@@ -44,6 +44,7 @@ This is the backlog of the bugs and missing features of the app.
 - startup page
 - configuration - Choose easy / standard / hard
 - custom block design page - editor to create your own block
+- check react versions
 
 ## Available Scripts
 
