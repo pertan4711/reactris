@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css?family=Joti+One");
+
+header {
+  background-color: orange;
+}
+
+body {
+  background-color: lightblue;
+}
+
+.Tetris {
+  text-align: left;
+}
+
+.Tetris-header {
+  /*background-color: lightgrey; /* #282c34; */
+  /* min-height: 100vh;
+  display: flex;
+  flex-direction: column; */
+  align-items: center;
+  /* justify-content: center;
+  font-size: calc(10px + 2vmin); */
+  color: white;
+}
+
+.playground-background {
+  background: rgb(36, 36, 36);
+}
+
+.playground-panel {
+  background: rgb(236, 154, 236);
+  font-family: "Joti One", cursive;
+  color: green;
+  position: absolute;
+}
+
+.playground-dialogue {
+  background: rgb(236, 154, 236, 0.7);
+  color: green;
+  font-family: "Joti One", cursive;
+  font-size: 30px;
+  border-radius: 10px;
+  padding: 15px 35px 15px 35px;
+  text-align: center;
+  position: absolute;
+}
+
+.playground-input-dialogue {
+  background: rgb(236, 154, 236, 0.7);
+  color: green;
+  font-family: "Joti One", cursive;
+  font-size: 20px;
+  text-align: left;
+}
+
+.score-heading {
+  font-size: 80px;
+}
+
+.score-text {
+  font-size: 60px;
+  margin: 5px;
+}
+
+.button-text {
+  font-family: "Joti One", cursive;
+  font-size: 40px;
+  color: darkgreen;
+  background-color: rgb(245, 245, 245);
+  margin: 5px;
+}
+
+.dialog-text {
+  font-size: 40px;
+}
+
+.ScoreStyleShadow {
+  background: "grey";
+}
+
+.brick {
+  width: "40px";
+  height: "40px";
+  position: "absolute";
+}
