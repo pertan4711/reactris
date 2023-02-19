@@ -23,7 +23,7 @@ Run the webserver and start the game with `yarn start` or `npm start`.
 The game will be a SPA on port 3000 (localhost:3000) and will be injected in the index.html file.
 Built partial with MVP pattern design where the model is written in typescript and the view part in React-Typescript.
 
-## TODO-Lista:
+## TODO:
 
 This is the backlog of the bugs and missing features of the app. 
 
