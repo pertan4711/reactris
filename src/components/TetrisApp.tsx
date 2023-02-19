@@ -11,6 +11,8 @@ import Playground from "./Playground";
 import GameOver from "./board/GameOver";
 import Pause from "./board/Pause";
 import Settings from "./board/Settings";
+import HighScore from "./board/Highscore";
+
 const TetrisApp = () => {
   const pg = playground.getInstance(window.innerWidth, window.innerHeight);
 
@@ -142,6 +144,17 @@ const TetrisApp = () => {
   let gameoverTextLeft = (pg.numColumns * pg.brickSpace) / 2 - 100;
   let gameoverTextTop = (pg.numRows * pg.brickSpace) / 2 - 100;
 
+  let highscoreList: { name: string; score: number }[] = [
+    {
+      name: "pertan4711",
+      score: 4711,
+    },
+    {
+      name: "pertan4711",
+      score: 471,
+    },
+  ];
+
   return (
     <div>
       <div>
@@ -153,7 +166,8 @@ const TetrisApp = () => {
           pg={pg}
         />
         {/* Hantering av dialogfönster */}
-        {openSettings && (gameOver || pause) && (
+        {gameOver && !pause && <HighScore highscoreList={highscoreList} />}
+        {/* {openSettings && (gameOver || pause) && (
           <Settings settings={myOpenSettings} pg={pg} />
         )}
         {gameOver && !pause && !openSettings && (
@@ -170,7 +184,7 @@ const TetrisApp = () => {
             pgTop={gameoverTextTop}
             startGame={togglePause}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

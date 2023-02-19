@@ -62,3 +62,7 @@ export type SettingsProps = {
   settings: any;
   pg: playgroundModel;
 };
+
+export type HighScoreProps = {
+  highscoreList: { name: string; score: number }[];
+};
