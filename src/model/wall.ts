@@ -30,7 +30,7 @@ export default class wall {
   initWall(columns: number, rows: number, height: number) {
     let tempWall = [];
 
-    // Bygg wall som är tom
+    // Build empty wall
     for (let y = 0; y < rows - height; y++) {
       let row = [];
       for (let x = 0; x < columns; x++) {
@@ -39,7 +39,7 @@ export default class wall {
       tempWall.push(row);
     }
 
-    // Bygg wall som har bricks
+    // Build wall consisting of bricks
     for (let y = rows - height + 1; y <= rows; y++) {
       let row = [];
       for (let x = 0; x < columns; x++) {
@@ -57,8 +57,8 @@ export default class wall {
     return tempWall;
   }
 
-  /// Returnera Wall som en tvådimersionell array där varje position antingen är
-  /// -1 som betyder tom eller positiv och är då en brick av typen BlockType med färg mm.
+  /// Return Wall as an two-dimensional array there every position is either
+  /// -1 which means empty or positive number of a brick of type 'BlockType' with color etc
   getWall(): number[][] {
     return this.wall;
   }
@@ -136,7 +136,7 @@ export default class wall {
           break;
         } else {
           if (col >= this.numColumns - 1) {
-            // Om vi kommer hit har vi en hel rad. Ta bort raden och inkrementera temp_score.
+            // Whole row - Remove and increment temp_score.
             this.deleteCompletedRow(row);
             completeRows++;
           }
@@ -147,7 +147,7 @@ export default class wall {
     return completeRows;
   }
 
-  // Tar bort hela raden och flyttar överliggande rader nedåt
+  // Remove whole row and move all above row one step down
   deleteCompletedRow(rowToDelete: number) {
     for (let row = rowToDelete - 1; row >= 0; row--) {
       for (let col = 0; col < this.numColumns; col++) {

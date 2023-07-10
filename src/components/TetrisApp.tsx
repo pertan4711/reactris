@@ -1,9 +1,9 @@
 // Main entry for game app
 
-// Implementerar viewdelen i MVP
-// Modellen finns i objektet pg (ren javascript av typen playground)
-// Här fångas alla tangenttryckningar och anropar andra komponenter för att
-// rita ut de visuella delarna
+// Implement view part in MVP
+// Model exist in object 'pg' (of type 'playground')
+
+// In here a keypress call other compontents to draw other visual parts.
 
 import { useState, useEffect } from "react";
 import playground from "../model/playground";
@@ -11,6 +11,7 @@ import Playground from "./Playground";
 import GameOver from "./board/GameOver";
 import Pause from "./board/Pause";
 import Settings from "./board/Settings";
+
 const TetrisApp = () => {
   const pg = playground.getInstance(window.innerWidth, window.innerHeight);
 
@@ -23,7 +24,7 @@ const TetrisApp = () => {
   const [openSettings, setOpenSettings] = useState(false);
   //const levelUpgradeDiv = 2;
 
-  // Assigna tangenttryckningar - Will only run once when component is mounted
+  // Assign keypress - Will only run once when component is mounted
   useEffect(() => {
     pg.printConfig();
     document.addEventListener("keydown", (event) => {
@@ -98,7 +99,7 @@ const TetrisApp = () => {
     }
   };
 
-  // Timeout till approx 1 sec
+  // Timeout approx 1 sec
   const gameTick = () => {
     if (!pg.gameover && !pg.pause) {
       pg.incTime();
@@ -106,7 +107,7 @@ const TetrisApp = () => {
     }
   };
 
-  // Updatera modell
+  // Update model
   const updatePlayground = () => {
     pg.updateBlockWallStatus();
     setActiveBlockBricks(pg.activeBlock.getBrickPosition());
@@ -152,7 +153,7 @@ const TetrisApp = () => {
           newgame={startNewGame}
           pg={pg}
         />
-        {/* Hantering av dialogfönster */}
+        {/* dialogue window */}
         {openSettings && (gameOver || pause) && (
           <Settings settings={myOpenSettings} pg={pg} />
         )}

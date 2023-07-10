@@ -5,10 +5,9 @@ import { Blocks, emptyWallBrick, playgroundSettings } from "./constants";
 import calculateBrickSize from "../utils/utils";
 
 /////////////////////////////////////////////////////////////////////////////////////
-/// Playground är modellen i MVP designpattern och håller reda på den uppbyggda
-/// muren och ett aktivt block. Den håller metoder för att uppdatera activeblock och wall,
-/// inkrementera tiden, initiera sig, slumpa nästa block och kontrollera om det
-/// aktiva blocket har landat.
+/// Playground is the model in the MVP design pattern and will keep track of the built
+/// wall and one active block. It will contain methods to update the active block and the wall,
+/// increment time, initialize, randomize next block and check if the active block has landed.
 /////////////////////////////////////////////////////////////////////////////////////
 export default class playground {
   private static instance: playground; // Singleton
@@ -19,7 +18,7 @@ export default class playground {
   level: number;
   activeBlock: Block;
   initWallHeight: number;
-  
+
   brickSize: number;
   brickSpace: number;
   windowSizeX: number;
@@ -37,9 +36,15 @@ export default class playground {
     this.level = 0;
     this.activeBlock = this.generateNextBlock();
     this.initWallHeight = playgroundSettings.initWallHeight;
-    
-    this.brickSize = calculateBrickSize(winX, winY, this.numColumns, this.numRows);
-    this.brickSpace = calculateBrickSize(winX, winY, this.numColumns, this.numRows) + 2;
+
+    this.brickSize = calculateBrickSize(
+      winX,
+      winY,
+      this.numColumns,
+      this.numRows
+    );
+    this.brickSpace =
+      calculateBrickSize(winX, winY, this.numColumns, this.numRows) + 2;
     this.windowSizeX = winX;
     this.windowSizeY = winY;
   }
@@ -53,7 +58,7 @@ export default class playground {
     return playground.instance;
   }
 
-  /// Slumpa nästa block och placera det ungefär i mitten
+  /// Randomize next block and put it in the middle
   generateNextBlock(): Block {
     let differentBlocksCount = Blocks.length;
     let blockIndex = Math.floor(Math.random() * differentBlocksCount);
@@ -70,14 +75,14 @@ export default class playground {
     return ab;
   }
 
-  /// Förflytta det aktiva blocket nedåt.
+  /// Move the active block down
   incTime = () => {
     this.activeBlock !== null
       ? this.activeBlock.pY++
       : (this.activeBlock = this.generateNextBlock());
   };
 
-  // Gör reset och starta om spelet
+  /// Reset and start game
   reset = () => {
     this.gameover = false;
     this.score = 0;
@@ -90,20 +95,20 @@ export default class playground {
     return this.wall.getWall();
   };
 
-  /// Kontrollerar om block landat efter en update eller MoveDown.
-  /// Om block landat, uppdatera poäng och slumpa fram nästa aktiva block.
+  /// Check if block has landed after update or MoveDown.
+  /// If block has landed - update score and randomize next active block-
   updateBlockWallStatus = () => {
-    // Om block utanför boundaries
+    // If block is outside boudaries
     this.adjustBlockWallPosition();
 
-    // Om block landat lägg till det i muren
+    // If block has landed put it in the wall
     if (this.checkBlockPosition()) {
-      // Om bricks har samma position - flytta nuvarande block uppåt och lägg till det i muren
+      // If bricks have the same postition - move block up and put in the wall
       this.activeBlock.pY--;
       this.wall.addBlock(this.activeBlock);
       this.activeBlock = this.generateNextBlock();
 
-      // Om nästa slumpade block kolliderar är spelet slut
+      // If next randomized block collides it is game over
       if (this.checkBlockPosition()) {
         this.gameover = true;
       }
@@ -111,7 +116,7 @@ export default class playground {
     this.score = this.score + this.wall.check4CompletedRows();
   };
 
-  // Kontrollera muren och activeblock om överlappning sker
+  // Check wall and active block for overlaps
   checkBlockPosition = () => {
     let bricks: {
       pX: number;
@@ -128,7 +133,7 @@ export default class playground {
     }
   };
 
-  // Kontrollera spelplanens sidor
+  // Check playground edges
   adjustBlockWallPosition = () => {
     let bricks = this.activeBlock.getBrickPosition();
     for (let i = 0; i < bricks.length; i++) {
@@ -154,12 +159,12 @@ export default class playground {
   addColumn = () => {
     this.numColumns++;
     this.wall.addColumn();
-  }
+  };
 
   deleteColumn = () => {
     this.numColumns--;
     this.wall.deleteColumn();
-  }
+  };
 
   get numRows() {
     return this.wall.numRows;
@@ -171,18 +176,24 @@ export default class playground {
   addRow = () => {
     this.numRows++;
     this.wall.addRow();
-  }
+  };
 
   deleteRow = () => {
     this.numRows--;
     this.wall.deleteRow();
-  }
+  };
 
   printConfig = () => {
     console.log("Playground model settings\n=========================");
     console.log("numColumns: " + this.numColumns);
     console.log("numRows: " + this.numRows);
-    console.log("activeBlock: { color: " + this.activeBlock.getBlockColor() + ", " + this.activeBlock.getBrickPosition() + " }");
+    console.log(
+      "activeBlock: { color: " +
+        this.activeBlock.getBlockColor() +
+        ", " +
+        this.activeBlock.getBrickPosition() +
+        " }"
+    );
     console.log(" bricks:");
     console.log(...this.activeBlock.getBrickPosition());
     console.log("gameover: " + this.gameover);
