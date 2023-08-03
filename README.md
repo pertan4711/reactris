@@ -92,4 +92,6 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
+There is a sandboxed clone of this code in [Reactris](https://codesandbox.io/s/reactris-ng769y?file=/src/index.tsx)
+
 To learn React, check out the [React documentation](https://reactjs.org/).
