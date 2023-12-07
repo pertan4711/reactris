@@ -1,0 +1,59 @@
+@startuml Domain Model
+skinparam BackgroundColor #EEEBDC
+
+abstract class "Block" as Block {
+  blockIndex: number
+  pX: number
+  pY: number
+  spinPosition: number
+}
+
+class leftblock extends Block {
+  getBrickPosition(): number[][]
+}
+
+class rightblock extends Block {
+  getBrickPosition(): number[][]
+}
+
+class lineblock extends Block {
+  getBrickPosition(): number[][]
+}
+
+class "Playground" as Playground {
+  - {static} instance: playground
+  gameover: boolean
+  pause: boolean
+  level: number
+  wall: Wall
+  score: number
+  activeBlock: Block
+  ' initWallHeight: number
+  ' brickSize: number
+  ' brickSpace: number
+  ' windowSizeX: number
+  ' windowSizeY: number
+  
+  'getInstance(winX: number, winY: number): playground
+  generateNextBlock(): Block
+  incTimer(): void
+  ' reset(): void
+  getWall(): Wall
+  ' getScore(): number
+  ' updateBlockWallStatus(): void
+}
+
+note top of Playground : Singleton class that contains \n the game logic related
+
+class "Wall" as Wall {
+  numColumns: number
+  numRows: number
+  wall: number[][]
+  initWall(columns, rows, height): void
+}
+
+Playground "1" *-- "1" Block : activeBlock
+Playground "1" -- "1" Wall : contains wall
+
+
+@enduml

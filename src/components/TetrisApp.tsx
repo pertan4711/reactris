@@ -24,9 +24,25 @@ const TetrisApp = () => {
   const [openSettings, setOpenSettings] = useState(false);
   //const levelUpgradeDiv = 2;
 
+  // Timeout approx 1 sec
+  const gameTick = () => {
+    if (!pg.gameover && !pg.pause) {
+      pg.incTime();
+      updatePlayground();
+    }
+  };
+
+  const togglePause = () => {
+    if (!pg.gameover) {
+      pg.pause = !pg.pause;
+      setPause(!pause);
+      updatePlayground();
+    }
+  };
+
   // Assign keypress - Will only run once when component is mounted
   useEffect(() => {
-    pg.printConfig();
+    //pg.printConfig();
     document.addEventListener("keydown", (event) => {
       switch (event.key) {
         case "ArrowLeft":
@@ -89,23 +105,7 @@ const TetrisApp = () => {
     });
 
     setInterval(() => gameTick(), timeInterval);
-  }, []);
-
-  const togglePause = () => {
-    if (!pg.gameover) {
-      pg.pause = !pg.pause;
-      setPause(!pause);
-      updatePlayground();
-    }
-  };
-
-  // Timeout approx 1 sec
-  const gameTick = () => {
-    if (!pg.gameover && !pg.pause) {
-      pg.incTime();
-      updatePlayground();
-    }
-  };
+  }, [pg]);
 
   // Update model
   const updatePlayground = () => {

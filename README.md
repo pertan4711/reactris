@@ -1,10 +1,12 @@
 # Game Reactris
 
-This is a clone of the tetris game done in React and Typescript. It is a simple project to learn the languages and deploy techniques. 
-It is an ongoing process there multiple techniques including testing with jest and deploying and hosting with docker and kubernetes 
+This is a clone of the tetris game done in React and Typescript. It is a simple project to learn especially react but also other
+languages and deploy techniques. Of course it is a full blown tetris with some interesting blocks that is self invented. It is easy
+to extend with your own block structures.
+It is an ongoing process there multiple techniques including testing with jest and deploying and hosting with docker
 will be used. I have also tried to make it available in both windows and linux environments.
 
-The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and uses some parameters for 
+The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and uses some parameters for
 typescript (see below).
 
 Configure and setup:
@@ -14,10 +16,12 @@ Configure and setup:
 Use yarn or npm to setup and configure the project. Be sure to install nodejs (npm). There could be some issues with the npm version.
 
 ### `yarn install`
+
 Install all dependencies to run the game.
-För vidareutveckling och för att starta spelet (webservern) räcker det med kommandot
 
 ### `yarn start`
+
+To develop and to start the game (web server)
 
 Run the webserver and start the game with `yarn start` or `npm start`.
 The game will be a SPA on port 3000 (localhost:3000) and will be injected in the index.html file.
@@ -25,7 +29,7 @@ Built partial with MVP pattern design where the model is written in typescript a
 
 ## TODO:
 
-This is the backlog of the bugs and missing features of the app. 
+This is the backlog of the bugs and missing features of the app.
 
 - level up does not work
 - simplify config process including/excluding which blocks to use in game
@@ -88,10 +92,4 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-There is a sandboxed clone of this code in [Reactris](https://codesandbox.io/s/reactris-ng769y?file=/src/index.tsx)
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+There is a sandboxed clone of this code in [CodeSandbox](https://codesandbox.io/s/reactris-ng769y?file=/src/index.tsx)
