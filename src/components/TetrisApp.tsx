@@ -133,12 +133,12 @@ const TetrisApp = () => {
     setOpenSettings(!openSettings);
   };
 
-  const levelUpgrade = () => {
-    let interval: number = timeInterval;
-    clearInterval(timeInterval);
-    setTimeInterval(interval * 0.8);
-    setInterval(() => gameTick(), timeInterval);
-  };
+  // const levelUpgrade = () => {
+  //   let interval: number = timeInterval;
+  //   clearInterval(timeInterval);
+  //   setTimeInterval(interval * 0.8);
+  //   setInterval(() => gameTick(), timeInterval);
+  // };
 
   let gameoverTextLeft = (pg.numColumns * pg.brickSpace) / 2 - 100;
   let gameoverTextTop = (pg.numRows * pg.brickSpace) / 2 - 100;
