@@ -11,13 +11,23 @@ participant "ScorePanel" as Panel #green
 Player -[#blue]> Playground : start_game
 Playground -[#orange]> Block : generateNextBlock
 Playground -[#red]> Wall : initWallHeight
-Playground -> Playground : moveBlock down
-Player -[#blue]> Playground : moveLeft
+
 alt Check collision
+group game check loop
     Playground -> Playground : moveBlock down
 else Block collision
-    Playground -> Wall : transform block to wall
-    Playground -> Block : generateNextBlock
+    Playground -[#red]> Wall : transform block to wall
+    alt Check full line
+    group check full line
+        Wall -[#red]> Wall : check full line
+    else No full line
+        Wall -[#red]> Wall : update wall
+    end
+    end
+    Wall -[#red]> Wall : check full line
+    Playground -[#orange]> Block : generateNextBlock
 end
+
+Player -[#blue]> Playground : moveLeft
 group 
 @enduml
