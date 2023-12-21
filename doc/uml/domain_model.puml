@@ -6,6 +6,13 @@ abstract class "Block" as Block {
   pX: number
   pY: number
   spinPosition: number
+  bricks: brickModelType[]
+  turnLeft()
+  turnRight()
+  moveLeft()
+  moveRight()
+  moveDown()
+  getBlockColor()
 }
 
 class leftblock extends Block {
@@ -50,6 +57,15 @@ class "Wall" as Wall {
   numRows: number
   wall: number[][]
   initWall(columns, rows, height): void
+  getWall(): number[][]
+  addColumn()
+  deleteColumn()
+  setColumn(col)
+  setRows(rows:number)
+  addRow()
+  deleteRow()
+  addBlock()
+  check4CompletedRows(): number
 }
 
 Playground "1" *-- "1" Block : activeBlock
