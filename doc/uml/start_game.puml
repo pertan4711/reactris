@@ -9,8 +9,8 @@ participant "Wall" as Wall #red
 participant "ScorePanel" as Panel #green
 
 Player -[#blue]> Playground : start_game
-Playground -[#orange]> Block : generateNextBlock
 Playground -[#red]> Wall : initWallHeight
+Playground -[#orange]> Block : generateNextBlock
 
 alt Check collision
 group game check loop
