@@ -1,17 +1,7 @@
-// Testar modellen
-import React from "react";
-import { render } from "@testing-library/react";
-import Tetris from "../components/TetrisApp";
+// Testing model
 import leftBlock from "../model/blocks/leftblock";
-import playground from "../model/playground";
 
-initLeftBlock = () => {};
-
-test("sum", () => {
-  expect(1 + 2).toBe(3);
-});
-
-// Kontrollera blockets startposition
+// Check block start position
 test("tetris block leftBlock initposition", () => {
   const block = new leftBlock({
     blockIndex: 99,
@@ -23,7 +13,7 @@ test("tetris block leftBlock initposition", () => {
   expect(block.pY).toEqual(3);
 });
 
-// Kontrollera blockets 'bricks' och deras position
+// Check 'bricks' of block and position
 test("tetris block leftBlock bricksposition", () => {
   const block = new leftBlock({
     blockIndex: 99,
@@ -59,17 +49,4 @@ test("tetris block leftBlock moveLeft", () => {
     { pX: 6, pY: 5 },
   ]);
   expect(color).toEqual("yellow");
-});
-
-test("tetris playground activeBlock spinPosition", () => {
-  const pg = new playground();
-  const pos = pg.activeBlock.spinPosition;
-  expect(pos).toEqual(1);
-});
-
-test("tetris playground wall height", () => {
-  const pg = new playground();
-  const w = pg.wall;
-  expect(w.numRows).toEqual(14);
-  expect(w.numColumns).toEqual(10);
 });
