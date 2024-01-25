@@ -3,7 +3,7 @@ import { ScoreProps } from "../../model/types";
 const ScoreBoard = ({
   width,
   height,
-  settings,
+  showSettings,
   pause,
   newgame,
   pg,
@@ -36,7 +36,7 @@ const ScoreBoard = ({
         <div className="score-text">Score:{pg.score}</div>
         <div className="score-text">Level:{pg.level}</div>
         <div style={{ color: "white", margin: "5px" }}>
-          <button className="button-text" onClick={() => settings()}>
+          <button className="button-text" onClick={() => showSettings()}>
             Settings
           </button>
           <br />

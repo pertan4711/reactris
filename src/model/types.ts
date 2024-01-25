@@ -2,8 +2,17 @@ import playgroundModel from "./playground";
 
 export type PlaygroundProps = {
   blockBricks: { pX: number; pY: number }[];
-  settings: any;
   pause: any;
+  showSettings: boolean;
+  newgame: any;
+  pg: playgroundModel;
+};
+
+export type ShowDialogProps = {
+  pause: any;
+  showSettings: boolean;
+  setShowSettings: any;
+  gameOver: boolean;
   newgame: any;
   pg: playgroundModel;
 };
@@ -39,7 +48,7 @@ export type BoundaryProps = {
 export type ScoreProps = {
   width: number;
   height: number;
-  settings: any;
+  showSettings: any;
   pause: any;
   newgame: any;
   pg: playgroundModel;

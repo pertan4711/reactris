@@ -8,7 +8,7 @@ import rightblock from "./blocks/rightblock";
 import rightflashblock from "./blocks/rightflashblock";
 import squareblock from "./blocks/squareblock";
 import hillblock from "./blocks/hillblock";
-import { playgroundSettingsType } from "./modeltypes";
+// import { gameSettingsType } from "./modeltypes";
 import bigleftblock from "./blocks/bigleftblock";
 import bigrightblock from "./blocks/bigrightblock";
 
@@ -27,11 +27,14 @@ export const Blocks: { block: any; color: string }[] = [
   { block: bigrightblock, color: "pink" },
 ];
 
-export const playgroundSettings: playgroundSettingsType = {
-  numColumns: 10,
-  numRows: 14,
-  initWallHeight: 4,
-};
+// export const initGameSettings: gameSettingsType = {
+//   numColumns: 10,
+//   numRows: 14,
+//   initWallHeight: 4,
+//   levelUpgradeDiv: 10,
+//   brickSize: 70,
+//   brickSpace: 72
+// };
 
 export const emptyWallBrick: number = -1;
 export const initWallPropability: number = 0.2;

@@ -7,13 +7,13 @@ import ScoreBoard from "./board/Score";
 
 function Playground({
   blockBricks,
-  settings,
   pause,
+  showSettings,
   newgame,
   pg,
 }: PlaygroundProps) {
-  const pwidth: number = pg.numColumns * pg.brickSpace;
-  const pheight: number = pg.numRows * pg.brickSpace;
+  const pwidth: number = pg.numColumns * pg.gameSettings.brickSpace;
+  const pheight: number = pg.numRows * pg.gameSettings.brickSpace;
 
   return (
     <div>
@@ -21,7 +21,7 @@ function Playground({
       <ScoreBoard
         width={pwidth}
         height={pheight}
-        settings={settings}
+        showSettings={showSettings}
         pause={pause}
         newgame={newgame}
         pg={pg}
@@ -31,17 +31,17 @@ function Playground({
         <Block
           bricks={blockBricks}
           color={pg.activeBlock.getBlockColor()}
-          numCol={pg.numColumns}
-          brickSize={pg.brickSize}
-          brickSpace={pg.brickSpace}
+          numCol={pg.gameSettings.numColumns}
+          brickSize={pg.gameSettings.brickSize}
+          brickSpace={pg.gameSettings.brickSpace}
         />
         {/* Colored wall */}
         <Wall
           wall={pg.getWall()}
-          numCol={pg.numColumns}
-          numRow={pg.numRows}
-          brickSize={pg.brickSize}
-          brickSpace={pg.brickSpace}
+          numCol={pg.gameSettings.numColumns}
+          numRow={pg.gameSettings.numRows}
+          brickSize={pg.gameSettings.brickSize}
+          brickSpace={pg.gameSettings.brickSpace}
         />
       </div>
     </div>

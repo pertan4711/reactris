@@ -1,7 +1,7 @@
 import wall from "./wall";
-import { blockModelType } from "./modeltypes";
+import { blockModelType, gameSettingsType } from "./modeltypes";
 import Block from "./block";
-import { Blocks, emptyWallBrick, playgroundSettings } from "./constants";
+import { Blocks, emptyWallBrick } from "./constants";
 import calculateBrickSize from "../utils/utils";
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -9,53 +9,56 @@ import calculateBrickSize from "../utils/utils";
 /// wall and one active block. It will contain methods to update the active block and the wall,
 /// increment time, initialize, randomize next block and check if the active block has landed.
 /////////////////////////////////////////////////////////////////////////////////////
-export default class playground {
-  private static instance: playground; // Singleton
+export default class playGroundModel {
+  private static instance: playGroundModel; // Singleton
   gameover: boolean;
   pause: boolean;
   wall: wall;
   score: number;
   level: number;
   activeBlock: Block;
-  initWallHeight: number;
 
-  brickSize: number;
-  brickSpace: number;
+  // brickSize: number;
+  // brickSpace: number;
+  // initWallHeight: number;
+  gameSettings: gameSettingsType;
+
   windowSizeX: number;
   windowSizeY: number;
 
-  private constructor(winX: number, winY: number) {
+  private constructor(winX: number, winY: number, gameSettings: gameSettingsType) {
     this.gameover = true;
     this.pause = false;
     this.wall = new wall({
-      numColumns: playgroundSettings.numColumns,
-      numRows: playgroundSettings.numRows,
-      initWallHeight: playgroundSettings.initWallHeight,
+      numColumns: gameSettings.numColumns,
+      numRows: gameSettings.numRows,
+      initWallHeight: gameSettings.initWallHeight,
     });
     this.score = 0;
     this.level = 0;
     this.activeBlock = this.generateNextBlock();
-    this.initWallHeight = playgroundSettings.initWallHeight;
+    //this.initWallHeight = gameSettings.initWallHeight;
+    this.gameSettings = gameSettings;
 
-    this.brickSize = calculateBrickSize(
+    this.gameSettings.brickSize = calculateBrickSize(
       winX,
       winY,
       this.numColumns,
       this.numRows
     );
-    this.brickSpace =
+    this.gameSettings.brickSpace =
       calculateBrickSize(winX, winY, this.numColumns, this.numRows) + 2;
     this.windowSizeX = winX;
     this.windowSizeY = winY;
   }
 
   // Singleton playground
-  public static getInstance(winX: number, winY: number): playground {
-    if (!playground.instance) {
-      playground.instance = new playground(winX, winY);
+  public static getInstance(winX: number, winY: number, gameSettings: gameSettingsType): playGroundModel {
+    if (!playGroundModel.instance) {
+      playGroundModel.instance = new playGroundModel(winX, winY, gameSettings);
     }
 
-    return playground.instance;
+    return playGroundModel.instance;
   }
 
   /// Randomize next block and put it in the middle
@@ -87,7 +90,7 @@ export default class playground {
     this.gameover = false;
     this.score = 0;
     this.activeBlock = this.generateNextBlock();
-    this.wall.reset(this.initWallHeight);
+    this.wall.reset(this.gameSettings.initWallHeight);
     this.activeBlock.pY = 0;
   };
 
@@ -198,7 +201,7 @@ export default class playground {
     console.log(...this.activeBlock.getBrickPosition());
     console.log("gameover: " + this.gameover);
     console.log("pause: " + this.pause);
-    console.log("initWallHeight: " + this.initWallHeight);
+    console.log("initWallHeight: " + this.gameSettings.initWallHeight);
     console.log("wall:" + this.getWall());
   };
 }

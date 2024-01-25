@@ -1,177 +1,56 @@
 // Main entry for game app
-
-// Implement view part in MVP
-// Model exist in object 'pg' (of type 'playground')
-
+// Implement view part in MVP - Model exist in object 'pg' (of type 'playground')
 // In here a keypress call other compontents to draw other visual parts.
 
-import { useState, useEffect } from "react";
-import playground from "../model/playground";
+import { gameSettingsType } from "../model/modeltypes";
+import playGroundModel from "../model/playground";
 import Playground from "./Playground";
-import GameOver from "./board/GameOver";
-import Pause from "./board/Pause";
-import Settings from "./board/Settings";
+import useGameState from "./useGameState";
+import ShowDialog from "./ShowDialog";
+
+let initGameSettings: gameSettingsType = {
+  numColumns: 10,
+  numRows: 14,
+  initWallHeight: 4,
+  levelUpgradeDiv: 10,
+  brickSize: 70,
+  brickSpace: 72,
+};
 
 const TetrisApp = () => {
-  const pg = playground.getInstance(window.innerWidth, window.innerHeight);
-
-  const [activeBlockBricks, setActiveBlockBricks] = useState(
-    pg.activeBlock.getBrickPosition()
-  );
-  const [timeInterval, setTimeInterval] = useState(1000);
-  const [gameOver, setGameOver] = useState(pg.gameover);
-  const [pause, setPause] = useState(pg.pause);
-  const [openSettings, setOpenSettings] = useState(false);
-  //const levelUpgradeDiv = 2;
-
-  // Timeout approx 1 sec
-  const gameTick = () => {
-    if (!pg.gameover && !pg.pause) {
-      pg.incTime();
-      updatePlayground();
-    }
-  };
-
-  const togglePause = () => {
-    if (!pg.gameover) {
-      pg.pause = !pg.pause;
-      setPause(!pause);
-      updatePlayground();
-    }
-  };
-
-  // Assign keypress - Will only run once when component is mounted
-  useEffect(() => {
-    //pg.printConfig();
-    document.addEventListener("keydown", (event) => {
-      switch (event.key) {
-        case "ArrowLeft":
-        case "a":
-          pg.activeBlock.moveLeft();
-          break;
-        case "ArrowRight":
-        case "d":
-          pg.activeBlock.moveRight();
-          break;
-        case "ArrowUp":
-        case "q":
-          pg.activeBlock.turnLeft();
-          break;
-        case "e":
-          pg.activeBlock.turnRight();
-          break;
-        case "ArrowDown":
-        case "s":
-          pg.incTime();
-          break;
-        case "3":
-          pg.brickSize++;
-          break;
-        case "4":
-          pg.brickSize--;
-          break;
-        case "5":
-          pg.brickSpace++;
-          break;
-        case "6":
-          pg.brickSpace--;
-          break;
-        case "7":
-          pg.addRow();
-          break;
-        case "8":
-          pg.numRows = pg.numRows - 1;
-          break;
-        case "9":
-          pg.addColumn();
-          break;
-        case "0":
-          pg.deleteColumn();
-          break;
-        case "Escape":
-          togglePause();
-          break;
-        case "+":
-          pg.brickSize++;
-          pg.brickSpace++;
-          break;
-        case "-":
-          pg.brickSize--;
-          pg.brickSpace--;
-          break;
-        default:
-      }
-      updatePlayground();
-    });
-
-    setInterval(() => gameTick(), timeInterval);
-  }, [pg]);
-
-  // Update model
-  const updatePlayground = () => {
-    pg.updateBlockWallStatus();
-    setActiveBlockBricks(pg.activeBlock.getBrickPosition());
-
-    // if (score !== pg.score && pg.score % levelUpgradeDiv === 0) {
-    //   levelUpgrade(timeInterval);
-    // }
-
-    setGameOver(pg.gameover);
-    setPause(pg.pause);
-  };
-
-  // Start new game from scratch
-  const startNewGame = () => {
-    pg.reset();
-    pg.gameover = false;
-    pg.pause = false;
-    setGameOver(false);
-    setPause(false);
-  };
-
-  const myOpenSettings = () => {
-    setOpenSettings(!openSettings);
-  };
-
-  // const levelUpgrade = () => {
-  //   let interval: number = timeInterval;
-  //   clearInterval(timeInterval);
-  //   setTimeInterval(interval * 0.8);
-  //   setInterval(() => gameTick(), timeInterval);
-  // };
-
-  let gameoverTextLeft = (pg.numColumns * pg.brickSpace) / 2 - 100;
-  let gameoverTextTop = (pg.numRows * pg.brickSpace) / 2 - 100;
-
+  const pg = playGroundModel.getInstance(
+    window.innerWidth, 
+    window.innerHeight, 
+    initGameSettings);
+  const {
+    activeBlockBricks,
+    gameOver,
+    pause, 
+    showSettings,
+    setShowSettings,
+    startNewGame
+  } = useGameState(pg);
+  
   return (
     <div>
       <div>
         <Playground
           blockBricks={activeBlockBricks}
-          settings={myOpenSettings}
-          pause={togglePause}
+          pause={pause}
+          showSettings={showSettings}
           newgame={startNewGame}
           pg={pg}
         />
-        {/* dialogue window */}
-        {openSettings && (gameOver || pause) && (
-          <Settings settings={myOpenSettings} pg={pg} />
-        )}
-        {gameOver && !pause && !openSettings && (
-          <GameOver
-            score={pg.score}
-            pgLeft={gameoverTextLeft}
-            pgTop={gameoverTextTop}
-            startNewGame={startNewGame}
-          />
-        )}
-        {pause && !gameOver && !openSettings && (
-          <Pause
-            pgLeft={gameoverTextLeft}
-            pgTop={gameoverTextTop}
-            startGame={togglePause}
-          />
-        )}
+      </div>
+      <div>
+        <ShowDialog
+          pause={pause}
+          showSettings={showSettings}
+          setShowSettings={setShowSettings}
+          gameOver={gameOver}
+          newgame={startNewGame}
+          pg={pg}
+        />
       </div>
     </div>
   );

@@ -3,11 +3,11 @@ import { SettingsProps } from "../../model/types";
 
 const Settings = (sp: SettingsProps) => {
   let configSettings = {
-    initWallHeight: [sp.pg.initWallHeight, true, false],
-    numColumns: [sp.pg.numColumns, true, false],
-    numRows: [sp.pg.numRows, true, false],
-    brickSize: [sp.pg.brickSize, true, false],
-    brickSpace: [sp.pg.brickSpace, true, false],
+    initWallHeight: [sp.pg.gameSettings.initWallHeight, true, false],
+    numColumns: [sp.pg.gameSettings.numColumns, true, false],
+    numRows: [sp.pg.gameSettings.numRows, true, false],
+    brickSize: [sp.pg.gameSettings.brickSize, true, false],
+    brickSpace: [sp.pg.gameSettings.brickSpace, true, false],
   };
 
   const [settings, setSettings] = useState(configSettings);
@@ -57,13 +57,13 @@ const Settings = (sp: SettingsProps) => {
             sp.pg.numRows = parseInt(setting[0].toString());
             break;
           case "brickSize":
-            sp.pg.brickSize = parseInt(setting[0].toString());
+            sp.pg.gameSettings.brickSize = parseInt(setting[0].toString());
             break;
           case "brickSpace":
-            sp.pg.brickSpace = parseInt(setting[0].toString());
+            sp.pg.gameSettings.brickSpace = parseInt(setting[0].toString());
             break;
           case "initWallHeight":
-            sp.pg.initWallHeight = parseInt(setting[0].toString());
+            sp.pg.gameSettings.initWallHeight = parseInt(setting[0].toString());
             break;
         }
       }

@@ -17,8 +17,11 @@ export type wallModelType = {
   initWallHeight: number;
 };
 
-export type playgroundSettingsType = {
+export type gameSettingsType = {
   numColumns: number;
   numRows: number;
   initWallHeight: number;
+  levelUpgradeDiv: number;
+  brickSize: number;
+  brickSpace: number;
 };
