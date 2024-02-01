@@ -1,6 +1,5 @@
 // Main entry for game app
-// Implement view part in MVP - Model exist in object 'pg' (of type 'playground')
-// In here a keypress call other compontents to draw other visual parts.
+// Implement view part in MVP - Model exist in singelton object 'pg'
 
 import { gameSettingsType } from "../model/modeltypes";
 import playGroundModel from "../model/playground";

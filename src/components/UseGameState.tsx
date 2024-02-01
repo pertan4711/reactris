@@ -1,33 +1,40 @@
 import { useState, useEffect, useCallback } from "react";
-import {
-  blockModelType,
-  gameSettingsType,
-  gameStatusEnum,
-} from "../model/modeltypes";
+import { gameStatusEnum } from "../model/modeltypes";
 import playGroundModel from "../model/playground";
-import GameOver from "./board/GameOver";
 
 //
 // Handle state and user hooks
 //
-function UseGameState(pg: playGroundModel) {
+function UseGameState(pg: playGroundModel): any {
   // State variables
   const [activeBlockBricks, setActiveBlockBricks] = useState(
     pg.activeBlock.getBrickPosition()
   );
   const [timeInterval, setTimeInterval] = useState(1000);
-  const [gameRunStatus, setGameRunStatus] = useState(pg.getGameStatus);
+  const [gameRunStatus, setGameRunStatus] = useState(gameStatusEnum.GameOver);
 
-  const updatePlayground = useCallback(() => {
+  const gameTick = useCallback(() => {
+    if (gameRunStatus === gameStatusEnum.Ongoing) {
+      pg.incTime();
+      //updatePlayground();
+    }
+  }, [pg, gameRunStatus]);
+
+  // Update active block and wall
+  const updatePlayground: any = useCallback(() => {
     pg.updateBlockWallStatus();
     setActiveBlockBricks(pg.activeBlock.getBrickPosition());
     if (pg.score % pg.gameSettings.levelUpgradeDiv === 0) {
       if (timeInterval > 500) {
-        setTimeInterval(timeInterval - 100);
+        let interval: number = timeInterval;
+        clearInterval(timeInterval);
+        setTimeInterval(interval * 0.8);
+        setInterval(() => gameTick(), timeInterval);
       }
     }
-  }, [pg, timeInterval]);
+  }, [pg, gameTick, timeInterval]);
 
+  // Toggle game status Pause
   const togglePause = useCallback(() => {
     if (gameRunStatus !== gameStatusEnum.GameOver) {
       if (gameRunStatus === gameStatusEnum.Pause) {
@@ -48,20 +55,6 @@ function UseGameState(pg: playGroundModel) {
     pg.pause = false;
     setGameRunStatus(gameStatusEnum.Ongoing);
   };
-
-  const levelUpgrade = () => {
-    let interval: number = timeInterval;
-    clearInterval(timeInterval);
-    setTimeInterval(interval * 0.8);
-    setInterval(() => gameTick(), timeInterval);
-  };
-
-  const gameTick = useCallback(() => {
-    if (gameRunStatus === gameStatusEnum.Ongoing) {
-      pg.incTime();
-      updatePlayground();
-    }
-  }, [pg, updatePlayground]);
 
   const handleKeys = useCallback(
     (event) => {
@@ -130,19 +123,21 @@ function UseGameState(pg: playGroundModel) {
   // Assign keypress events
   useEffect(() => {
     //pg.printConfig();
+
+    const gameIntervalId = setInterval(() => {
+      gameTick();
+      updatePlayground();
+    }, timeInterval);
+
     if (gameRunStatus === gameStatusEnum.Ongoing) {
       document.addEventListener("keydown", handleKeys);
-      updatePlayground();
-    } else {
-      document.removeEventListener("keydown", handleKeys);
     }
-  }, [handleKeys, updatePlayground]);
 
-  // Timeout approx 1 sec
-  useEffect(() => {
-    const gameIntervalId = setInterval(() => gameTick(), timeInterval);
-    return () => clearInterval(gameIntervalId);
-  }, [pg, gameTick, timeInterval, updatePlayground]);
+    return () => {
+      clearInterval(gameIntervalId);
+      document.removeEventListener("keydown", handleKeys);
+    };
+  }, [pg, gameTick, timeInterval, gameRunStatus, handleKeys, updatePlayground]);
 
   return {
     activeBlockBricks,
