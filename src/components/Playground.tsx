@@ -7,9 +7,8 @@ import ScoreBoard from "./board/Score";
 
 function Playground({
   blockBricks,
-  pause,
-  showSettings,
-  newgame,
+  gameStatus,
+  actionCallbacks,
   pg,
 }: PlaygroundProps) {
   const pwidth: number = pg.numColumns * pg.gameSettings.brickSpace;
@@ -21,9 +20,8 @@ function Playground({
       <ScoreBoard
         width={pwidth}
         height={pheight}
-        showSettings={showSettings}
-        pause={pause}
-        newgame={newgame}
+        gameStatus={gameStatus}
+        actionCallbacks={actionCallbacks}
         pg={pg}
       />
       <div>

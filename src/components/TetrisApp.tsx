@@ -5,7 +5,7 @@
 import { gameSettingsType } from "../model/modeltypes";
 import playGroundModel from "../model/playground";
 import Playground from "./Playground";
-import useGameState from "./useGameState";
+import UseGameState from "./UseGameState";
 import ShowDialog from "./ShowDialog";
 
 let initGameSettings: gameSettingsType = {
@@ -19,36 +19,27 @@ let initGameSettings: gameSettingsType = {
 
 const TetrisApp = () => {
   const pg = playGroundModel.getInstance(
-    window.innerWidth, 
-    window.innerHeight, 
-    initGameSettings);
-  const {
-    activeBlockBricks,
-    gameOver,
-    pause, 
-    showSettings,
-    setShowSettings,
-    startNewGame
-  } = useGameState(pg);
-  
+    window.innerWidth,
+    window.innerHeight,
+    initGameSettings
+  );
+
+  const { activeBlockBricks, gameStatus, actionCallbacks } = UseGameState(pg);
+
   return (
     <div>
       <div>
         <Playground
           blockBricks={activeBlockBricks}
-          pause={pause}
-          showSettings={showSettings}
-          newgame={startNewGame}
+          gameStatus={gameStatus}
+          actionCallbacks={actionCallbacks}
           pg={pg}
         />
       </div>
       <div>
         <ShowDialog
-          pause={pause}
-          showSettings={showSettings}
-          setShowSettings={setShowSettings}
-          gameOver={gameOver}
-          newgame={startNewGame}
+          gameStatus={gameStatus}
+          actionCallbacks={actionCallbacks}
           pg={pg}
         />
       </div>

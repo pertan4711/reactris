@@ -1,5 +1,5 @@
 import wall from "./wall";
-import { blockModelType, gameSettingsType } from "./modeltypes";
+import { blockModelType, gameSettingsType, gameStatusEnum } from "./modeltypes";
 import Block from "./block";
 import { Blocks, emptyWallBrick } from "./constants";
 import calculateBrickSize from "../utils/utils";
@@ -26,7 +26,11 @@ export default class playGroundModel {
   windowSizeX: number;
   windowSizeY: number;
 
-  private constructor(winX: number, winY: number, gameSettings: gameSettingsType) {
+  private constructor(
+    winX: number,
+    winY: number,
+    gameSettings: gameSettingsType
+  ) {
     this.gameover = true;
     this.pause = false;
     this.wall = new wall({
@@ -53,7 +57,11 @@ export default class playGroundModel {
   }
 
   // Singleton playground
-  public static getInstance(winX: number, winY: number, gameSettings: gameSettingsType): playGroundModel {
+  public static getInstance(
+    winX: number,
+    winY: number,
+    gameSettings: gameSettingsType
+  ): playGroundModel {
     if (!playGroundModel.instance) {
       playGroundModel.instance = new playGroundModel(winX, winY, gameSettings);
     }
@@ -184,6 +192,16 @@ export default class playGroundModel {
   deleteRow = () => {
     this.numRows--;
     this.wall.deleteRow();
+  };
+
+  getGameStatus = () => {
+    if (this.gameover) {
+      return gameStatusEnum.GameOver;
+    } else if (this.pause) {
+      return gameStatusEnum.Pause;
+    } else {
+      return gameStatusEnum.Ongoing;
+    }
   };
 
   printConfig = () => {

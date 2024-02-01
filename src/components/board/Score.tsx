@@ -3,9 +3,8 @@ import { ScoreProps } from "../../model/types";
 const ScoreBoard = ({
   width,
   height,
-  showSettings,
-  pause,
-  newgame,
+  gameStatus,
+  actionCallbacks,
   pg,
 }: ScoreProps) => {
   return (
@@ -36,15 +35,24 @@ const ScoreBoard = ({
         <div className="score-text">Score:{pg.score}</div>
         <div className="score-text">Level:{pg.level}</div>
         <div style={{ color: "white", margin: "5px" }}>
-          <button className="button-text" onClick={() => showSettings()}>
+          <button
+            className="button-text"
+            onClick={() => actionCallbacks.settings()}
+          >
             Settings
           </button>
           <br />
-          <button className="button-text" onClick={() => pause()}>
+          <button
+            className="button-text"
+            onClick={() => actionCallbacks.pause()}
+          >
             Pause
           </button>
           <br />
-          <button className="button-text" onClick={() => newgame()}>
+          <button
+            className="button-text"
+            onClick={() => actionCallbacks.newgameCallback()}
+          >
             New Game
           </button>
         </div>

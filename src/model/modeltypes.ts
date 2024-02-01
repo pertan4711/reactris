@@ -25,3 +25,10 @@ export type gameSettingsType = {
   brickSize: number;
   brickSpace: number;
 };
+
+export enum gameStatusEnum {
+  GameOver,
+  Pause,
+  Ongoing,
+  Settings,
+}

@@ -69,7 +69,7 @@ const Settings = (sp: SettingsProps) => {
       }
     }
 
-    sp.settings();
+    //sp.settings();
     sp.pg.updateBlockWallStatus();
   };
 

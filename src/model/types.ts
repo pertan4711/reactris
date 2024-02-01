@@ -1,19 +1,16 @@
 import playgroundModel from "./playground";
+import { gameStatusEnum } from "./modeltypes";
 
 export type PlaygroundProps = {
   blockBricks: { pX: number; pY: number }[];
-  pause: any;
-  showSettings: boolean;
-  newgame: any;
+  gameStatus: gameStatusEnum;
+  actionCallbacks: any;
   pg: playgroundModel;
 };
 
 export type ShowDialogProps = {
-  pause: any;
-  showSettings: boolean;
-  setShowSettings: any;
-  gameOver: boolean;
-  newgame: any;
+  gameStatus: gameStatusEnum;
+  actionCallbacks: any;
   pg: playgroundModel;
 };
 
@@ -48,9 +45,8 @@ export type BoundaryProps = {
 export type ScoreProps = {
   width: number;
   height: number;
-  showSettings: any;
-  pause: any;
-  newgame: any;
+  gameStatus: gameStatusEnum;
+  actionCallbacks: any;
   pg: playgroundModel;
 };
 
@@ -68,6 +64,5 @@ export type PauseProps = {
 };
 
 export type SettingsProps = {
-  settings: any;
   pg: playgroundModel;
 };
