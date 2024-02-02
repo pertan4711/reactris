@@ -34,24 +34,25 @@ const ScoreBoard = ({
         <div className="score-heading">Reactris</div>
         <div className="score-text">Score:{pg.score}</div>
         <div className="score-text">Level:{pg.level}</div>
+        <p />
         <div style={{ color: "white", margin: "5px" }}>
           <button
             className="button-text"
-            onClick={() => actionCallbacks.settings()}
+            onClick={() => actionCallbacks.showSettings()}
           >
             Settings
           </button>
           <br />
           <button
             className="button-text"
-            onClick={() => actionCallbacks.pause()}
+            onClick={() => actionCallbacks.togglePause()}
           >
             Pause
           </button>
           <br />
           <button
             className="button-text"
-            onClick={() => actionCallbacks.newgameCallback()}
+            onClick={() => actionCallbacks.startNewGame()}
           >
             New Game
           </button>

@@ -35,9 +35,10 @@ function UseGameState(pg: playGroundModel): any {
       if (timeInterval > 500) {
         let interval: number = timeInterval;
         clearInterval(timeInterval);
+        pg.level += 1;
+        setTimeInterval(interval * 0.8);
 
         console.log("LevelUp timeInternal: " + timeInterval);
-        setTimeInterval(interval * 0.8);
         setInterval(() => gameTick(), timeInterval);
         pg.lastScore = pg.score;
       }
@@ -79,26 +80,37 @@ function UseGameState(pg: playGroundModel): any {
       switch (event.key) {
         case "ArrowLeft":
         case "a":
-          console.log("moveLeft");
-          pg.activeBlock.moveLeft();
+          if (!pg.gameover) {
+            console.log("moveLeft");
+            pg.activeBlock.moveLeft();
+          }
           break;
         case "ArrowRight":
         case "d":
-          pg.activeBlock.moveRight();
+          if (!pg.gameover) {
+            pg.activeBlock.moveRight();
+          }
           break;
         case "ArrowUp":
         case "q":
-          pg.activeBlock.turnLeft();
+          if (!pg.gameover) {
+            pg.activeBlock.turnLeft();
+          }
           break;
         case "e":
-          pg.activeBlock.turnRight();
+          if (!pg.gameover) {
+            pg.activeBlock.turnRight();
+          }
           break;
         case "ArrowDown":
         case "s":
-          pg.incTime();
+          if (!pg.gameover) {
+            pg.incTime();
+          }
           break;
         case "p":
           pg.printConfig();
+          console.log("Time interval: " + timeInterval);
           break;
         case "3":
           pg.gameSettings.brickSize++;
@@ -140,7 +152,7 @@ function UseGameState(pg: playGroundModel): any {
       // when pressing a key - update
       updatePlayground();
     },
-    [pg, togglePause, updatePlayground]
+    [pg, togglePause, updatePlayground, timeInterval]
   );
 
   // Assign keypress events

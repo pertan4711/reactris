@@ -27,7 +27,7 @@ const ShowDialog = (props: ShowDialogProps) => {
         <Pause
           pgLeft={gameOverTextLeft}
           pgTop={gameOverTextTop}
-          startGame={props.actionCallbacks.pause}
+          startGame={props.actionCallbacks.togglePause}
         />
       )}
     </div>

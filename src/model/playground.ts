@@ -117,7 +117,7 @@ export default class playGroundModel {
     // If block has landed put it in the wall
     if (this.checkBlockPosition()) {
       // If bricks have the same postition - move block up and put in the wall
-      console.log("block landed");
+      console.log("block collided");
       this.activeBlock.pY--;
       this.wall.addBlock(this.activeBlock);
       this.activeBlock = this.generateNextBlock();
@@ -210,7 +210,7 @@ export default class playGroundModel {
   };
 
   printConfig = () => {
-    console.log("\nPlayground model settings\n=========================");
+    console.log("\nReactris settings\n=================");
     console.log("numColumns: " + this.numColumns);
     console.log("numRows: " + this.numRows);
     console.log(
@@ -225,6 +225,10 @@ export default class playGroundModel {
     console.log("gameover: " + this.gameover);
     console.log("pause: " + this.pause);
     console.log("initWallHeight: " + this.gameSettings.initWallHeight);
-    console.log("wall:" + this.getWall());
+    let wall = this.getWall();
+    console.log("wall: ");
+    wall.forEach((row) => {
+      console.log("row :" + row);
+    });
   };
 }

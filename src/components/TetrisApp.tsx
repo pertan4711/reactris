@@ -11,7 +11,7 @@ let initGameSettings: gameSettingsType = {
   numColumns: 10,
   numRows: 14,
   initWallHeight: 4,
-  levelUpgradeDiv: 10,
+  levelUpgradeDiv: 2,
   brickSize: 70,
   brickSpace: 72,
 };

@@ -139,6 +139,7 @@ export default class wall {
             // Whole row - Remove and increment temp_score.
             this.deleteCompletedRow(row);
             completeRows++;
+            console.log("completed row(s): " + completeRows);
           }
         }
       }
