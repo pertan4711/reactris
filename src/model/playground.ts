@@ -15,6 +15,7 @@ export default class playGroundModel {
   pause: boolean;
   wall: wall;
   score: number;
+  lastScore: number;
   level: number;
   activeBlock: Block;
 
@@ -39,6 +40,7 @@ export default class playGroundModel {
       initWallHeight: gameSettings.initWallHeight,
     });
     this.score = 0;
+    this.lastScore = 0;
     this.level = 0;
     this.activeBlock = this.generateNextBlock();
     //this.initWallHeight = gameSettings.initWallHeight;
@@ -115,6 +117,7 @@ export default class playGroundModel {
     // If block has landed put it in the wall
     if (this.checkBlockPosition()) {
       // If bricks have the same postition - move block up and put in the wall
+      console.log("block landed");
       this.activeBlock.pY--;
       this.wall.addBlock(this.activeBlock);
       this.activeBlock = this.generateNextBlock();
@@ -151,10 +154,12 @@ export default class playGroundModel {
       let brick = bricks[i];
       if (brick.pX < 0) {
         this.activeBlock.pX++;
+        console.log("Brick to far left");
         break;
       }
       if (brick.pX > this.numColumns - 1) {
         this.activeBlock.pX--;
+        console.log("Brick to far right");
         break;
       }
     }
@@ -205,7 +210,7 @@ export default class playGroundModel {
   };
 
   printConfig = () => {
-    console.log("Playground model settings\n=========================");
+    console.log("\nPlayground model settings\n=========================");
     console.log("numColumns: " + this.numColumns);
     console.log("numRows: " + this.numRows);
     console.log(

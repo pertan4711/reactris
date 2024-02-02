@@ -23,7 +23,13 @@ const TetrisApp = () => {
     initGameSettings
   );
 
-  const { activeBlockBricks, gameStatus, actionCallbacks } = UseGameState(pg);
+  const {
+    activeBlockBricks,
+    gameStatus,
+    startNewGame,
+    togglePause,
+    showSettings,
+  } = UseGameState(pg);
 
   return (
     <div>
@@ -31,14 +37,14 @@ const TetrisApp = () => {
         <Playground
           blockBricks={activeBlockBricks}
           gameStatus={gameStatus}
-          actionCallbacks={actionCallbacks}
+          actionCallbacks={{ startNewGame, togglePause, showSettings }}
           pg={pg}
         />
       </div>
       <div>
         <ShowDialog
           gameStatus={gameStatus}
-          actionCallbacks={actionCallbacks}
+          actionCallbacks={{ startNewGame, togglePause, showSettings }}
           pg={pg}
         />
       </div>
