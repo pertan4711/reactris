@@ -63,13 +63,13 @@ function UseGameState(pg: playGroundModel): any {
     }
   }, [pg, gameRunStatus]);
 
-  // Start new game from scratch
-  const startNewGame = () => {
-    pg.reset();
-    pg.gameover = false;
-    pg.pause = false;
-    setGameRunStatus(gameStatusEnum.Ongoing);
-  };
+  // // Start new game from scratch
+  // const startNewGame = () => {
+  //   pg.reset();
+  //   pg.gameover = false;
+  //   pg.pause = false;
+  //   setGameRunStatus(gameStatusEnum.Ongoing);
+  // };
 
   const showSettings = () => {
     setGameRunStatus(gameStatusEnum.Settings);
@@ -175,7 +175,7 @@ function UseGameState(pg: playGroundModel): any {
   return {
     activeBlockBricks,
     gameStatus: gameRunStatus,
-    startNewGame,
+    //startNewGame,
     togglePause,
     showSettings,
   };

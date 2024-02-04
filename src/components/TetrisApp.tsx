@@ -1,6 +1,7 @@
 // Main entry for game app
 // Implement view part in MVP - Model exist in singelton object 'pg'
 
+import { useState } from "react";
 import { gameSettingsType } from "../model/modeltypes";
 import playGroundModel from "../model/playground";
 import Playground from "./Playground";
@@ -16,20 +17,15 @@ let initGameSettings: gameSettingsType = {
   brickSpace: 72,
 };
 
-const TetrisApp = () => {
+const Game = (props: any) => {
   const pg = playGroundModel.getInstance(
     window.innerWidth,
     window.innerHeight,
     initGameSettings
   );
 
-  const {
-    activeBlockBricks,
-    gameStatus,
-    startNewGame,
-    togglePause,
-    showSettings,
-  } = UseGameState(pg);
+  const { activeBlockBricks, gameStatus, togglePause, showSettings } =
+    UseGameState(pg);
 
   return (
     <div>
@@ -37,19 +33,24 @@ const TetrisApp = () => {
         <Playground
           blockBricks={activeBlockBricks}
           gameStatus={gameStatus}
-          actionCallbacks={{ startNewGame, togglePause, showSettings }}
+          actionCallbacks={(props.startNewGame, togglePause, showSettings)}
           pg={pg}
         />
       </div>
       <div>
         <ShowDialog
           gameStatus={gameStatus}
-          actionCallbacks={{ startNewGame, togglePause, showSettings }}
+          actionCallbacks={(props.startNewGame, togglePause, showSettings)}
           pg={pg}
         />
       </div>
     </div>
   );
+};
+
+const TetrisApp = () => {
+  const [gameId, setGameId] = useState(1);
+  return <Game key={gameId} startNewGame={() => setGameId(gameId + 1)} />;
 };
 
 export default TetrisApp;
