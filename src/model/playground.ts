@@ -128,6 +128,7 @@ export default class playGroundModel {
       }
     }
     this.score = this.score + this.wall.check4CompletedRows();
+    this.level = this.calcLevel();
   };
 
   // Check wall and active block for overlaps
@@ -145,6 +146,10 @@ export default class playGroundModel {
         return true;
       }
     }
+  };
+
+  calcLevel = () => {
+    return Math.floor(this.score / this.gameSettings.levelUpgradeDiv);
   };
 
   // Check playground edges
@@ -224,6 +229,7 @@ export default class playGroundModel {
     console.log(...this.activeBlock.getBrickPosition());
     console.log("gameover: " + this.gameover);
     console.log("pause: " + this.pause);
+    console.log("level: " + this.level);
     console.log("initWallHeight: " + this.gameSettings.initWallHeight);
     let wall = this.getWall();
     console.log("wall: ");

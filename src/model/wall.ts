@@ -121,10 +121,15 @@ export default class wall {
   }
 
   addBlock(block: block) {
-    var bricks = block.getBrickPosition();
-    bricks.forEach((brick) => {
-      this.wall[brick.pY][brick.pX] = block.blockIndex;
-    });
+    if (block !== null) {
+      var bricks = block.getBrickPosition();
+      bricks.forEach((brick) => {
+        this.wall[brick.pY][brick.pX] = block.blockIndex;
+        // console.log(
+        //   "wall[" + brick.pY + "][" + brick.pX + "]: " + block.blockIndex
+        // );
+      });
+    }
   }
 
   check4CompletedRows(): number {
@@ -136,7 +141,7 @@ export default class wall {
           break;
         } else {
           if (col >= this.numColumns - 1) {
-            // Whole row - Remove and increment temp_score.
+            // Whole row - Remove and increment local counter
             this.deleteCompletedRow(row);
             completeRows++;
             console.log("completed row(s): " + completeRows);

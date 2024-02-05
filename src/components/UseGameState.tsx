@@ -30,25 +30,8 @@ function UseGameState(pg: playGroundModel): any {
     } else {
       pg.updateBlockWallStatus();
       setActiveBlockBricks(pg.activeBlock.getBrickPosition());
-
-      // If upgrade level
-      if (
-        pg.score % pg.gameSettings.levelUpgradeDiv === 0 &&
-        pg.score !== pg.lastScore
-      ) {
-        if (timeInterval > 500) {
-          let interval: number = timeInterval;
-          clearInterval(timeInterval);
-          pg.level += 1;
-          setTimeInterval(interval * 0.8);
-
-          console.log("LevelUp timeInternal: " + timeInterval);
-          setInterval(() => gameTick(), timeInterval);
-          pg.lastScore = pg.score;
-        }
-      }
     }
-  }, [pg, gameTick, timeInterval]);
+  }, [pg]);
 
   // Toggle game status Pause
   const togglePause = useCallback(() => {
@@ -81,7 +64,7 @@ function UseGameState(pg: playGroundModel): any {
         case "ArrowLeft":
         case "a":
           if (!pg.gameover) {
-            console.log("moveLeft");
+            // console.log("moveLeft");
             pg.activeBlock.moveLeft();
             if (pg.checkBlockPosition()) {
               pg.activeBlock.moveRight();
@@ -91,7 +74,7 @@ function UseGameState(pg: playGroundModel): any {
         case "ArrowRight":
         case "d":
           if (!pg.gameover) {
-            console.log("moveRight");
+            // console.log("moveRight");
             pg.activeBlock.moveRight();
             if (pg.checkBlockPosition()) {
               pg.activeBlock.moveLeft();
@@ -162,8 +145,31 @@ function UseGameState(pg: playGroundModel): any {
     [pg, togglePause, updatePlayground, timeInterval]
   );
 
-  // Assign keypress events
+  // Main game engine
   useEffect(() => {
+    function upgradeLevel(): boolean {
+      return (
+        (pg.score % pg.gameSettings.levelUpgradeDiv === 0 &&
+          pg.score !== pg.lastScore) ||
+        pg.score / pg.gameSettings.levelUpgradeDiv -
+          pg.lastScore / pg.gameSettings.levelUpgradeDiv >
+          1
+      );
+    }
+
+    function calcInterval(): number {
+      if (pg.level === 2) {
+        return 800;
+      } else if (pg.level === 3) {
+        return 700;
+      } else if (pg.level === 4) {
+        return 600;
+      } else if (pg.level > 4) {
+        return 500;
+      }
+      return 500;
+    }
+
     //pg.printConfig();
     document.addEventListener("keydown", handleKeys);
     const gameIntervalId = setInterval(() => {
@@ -172,6 +178,22 @@ function UseGameState(pg: playGroundModel): any {
         updatePlayground();
       }
     }, timeInterval);
+
+    console.log("score: " + pg.score + "lastScore: " + pg.lastScore);
+    console.log("upgradeLevel: " + upgradeLevel());
+
+    if (upgradeLevel()) {
+      let newInterval = calcInterval();
+      console.log("newInterval: " + newInterval);
+      console.log("gameIntervalId: " + gameIntervalId);
+      clearInterval(gameIntervalId);
+      pg.level += 1;
+      setTimeInterval(newInterval);
+
+      console.log("LevelUp timeInternal: " + timeInterval);
+      setInterval(() => gameTick(), timeInterval);
+      pg.lastScore = pg.score;
+    }
 
     return () => {
       clearInterval(gameIntervalId);
