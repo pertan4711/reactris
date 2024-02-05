@@ -1,12 +1,6 @@
 import { ScoreProps } from "../../model/types";
 
-const ScoreBoard = ({
-  width,
-  height,
-  gameStatus,
-  actionCallbacks,
-  pg,
-}: ScoreProps) => {
+const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
   return (
     <>
       {/* Shadow of board */}

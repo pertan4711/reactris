@@ -10,7 +10,7 @@ const ShowDialog = (props: ShowDialogProps) => {
   let gameOverTextTop =
     (props.pg.numRows * props.pg.gameSettings.brickSpace) / 2 - 100;
   let gameStatus: gameStatusEnum = props.gameStatus;
-  console.log("gameStatus: " + gameStatus);
+  //console.log("gameStatus: " + gameStatus);
 
   return (
     <div>

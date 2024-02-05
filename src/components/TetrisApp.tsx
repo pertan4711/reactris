@@ -24,8 +24,13 @@ const Game = (props: any) => {
     initGameSettings
   );
 
-  const { activeBlockBricks, gameStatus, togglePause, showSettings } =
-    UseGameState(pg);
+  const {
+    activeBlockBricks,
+    gameStatus,
+    startNewGame,
+    togglePause,
+    showSettings,
+  } = UseGameState(pg);
 
   return (
     <div>
@@ -33,14 +38,14 @@ const Game = (props: any) => {
         <Playground
           blockBricks={activeBlockBricks}
           gameStatus={gameStatus}
-          actionCallbacks={(props.startNewGame, togglePause, showSettings)}
+          actionCallbacks={{ startNewGame, togglePause, showSettings }}
           pg={pg}
         />
       </div>
       <div>
         <ShowDialog
           gameStatus={gameStatus}
-          actionCallbacks={(props.startNewGame, togglePause, showSettings)}
+          actionCallbacks={{ startNewGame, togglePause, showSettings }}
           pg={pg}
         />
       </div>

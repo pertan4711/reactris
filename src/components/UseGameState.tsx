@@ -23,30 +23,30 @@ function UseGameState(pg: playGroundModel): any {
 
   // Update active block and wall
   const updatePlayground: any = useCallback(() => {
-    console.log("updatePlayground");
-    pg.updateBlockWallStatus();
-    setActiveBlockBricks(pg.activeBlock.getBrickPosition());
-
-    // If upgrade level
-    if (
-      pg.score % pg.gameSettings.levelUpgradeDiv === 0 &&
-      pg.score !== pg.lastScore
-    ) {
-      if (timeInterval > 500) {
-        let interval: number = timeInterval;
-        clearInterval(timeInterval);
-        pg.level += 1;
-        setTimeInterval(interval * 0.8);
-
-        console.log("LevelUp timeInternal: " + timeInterval);
-        setInterval(() => gameTick(), timeInterval);
-        pg.lastScore = pg.score;
-      }
-    }
-
+    //console.log("updatePlayground");
     if (pg.gameover) {
       console.log("Game Over");
       setGameRunStatus(gameStatusEnum.GameOver);
+    } else {
+      pg.updateBlockWallStatus();
+      setActiveBlockBricks(pg.activeBlock.getBrickPosition());
+
+      // If upgrade level
+      if (
+        pg.score % pg.gameSettings.levelUpgradeDiv === 0 &&
+        pg.score !== pg.lastScore
+      ) {
+        if (timeInterval > 500) {
+          let interval: number = timeInterval;
+          clearInterval(timeInterval);
+          pg.level += 1;
+          setTimeInterval(interval * 0.8);
+
+          console.log("LevelUp timeInternal: " + timeInterval);
+          setInterval(() => gameTick(), timeInterval);
+          pg.lastScore = pg.score;
+        }
+      }
     }
   }, [pg, gameTick, timeInterval]);
 
@@ -63,13 +63,13 @@ function UseGameState(pg: playGroundModel): any {
     }
   }, [pg, gameRunStatus]);
 
-  // // Start new game from scratch
-  // const startNewGame = () => {
-  //   pg.reset();
-  //   pg.gameover = false;
-  //   pg.pause = false;
-  //   setGameRunStatus(gameStatusEnum.Ongoing);
-  // };
+  // Start new game from scratch
+  const startNewGame = () => {
+    pg.reset();
+    pg.gameover = false;
+    pg.pause = false;
+    setGameRunStatus(gameStatusEnum.Ongoing);
+  };
 
   const showSettings = () => {
     setGameRunStatus(gameStatusEnum.Settings);
@@ -83,12 +83,19 @@ function UseGameState(pg: playGroundModel): any {
           if (!pg.gameover) {
             console.log("moveLeft");
             pg.activeBlock.moveLeft();
+            if (pg.checkBlockPosition()) {
+              pg.activeBlock.moveRight();
+            }
           }
           break;
         case "ArrowRight":
         case "d":
           if (!pg.gameover) {
+            console.log("moveRight");
             pg.activeBlock.moveRight();
+            if (pg.checkBlockPosition()) {
+              pg.activeBlock.moveLeft();
+            }
           }
           break;
         case "ArrowUp":
@@ -175,7 +182,7 @@ function UseGameState(pg: playGroundModel): any {
   return {
     activeBlockBricks,
     gameStatus: gameRunStatus,
-    //startNewGame,
+    startNewGame,
     togglePause,
     showSettings,
   };
