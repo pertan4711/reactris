@@ -177,12 +177,12 @@ export default class playGroundModel {
   }
 
   addColumn = () => {
-    this.numColumns++;
+    //this.numColumns++;
     this.wall.addColumn();
   };
 
   deleteColumn = () => {
-    this.numColumns--;
+    //this.numColumns--;
     this.wall.deleteColumn();
   };
 
@@ -194,12 +194,12 @@ export default class playGroundModel {
   }
 
   addRow = () => {
-    this.numRows++;
+    //this.numRows++;
     this.wall.addRow();
   };
 
   deleteRow = () => {
-    this.numRows--;
+    //7this.numRows--;
     this.wall.deleteRow();
   };
 

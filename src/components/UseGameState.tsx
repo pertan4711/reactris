@@ -26,17 +26,38 @@ function UseGameState(pg: playGroundModel): any {
   // Update active block and wall
   const updatePlayground: any = useCallback(() => {
     //console.log("updatePlayground");
+    function calcInterval(): number {
+      // console.log("level: " + level + "  pg.level: " + pg.level);
+      if (level < 2) {
+        return 1000;
+      }
+      if (level === 2) {
+        return 800;
+      } else if (level === 3) {
+        return 700;
+      } else if (level === 4) {
+        return 600;
+      } else if (level === 5) {
+        return 500;
+      } else if (level > 5) {
+        return 400;
+      }
+      return 400;
+    }
+
     if (pg.gameover) {
       console.log("Game Over");
       setGameRunStatus(gameStatusEnum.GameOver);
     } else {
       pg.updateGame();
       setActiveBlockBricks(pg.activeBlock.getBrickPosition());
+      setTimeInterval(calcInterval());
     }
-  }, [pg]);
+  }, [pg, level]);
 
   // Toggle game status Pause
   const togglePause = useCallback(() => {
+    console.log("toggle: " + pg.pause);
     if (gameRunStatus !== gameStatusEnum.GameOver) {
       if (gameRunStatus === gameStatusEnum.Pause) {
         pg.pause = false;
@@ -150,28 +171,8 @@ function UseGameState(pg: playGroundModel): any {
   // Main game engine
   useEffect(() => {
 
-    function calcInterval(): number {
-      // console.log("level: " + level + "  pg.level: " + pg.level);
-      if (level < 2) {
-        return 1000;
-      }
-      if (level === 2) {
-        return 800;
-      } else if (level === 3) {
-        return 700;
-      } else if (level === 4) {
-        return 600;
-      } else if (level === 5) {
-        return 500;
-      } else if (level > 5) {
-        return 400;
-      }
-      return 400;
-    }
-
     //pg.printConfig();
     document.addEventListener("keydown", handleKeys);
-    setTimeInterval(calcInterval());
     const gameIntervalId = setInterval(() => {
       if (gameRunStatus === gameStatusEnum.Ongoing) {
         gameTick();
@@ -180,7 +181,6 @@ function UseGameState(pg: playGroundModel): any {
       }
     }, timeInterval);
 
-    setTimeInterval(calcInterval());
     if (pg.level !== level) {
       setLevel(pg.level);
       console.log("LevelUp timeInternal: " + timeInterval + "  level: " + level);
