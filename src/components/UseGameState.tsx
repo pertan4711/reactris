@@ -6,11 +6,13 @@ import playGroundModel from "../model/playground";
 // Handle state and user hooks
 //
 function UseGameState(pg: playGroundModel): any {
+
   // State variables
   const [activeBlockBricks, setActiveBlockBricks] = useState(
     pg.activeBlock.getBrickPosition()
   );
   const [timeInterval, setTimeInterval] = useState(1000);
+  const [level, setLevel] = useState(pg.level);
   const [gameRunStatus, setGameRunStatus] = useState(gameStatusEnum.GameOver);
 
   // Set interval first to 1 sec
@@ -28,7 +30,7 @@ function UseGameState(pg: playGroundModel): any {
       console.log("Game Over");
       setGameRunStatus(gameStatusEnum.GameOver);
     } else {
-      pg.updateBlockWallStatus();
+      pg.updateGame();
       setActiveBlockBricks(pg.activeBlock.getBrickPosition());
     }
   }, [pg]);
@@ -147,59 +149,48 @@ function UseGameState(pg: playGroundModel): any {
 
   // Main game engine
   useEffect(() => {
-    function upgradeLevel(): boolean {
-      return (
-        (pg.score % pg.gameSettings.levelUpgradeDiv === 0 &&
-          pg.score !== pg.lastScore) ||
-        pg.score / pg.gameSettings.levelUpgradeDiv -
-          pg.lastScore / pg.gameSettings.levelUpgradeDiv >
-          1
-      );
-    }
 
     function calcInterval(): number {
-      if (pg.level === 2) {
-        return 800;
-      } else if (pg.level === 3) {
-        return 700;
-      } else if (pg.level === 4) {
-        return 600;
-      } else if (pg.level > 4) {
-        return 500;
+      // console.log("level: " + level + "  pg.level: " + pg.level);
+      if (level < 2) {
+        return 1000;
       }
-      return 500;
+      if (level === 2) {
+        return 800;
+      } else if (level === 3) {
+        return 700;
+      } else if (level === 4) {
+        return 600;
+      } else if (level === 5) {
+        return 500;
+      } else if (level > 5) {
+        return 400;
+      }
+      return 400;
     }
 
     //pg.printConfig();
     document.addEventListener("keydown", handleKeys);
+    setTimeInterval(calcInterval());
     const gameIntervalId = setInterval(() => {
       if (gameRunStatus === gameStatusEnum.Ongoing) {
         gameTick();
         updatePlayground();
+        console.log("gameIntervalId: " + gameIntervalId);
       }
     }, timeInterval);
 
-    console.log("score: " + pg.score + "lastScore: " + pg.lastScore);
-    console.log("upgradeLevel: " + upgradeLevel());
-
-    if (upgradeLevel()) {
-      let newInterval = calcInterval();
-      console.log("newInterval: " + newInterval);
-      console.log("gameIntervalId: " + gameIntervalId);
-      clearInterval(gameIntervalId);
-      pg.level += 1;
-      setTimeInterval(newInterval);
-
-      console.log("LevelUp timeInternal: " + timeInterval);
-      setInterval(() => gameTick(), timeInterval);
-      pg.lastScore = pg.score;
+    setTimeInterval(calcInterval());
+    if (pg.level !== level) {
+      setLevel(pg.level);
+      console.log("LevelUp timeInternal: " + timeInterval + "  level: " + level);
     }
 
     return () => {
       clearInterval(gameIntervalId);
       document.removeEventListener("keydown", handleKeys);
     };
-  }, [pg, gameTick, timeInterval, gameRunStatus, handleKeys, updatePlayground]);
+  }, [pg, gameTick, timeInterval, level, gameRunStatus, handleKeys, updatePlayground]);
 
   return {
     activeBlockBricks,

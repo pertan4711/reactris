@@ -15,13 +15,9 @@ export default class playGroundModel {
   pause: boolean;
   wall: wall;
   score: number;
-  lastScore: number;
   level: number;
   activeBlock: Block;
 
-  // brickSize: number;
-  // brickSpace: number;
-  // initWallHeight: number;
   gameSettings: gameSettingsType;
 
   windowSizeX: number;
@@ -40,10 +36,8 @@ export default class playGroundModel {
       initWallHeight: gameSettings.initWallHeight,
     });
     this.score = 0;
-    this.lastScore = 0;
-    this.level = 0;
+    this.level = 1;
     this.activeBlock = this.generateNextBlock();
-    //this.initWallHeight = gameSettings.initWallHeight;
     this.gameSettings = gameSettings;
 
     this.gameSettings.brickSize = calculateBrickSize(
@@ -96,9 +90,10 @@ export default class playGroundModel {
   };
 
   /// Reset and start game
-  reset = () => {
+  reset = () => {    
     this.gameover = false;
     this.score = 0;
+    this.level = 1;
     this.activeBlock = this.generateNextBlock();
     this.wall.reset(this.gameSettings.initWallHeight);
     this.activeBlock.pY = 0;
@@ -108,16 +103,22 @@ export default class playGroundModel {
     return this.wall.getWall();
   };
 
+  updateGame = () => {
+    this.updateBlockWall();
+    /// If block has landed - update score and randomize next active block
+    this.score = this.score + this.wall.check4CompletedRows();
+    this.level = this.calcLevel();
+  }
+
   /// Check if block has landed after update or MoveDown.
-  /// If block has landed - update score and randomize next active block-
-  updateBlockWallStatus = () => {
+  updateBlockWall = () => {
     // If block is outside boudaries
     this.adjustBlockWallPosition();
 
     // If block has landed put it in the wall
     if (this.checkBlockPosition()) {
       // If bricks have the same postition - move block up and put in the wall
-      console.log("block collided");
+      console.log("block landed on wall");
       this.activeBlock.pY--;
       this.wall.addBlock(this.activeBlock);
       this.activeBlock = this.generateNextBlock();
@@ -127,8 +128,6 @@ export default class playGroundModel {
         this.gameover = true;
       }
     }
-    this.score = this.score + this.wall.check4CompletedRows();
-    this.level = this.calcLevel();
   };
 
   // Check wall and active block for overlaps
@@ -149,7 +148,7 @@ export default class playGroundModel {
   };
 
   calcLevel = () => {
-    return Math.floor(this.score / this.gameSettings.levelUpgradeDiv);
+    return Math.floor(this.score / this.gameSettings.levelUpgradeDiv) + 1;
   };
 
   // Check playground edges
@@ -219,17 +218,15 @@ export default class playGroundModel {
     console.log("numColumns: " + this.numColumns);
     console.log("numRows: " + this.numRows);
     console.log(
-      "activeBlock: { color: " +
+      "activeBlock: { " +
+        this.activeBlock.constructor.name +
+        ", " +
         this.activeBlock.getBlockColor() +
         ", " +
-        this.activeBlock.getBrickPosition() +
-        " }"
-    );
-    console.log(" bricks:");
+        this.activeBlock.spinPosition +
+        " } bricks:");
     console.log(...this.activeBlock.getBrickPosition());
-    console.log("gameover: " + this.gameover);
-    console.log("pause: " + this.pause);
-    console.log("level: " + this.level);
+    console.log("gameover: " + this.gameover + "  pause: " + this.pause + "  level: " + this.level + "  score: " + this.score);
     console.log("initWallHeight: " + this.gameSettings.initWallHeight);
     let wall = this.getWall();
     console.log("wall: ");
