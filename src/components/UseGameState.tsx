@@ -6,7 +6,6 @@ import playGroundModel from "../model/playground";
 // Handle state and user hooks
 //
 function UseGameState(pg: playGroundModel): any {
-
   // State variables
   const [activeBlockBricks, setActiveBlockBricks] = useState(
     pg.activeBlock.getBrickPosition()
@@ -19,41 +18,20 @@ function UseGameState(pg: playGroundModel): any {
   const gameTick = useCallback(() => {
     if (gameRunStatus === gameStatusEnum.Ongoing) {
       pg.incTime();
-      //updatePlayground();
     }
   }, [pg, gameRunStatus]);
 
   // Update active block and wall
   const updatePlayground: any = useCallback(() => {
     //console.log("updatePlayground");
-    function calcInterval(): number {
-      // console.log("level: " + level + "  pg.level: " + pg.level);
-      if (level < 2) {
-        return 1000;
-      }
-      if (level === 2) {
-        return 800;
-      } else if (level === 3) {
-        return 700;
-      } else if (level === 4) {
-        return 600;
-      } else if (level === 5) {
-        return 500;
-      } else if (level > 5) {
-        return 400;
-      }
-      return 400;
-    }
-
     if (pg.gameover) {
       console.log("Game Over");
       setGameRunStatus(gameStatusEnum.GameOver);
     } else {
       pg.updateGame();
       setActiveBlockBricks(pg.activeBlock.getBrickPosition());
-      setTimeInterval(calcInterval());
     }
-  }, [pg, level]);
+  }, [pg]);
 
   // Toggle game status Pause
   const togglePause = useCallback(() => {
@@ -75,6 +53,7 @@ function UseGameState(pg: playGroundModel): any {
     pg.gameover = false;
     pg.pause = false;
     setGameRunStatus(gameStatusEnum.Ongoing);
+    setLevel(1);
   };
 
   const showSettings = () => {
@@ -170,27 +149,55 @@ function UseGameState(pg: playGroundModel): any {
 
   // Main game engine
   useEffect(() => {
+    function calcInterval(): number {
+      console.log("level: " + level + "  pg.level: " + pg.level);
+      if (level < 2) {
+        return 1000;
+      }
+      if (level === 2) {
+        return 800;
+      } else if (level === 3) {
+        return 700;
+      } else if (level === 4) {
+        return 600;
+      } else if (level === 5) {
+        return 500;
+      } else if (level > 5) {
+        return 400;
+      }
+      return 400;
+    }
 
     //pg.printConfig();
     document.addEventListener("keydown", handleKeys);
+    setTimeInterval(calcInterval());
     const gameIntervalId = setInterval(() => {
       if (gameRunStatus === gameStatusEnum.Ongoing) {
         gameTick();
         updatePlayground();
+        if (pg.level !== level) {
+          setLevel(pg.level);
+          console.log(
+            "LevelUp timeInternal: " + timeInterval + "  level: " + level
+          );
+        }
         console.log("gameIntervalId: " + gameIntervalId);
       }
     }, timeInterval);
-
-    if (pg.level !== level) {
-      setLevel(pg.level);
-      console.log("LevelUp timeInternal: " + timeInterval + "  level: " + level);
-    }
 
     return () => {
       clearInterval(gameIntervalId);
       document.removeEventListener("keydown", handleKeys);
     };
-  }, [pg, gameTick, timeInterval, level, gameRunStatus, handleKeys, updatePlayground]);
+  }, [
+    pg,
+    gameTick,
+    timeInterval,
+    level,
+    gameRunStatus,
+    handleKeys,
+    updatePlayground,
+  ]);
 
   return {
     activeBlockBricks,
