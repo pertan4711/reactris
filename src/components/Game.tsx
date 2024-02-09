@@ -25,7 +25,7 @@ const Game = (props: any) => {
 
   pg.gameSettings = gameSettings;
 
-  console.log("gameStatus: " + gameStatus);
+  //console.log("gameStatus: " + gameStatus);
 
   return (
     <div>

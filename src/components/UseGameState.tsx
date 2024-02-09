@@ -28,7 +28,7 @@ function UseGameState(pg: playGroundModel): any {
   const updatePlayground: any = useCallback(() => {
     //console.log("updatePlayground");
     if (pg.gameover) {
-      console.log("Game Over");
+      console.log("Game Over! gameStatus:" + gameStatus);
       setLastGameStatus(gameStatus);
       setGameStatus(gameStatusEnum.GameOver);
     } else {
@@ -190,7 +190,12 @@ function UseGameState(pg: playGroundModel): any {
         if (pg.level !== level) {
           setLevel(pg.level);
           console.log(
-            "LevelUp timeInternal: " + timeInterval + "  level: " + level
+            "levelUp timeInternal: " +
+              timeInterval +
+              "  level: " +
+              level +
+              "  score: " +
+              pg.score
           );
         }
         console.log("gameIntervalId: " + gameIntervalId);
@@ -198,6 +203,7 @@ function UseGameState(pg: playGroundModel): any {
     }, timeInterval);
 
     return () => {
+      console.log("clearInterval");
       clearInterval(gameIntervalId);
       document.removeEventListener("keydown", handleKeys);
     };

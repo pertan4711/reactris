@@ -42,6 +42,12 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
           event.target.value >= 0 ? true : false;
         configSettings.initWallHeight[2] = true;
         break;
+      case "levelUpgradeDiv":
+        configSettings.levelUpgradeDiv[0] = event.target.value;
+        configSettings.levelUpgradeDiv[1] =
+          event.target.value >= 1 ? true : false;
+        configSettings.levelUpgradeDiv[2] = true;
+        break;
       default:
         break;
     }
