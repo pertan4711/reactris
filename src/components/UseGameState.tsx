@@ -150,7 +150,7 @@ function UseGameState(pg: playGroundModel): any {
   // Main game engine
   useEffect(() => {
     function calcInterval(): number {
-      console.log("level: " + level + "  pg.level: " + pg.level);
+      //console.log("level: " + level + "  pg.level: " + pg.level);
       if (level < 2) {
         return 1000;
       }

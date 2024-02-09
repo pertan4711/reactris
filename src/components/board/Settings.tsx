@@ -1,76 +1,69 @@
 import { useState } from "react";
 import { SettingsProps } from "../../model/types";
+import { gameSettingsType } from "../../model/modeltypes";
 
-const Settings = (sp: SettingsProps) => {
+const Settings = (props: SettingsProps) => {
   let configSettings = {
-    initWallHeight: [sp.pg.gameSettings.initWallHeight, true, false],
-    numColumns: [sp.pg.gameSettings.numColumns, true, false],
-    numRows: [sp.pg.gameSettings.numRows, true, false],
-    brickSize: [sp.pg.gameSettings.brickSize, true, false],
-    brickSpace: [sp.pg.gameSettings.brickSpace, true, false],
+    initWallHeight: [props.gameSettings.initWallHeight, true, false],
+    numColumns: [props.gameSettings.numColumns, true, false],
+    numRows: [props.gameSettings.numRows, true, false],
+    brickSize: [props.gameSettings.brickSize, true, false],
+    brickSpace: [props.gameSettings.brickSpace, true, false],
+    levelUpgradeDiv: [props.gameSettings.levelUpgradeDiv, true, false],
   };
 
-  const [settings, setSettings] = useState(configSettings);
+  const [localSettings, setLocalSettings] = useState(configSettings);
 
   const handleChange = (event: any) => {
-    let valid: boolean = false;
-
     switch (event.target.name) {
       case "numColumns":
-        configSettings.numColumns = event.target.value;
-        valid = event.target.value > 5 ? true : false;
+        configSettings.numColumns[0] = event.target.value;
+        configSettings.numColumns[1] = event.target.value > 5 ? true : false; // valid
+        configSettings.numColumns[2] = true; // changed
         break;
       case "numRows":
-        configSettings.numRows = event.target.value;
-        valid = event.target.value > 5 ? true : false;
+        configSettings.numRows[0] = event.target.value;
+        configSettings.numRows[1] = event.target.value > 5 ? true : false;
+        configSettings.numRows[2] = true;
         break;
       case "brickSize":
-        configSettings.brickSize = event.target.value;
-        valid = event.target.value > 5 ? true : false;
+        configSettings.brickSize[0] = event.target.value;
+        configSettings.brickSize[1] = event.target.value > 5 ? true : false;
+        configSettings.brickSize[2] = true;
         break;
       case "brickSpace":
-        valid = event.target.value > 5 ? true : false;
+        configSettings.brickSpace[0] = event.target.value;
+        configSettings.brickSpace[1] = event.target.value > 5 ? true : false;
+        configSettings.brickSpace[2] = true;
         break;
       case "initWallHeight":
-        valid = event.target.value >= 0 ? true : false;
+        configSettings.initWallHeight[0] = event.target.value;
+        configSettings.initWallHeight[1] =
+          event.target.value >= 0 ? true : false;
+        configSettings.initWallHeight[2] = true;
         break;
       default:
         break;
     }
 
-    setSettings({
+    setLocalSettings({
       ...configSettings,
-      [event.target.name]: [event.target.value, valid, true],
     });
   };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
-    for (let [key, setting] of Object.entries(settings)) {
-      if (setting[2]) {
-        switch (key) {
-          case "numColumns":
-            sp.pg.numColumns = parseInt(setting[0].toString());
-            break;
-          case "numRows":
-            sp.pg.numRows = parseInt(setting[0].toString());
-            break;
-          case "brickSize":
-            sp.pg.gameSettings.brickSize = parseInt(setting[0].toString());
-            break;
-          case "brickSpace":
-            sp.pg.gameSettings.brickSpace = parseInt(setting[0].toString());
-            break;
-          case "initWallHeight":
-            sp.pg.gameSettings.initWallHeight = parseInt(setting[0].toString());
-            break;
-        }
-      }
-    }
+    let updateSettings: gameSettingsType = {
+      initWallHeight: parseInt(localSettings.initWallHeight[0].toString()),
+      numColumns: parseInt(localSettings.numColumns[0].toString()),
+      numRows: parseInt(localSettings.numRows[0].toString()),
+      brickSize: parseInt(localSettings.brickSize[0].toString()),
+      brickSpace: parseInt(localSettings.brickSpace[0].toString()),
+      levelUpgradeDiv: props.gameSettings.levelUpgradeDiv,
+    };
 
-    //sp.settings();
-    sp.pg.updateBlockWall();
+    props.setGameSettings(updateSettings);
   };
 
   return (
@@ -85,7 +78,7 @@ const Settings = (sp: SettingsProps) => {
         <form onSubmit={handleSubmit}>
           <table>
             <tbody>
-              {Object.entries(settings).map(([key, setting]) => (
+              {Object.entries(localSettings).map(([key, setting]) => (
                 <tr key={key}>
                   <th>
                     {key}

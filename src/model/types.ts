@@ -1,5 +1,5 @@
 import playgroundModel from "./playground";
-import { gameStatusEnum } from "./modeltypes";
+import { gameSettingsType, gameStatusEnum } from "./modeltypes";
 
 export type PlaygroundProps = {
   blockBricks: { pX: number; pY: number }[];
@@ -9,9 +9,10 @@ export type PlaygroundProps = {
 };
 
 export type ShowDialogProps = {
+  score: number;
   gameStatus: gameStatusEnum;
+  gameSettings: gameSettingsType;
   actionCallbacks: any;
-  pg: playgroundModel;
 };
 
 export type BrickProps = {
@@ -64,5 +65,6 @@ export type PauseProps = {
 };
 
 export type SettingsProps = {
-  pg: playgroundModel;
+  gameSettings: gameSettingsType;
+  setGameSettings: any;
 };
