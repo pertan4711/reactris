@@ -66,5 +66,5 @@ export type PauseProps = {
 
 export type SettingsProps = {
   gameSettings: gameSettingsType;
-  setGameSettings: any;
+  setGameSettingsCallback: any;
 };

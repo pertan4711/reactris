@@ -17,7 +17,9 @@ const ShowDialog = (props: ShowDialogProps) => {
       {gameStatus === gameStatusEnum.Settings && (
         <Settings
           gameSettings={props.gameSettings}
-          setGameSettings={props.actionCallbacks.setGameSettings}
+          setGameSettingsCallback={
+            props.actionCallbacks.setGameSettingsCallback
+          }
         />
       )}
       {gameStatus === gameStatusEnum.GameOver && (

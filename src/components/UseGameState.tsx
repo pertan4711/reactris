@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { gameStatusEnum } from "../model/modeltypes";
 import playGroundModel from "../model/playground";
+import { gameSettingsType } from "../model/modeltypes";
 
 //
 // Handle state and user hooks
@@ -12,52 +13,63 @@ function UseGameState(pg: playGroundModel): any {
   );
   const [timeInterval, setTimeInterval] = useState(1000);
   const [level, setLevel] = useState(pg.level);
-  const [gameRunStatus, setGameRunStatus] = useState(gameStatusEnum.GameOver);
+  const [gameStatus, setGameStatus] = useState(gameStatusEnum.GameOver);
+  const [lastGameStatus, setLastGameStatus] = useState(gameStatus);
+  const [gameSettings, setGameSettings] = useState(pg.gameSettings);
 
   // Set interval first to 1 sec
   const gameTick = useCallback(() => {
-    if (gameRunStatus === gameStatusEnum.Ongoing) {
+    if (gameStatus === gameStatusEnum.Ongoing) {
       pg.incTime();
     }
-  }, [pg, gameRunStatus]);
+  }, [pg, gameStatus]);
 
   // Update active block and wall
   const updatePlayground: any = useCallback(() => {
     //console.log("updatePlayground");
     if (pg.gameover) {
       console.log("Game Over");
-      setGameRunStatus(gameStatusEnum.GameOver);
+      setLastGameStatus(gameStatus);
+      setGameStatus(gameStatusEnum.GameOver);
     } else {
       pg.updateGame();
       setActiveBlockBricks(pg.activeBlock.getBrickPosition());
     }
-  }, [pg]);
+  }, [pg, gameStatus]);
 
   // Toggle game status Pause
   const togglePause = useCallback(() => {
     console.log("toggle: " + pg.pause);
-    if (gameRunStatus !== gameStatusEnum.GameOver) {
-      if (gameRunStatus === gameStatusEnum.Pause) {
+    if (gameStatus !== gameStatusEnum.GameOver) {
+      setLastGameStatus(gameStatus);
+      if (gameStatus === gameStatusEnum.Pause) {
         pg.pause = false;
-        setGameRunStatus(gameStatusEnum.Ongoing);
+        setGameStatus(gameStatusEnum.Ongoing);
       } else {
         pg.pause = true;
-        setGameRunStatus(gameStatusEnum.Pause);
+        setGameStatus(gameStatusEnum.Pause);
       }
     }
-  }, [pg, gameRunStatus]);
+  }, [pg, gameStatus]);
 
   // Start new game from scratch
   const startNewGame = () => {
     pg.reset();
     pg.gameover = false;
     pg.pause = false;
-    setGameRunStatus(gameStatusEnum.Ongoing);
+    setLastGameStatus(gameStatus);
+    setGameStatus(gameStatusEnum.Ongoing);
     setLevel(1);
   };
 
   const showSettings = () => {
-    setGameRunStatus(gameStatusEnum.Settings);
+    setLastGameStatus(gameStatus);
+    setGameStatus(gameStatusEnum.Settings);
+  };
+
+  const setGameSettingsCallback = (myGameSettings: gameSettingsType) => {
+    setGameSettings(myGameSettings);
+    setGameStatus(lastGameStatus);
   };
 
   const handleKeys = useCallback(
@@ -172,7 +184,7 @@ function UseGameState(pg: playGroundModel): any {
     document.addEventListener("keydown", handleKeys);
     setTimeInterval(calcInterval());
     const gameIntervalId = setInterval(() => {
-      if (gameRunStatus === gameStatusEnum.Ongoing) {
+      if (gameStatus === gameStatusEnum.Ongoing) {
         gameTick();
         updatePlayground();
         if (pg.level !== level) {
@@ -194,17 +206,19 @@ function UseGameState(pg: playGroundModel): any {
     gameTick,
     timeInterval,
     level,
-    gameRunStatus,
+    gameStatus,
     handleKeys,
     updatePlayground,
   ]);
 
   return {
     activeBlockBricks,
-    gameStatus: gameRunStatus,
+    gameStatus,
+    gameSettings,
     startNewGame,
     togglePause,
     showSettings,
+    setGameSettingsCallback,
   };
 }
 

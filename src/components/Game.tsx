@@ -1,30 +1,31 @@
 // Main entry for game app
 // Implement view part in MVP - Model exist in singelton object 'pg'
 
-import { useState } from "react";
 import playGroundModel from "../model/playground";
 import Playground from "./Playground";
 import UseGameState from "./UseGameState";
 import ShowDialog from "./ShowDialog";
 
 const Game = (props: any) => {
-  const [gameSettings, setGameSettings] = useState(props.gameSettings);
-
   const pg = playGroundModel.getInstance(
     window.innerWidth,
     window.innerHeight,
-    gameSettings
+    props.gameSettings
   );
-
-  pg.gameSettings = gameSettings;
 
   const {
     activeBlockBricks,
     gameStatus,
+    gameSettings,
     startNewGame,
     togglePause,
     showSettings,
+    setGameSettingsCallback,
   } = UseGameState(pg);
+
+  pg.gameSettings = gameSettings;
+
+  console.log("gameStatus: " + gameStatus);
 
   return (
     <div>
@@ -45,7 +46,7 @@ const Game = (props: any) => {
             startNewGame,
             togglePause,
             showSettings,
-            setGameSettings,
+            setGameSettingsCallback,
           }}
         />
       </div>

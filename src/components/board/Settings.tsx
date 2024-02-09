@@ -2,14 +2,14 @@ import { useState } from "react";
 import { SettingsProps } from "../../model/types";
 import { gameSettingsType } from "../../model/modeltypes";
 
-const Settings = (props: SettingsProps) => {
+const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
   let configSettings = {
-    initWallHeight: [props.gameSettings.initWallHeight, true, false],
-    numColumns: [props.gameSettings.numColumns, true, false],
-    numRows: [props.gameSettings.numRows, true, false],
-    brickSize: [props.gameSettings.brickSize, true, false],
-    brickSpace: [props.gameSettings.brickSpace, true, false],
-    levelUpgradeDiv: [props.gameSettings.levelUpgradeDiv, true, false],
+    initWallHeight: [gameSettings.initWallHeight, true, false],
+    numColumns: [gameSettings.numColumns, true, false],
+    numRows: [gameSettings.numRows, true, false],
+    brickSize: [gameSettings.brickSize, true, false],
+    brickSpace: [gameSettings.brickSpace, true, false],
+    levelUpgradeDiv: [gameSettings.levelUpgradeDiv, true, false],
   };
 
   const [localSettings, setLocalSettings] = useState(configSettings);
@@ -60,10 +60,10 @@ const Settings = (props: SettingsProps) => {
       numRows: parseInt(localSettings.numRows[0].toString()),
       brickSize: parseInt(localSettings.brickSize[0].toString()),
       brickSpace: parseInt(localSettings.brickSpace[0].toString()),
-      levelUpgradeDiv: props.gameSettings.levelUpgradeDiv,
+      levelUpgradeDiv: gameSettings.levelUpgradeDiv,
     };
 
-    props.setGameSettings(updateSettings);
+    setGameSettingsCallback(updateSettings);
   };
 
   return (
