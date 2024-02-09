@@ -2,26 +2,27 @@
 // Implement view part in MVP - Model exist in singelton object 'pg'
 
 import { useState } from "react";
-import { gameSettingsType } from "../model/modeltypes";
+//import { gameSettingsType } from "../model/modeltypes";
 import playGroundModel from "../model/playground";
 import Playground from "./Playground";
 import UseGameState from "./UseGameState";
 import ShowDialog from "./ShowDialog";
 
-let initGameSettings: gameSettingsType = {
-  numColumns: 10,
-  numRows: 14,
-  initWallHeight: 4,
-  levelUpgradeDiv: 2,
-  brickSize: 70,
-  brickSpace: 72,
-};
+let initGameSettings: { name: string; value: number }[] = [
+  { name: "numColumns", value: 10 },
+  { name: "numRows", value: 14 },
+  { name: "initWallHeight", value: 4 },
+  { name: "levelUpgradeDiv", value: 2 },
+  { name: "brickSize", value: 70 },
+  { name: "brickSpace", value: 72 },
+];
 
 const Game = (props: any) => {
+  const [gameSettings, setGameSettings] = useState(initGameSettings);
   const pg = playGroundModel.getInstance(
     window.innerWidth,
     window.innerHeight,
-    initGameSettings
+    gameSettings
   );
 
   const {
@@ -46,7 +47,9 @@ const Game = (props: any) => {
         <ShowDialog
           gameStatus={gameStatus}
           actionCallbacks={{ startNewGame, togglePause, showSettings }}
-          pg={pg}
+          gameSettings={gameSettings}
+          gameSettingsCallback={setGameSettings}
+          score={pg.score}
         />
       </div>
     </div>

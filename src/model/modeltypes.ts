@@ -17,14 +17,14 @@ export type wallModelType = {
   initWallHeight: number;
 };
 
-export type gameSettingsType = {
-  numColumns: number;
-  numRows: number;
-  initWallHeight: number;
-  levelUpgradeDiv: number;
-  brickSize: number;
-  brickSpace: number;
-};
+// export type gameSettingsType = {
+//   numColumns: number;
+//   numRows: number;
+//   initWallHeight: number;
+//   levelUpgradeDiv: number;
+//   brickSize: number;
+//   brickSpace: number;
+// };
 
 export enum gameStatusEnum {
   GameOver,

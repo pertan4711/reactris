@@ -11,7 +11,9 @@ export type PlaygroundProps = {
 export type ShowDialogProps = {
   gameStatus: gameStatusEnum;
   actionCallbacks: any;
-  pg: playgroundModel;
+  gameSettings: any;
+  gameSettingsCallback: any;
+  score: number;
 };
 
 export type BrickProps = {
@@ -64,5 +66,6 @@ export type PauseProps = {
 };
 
 export type SettingsProps = {
-  pg: playgroundModel;
+  gameSettings: [string, number][];
+  gameSettingsCallback: any;
 };

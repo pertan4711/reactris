@@ -6,18 +6,23 @@ import { gameStatusEnum } from "../model/modeltypes";
 
 const ShowDialog = (props: ShowDialogProps) => {
   let gameOverTextLeft =
-    (props.pg.numColumns * props.pg.gameSettings.brickSpace) / 2 - 100;
+    (props.gameSettings.numColumns * props.gameSettings.brickSpace) / 2 - 100;
   let gameOverTextTop =
-    (props.pg.numRows * props.pg.gameSettings.brickSpace) / 2 - 100;
+    (props.gameSettings.numRows * props.gameSettings.brickSpace) / 2 - 100;
   let gameStatus: gameStatusEnum = props.gameStatus;
   //console.log("gameStatus: " + gameStatus);
 
   return (
     <div>
-      {gameStatus === gameStatusEnum.Settings && <Settings pg={props.pg} />}
+      {gameStatus === gameStatusEnum.Settings && (
+        <Settings
+          gameSettings={props.gameSettings}
+          gameSettingsCallback={props.gameSettingsCallback}
+        />
+      )}
       {gameStatus === gameStatusEnum.GameOver && (
         <GameOver
-          score={props.pg.score}
+          score={props.score}
           pgLeft={gameOverTextLeft}
           pgTop={gameOverTextTop}
           startNewGame={props.actionCallbacks.startNewGame}

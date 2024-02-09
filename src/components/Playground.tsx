@@ -4,6 +4,7 @@ import Wall from "./game/Wall";
 import { PlaygroundProps } from "../model/types";
 import Boundary from "./board/Boundary";
 import ScoreBoard from "./board/Score";
+import { getSetting } from "../utils/utils";
 
 function Playground({
   blockBricks,
@@ -11,8 +12,13 @@ function Playground({
   actionCallbacks,
   pg,
 }: PlaygroundProps) {
-  const pwidth: number = pg.numColumns * pg.gameSettings.brickSpace;
-  const pheight: number = pg.numRows * pg.gameSettings.brickSpace;
+  const brickSpace = getSetting(pg, "brickSpace");
+  const brickSize = getSetting(pg, "brickSize");
+  const numColumns = getSetting(pg, "numColumns");
+  const numRows = getSetting(pg, "numRows");
+
+  const pwidth: number = pg.numColumns * brickSpace;
+  const pheight: number = pg.numRows * brickSpace;
 
   return (
     <div>
@@ -29,17 +35,17 @@ function Playground({
         <Block
           bricks={blockBricks}
           color={pg.activeBlock.getBlockColor()}
-          numCol={pg.gameSettings.numColumns}
-          brickSize={pg.gameSettings.brickSize}
-          brickSpace={pg.gameSettings.brickSpace}
+          numCol={numColumns}
+          brickSize={brickSize}
+          brickSpace={brickSpace}
         />
         {/* Colored wall */}
         <Wall
           wall={pg.getWall()}
-          numCol={pg.gameSettings.numColumns}
-          numRow={pg.gameSettings.numRows}
-          brickSize={pg.gameSettings.brickSize}
-          brickSpace={pg.gameSettings.brickSpace}
+          numCol={numColumns}
+          numRow={numRows}
+          brickSize={brickSize}
+          brickSpace={brickSpace}
         />
       </div>
     </div>

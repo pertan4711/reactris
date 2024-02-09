@@ -1,76 +1,103 @@
-import { useState } from "react";
+//import { useState } from "react";
 import { SettingsProps } from "../../model/types";
+//import { gameSettingsType } from "../../model/modeltypes";
 
 const Settings = (sp: SettingsProps) => {
-  let configSettings = {
-    initWallHeight: [sp.pg.gameSettings.initWallHeight, true, false],
-    numColumns: [sp.pg.gameSettings.numColumns, true, false],
-    numRows: [sp.pg.gameSettings.numRows, true, false],
-    brickSize: [sp.pg.gameSettings.brickSize, true, false],
-    brickSpace: [sp.pg.gameSettings.brickSpace, true, false],
+  type localSettingType = {
+    settingName: string;
+    settingValue: number;
+    valid: Boolean;
+    changed: Boolean;
   };
 
-  const [settings, setSettings] = useState(configSettings);
+  let localSettings: localSettingType[] = [];
+
+  // Transform to local setting object to detect change and validate
+  for (const [key, value] of sp.gameSettings) {
+    let localSetting: localSettingType = {
+      settingName: key.toString(),
+      settingValue: value,
+      valid: true,
+      changed: false,
+    };
+    localSettings.push(localSetting);
+  }
+
+  //const [settings, setSettings] = useState(configSettings);
 
   const handleChange = (event: any) => {
-    let valid: boolean = false;
+    let setSetting = localSettings.find(
+      (setting) => setting.settingName === event.target.name
+    );
 
-    switch (event.target.name) {
-      case "numColumns":
-        configSettings.numColumns = event.target.value;
-        valid = event.target.value > 5 ? true : false;
-        break;
-      case "numRows":
-        configSettings.numRows = event.target.value;
-        valid = event.target.value > 5 ? true : false;
-        break;
-      case "brickSize":
-        configSettings.brickSize = event.target.value;
-        valid = event.target.value > 5 ? true : false;
-        break;
-      case "brickSpace":
-        valid = event.target.value > 5 ? true : false;
-        break;
-      case "initWallHeight":
-        valid = event.target.value >= 0 ? true : false;
-        break;
-      default:
-        break;
+    if (setSetting != null) {
+      setSetting.settingValue = event.target.value;
+      setSetting.changed = true;
+
+      // Valid stuff
+      switch (event.target.name) {
+        case "numColumns":
+        case "numRows":
+        case "brickSize":
+        case "brickSpace":
+          setSetting.valid = event.target.value > 5 ? true : false;
+          break;
+        case "initWallHeight":
+          setSetting.valid = event.target.value >= 0 ? true : false;
+          break;
+        default:
+          break;
+      }
     }
 
-    setSettings({
-      ...configSettings,
-      [event.target.name]: [event.target.value, valid, true],
-    });
+    // // Set to local setting object
+    // setSettings({
+    //   ...configSettings,
+    //   [event.target.name]: [event.target.value, valid, true],
+    // });
   };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
-    for (let [key, setting] of Object.entries(settings)) {
-      if (setting[2]) {
-        switch (key) {
-          case "numColumns":
-            sp.pg.numColumns = parseInt(setting[0].toString());
-            break;
-          case "numRows":
-            sp.pg.numRows = parseInt(setting[0].toString());
-            break;
-          case "brickSize":
-            sp.pg.gameSettings.brickSize = parseInt(setting[0].toString());
-            break;
-          case "brickSpace":
-            sp.pg.gameSettings.brickSpace = parseInt(setting[0].toString());
-            break;
-          case "initWallHeight":
-            sp.pg.gameSettings.initWallHeight = parseInt(setting[0].toString());
-            break;
-        }
-      }
+    //let pushingSettings: { name: string; value: number }[] = [];
+
+    let pushingSettings = localSettings.map((setting: localSettingType) => {
+      return { name: setting.settingName, value: setting.settingValue };
+    });
+
+    for (let setting in localSettings) {
+      // let pushSetting = {setting.mySetting, myValue};
+      // pushingSetting.push({ mySetting.settingName, mySetting.settingValue});
+      console.log(setting);
     }
 
+    sp.gameSettingsCallback(pushingSettings);
+
+    // for (let [key, setting] of Object.entries(settings)) {
+    //   if (setting[2]) {
+    //     switch (key) {
+    //       case "numColumns":
+    //         sendBackSetting.numColumns = parseInt(setting[0].toString());
+    //         break;
+    //       case "numRows":
+    //         sp.gameSettingsCallback(parseInt(setting[0].toString()));
+    //         break;
+    //       case "brickSize":
+    //         sp.gameSettingsCallback(parseInt(setting[0].toString()));
+    //         break;
+    //       case "brickSpace":
+    //         sp.gameSettingsCallback(parseInt(setting[0].toString()));
+    //         break;
+    //       case "initWallHeight":
+    //         sp.gameSettingsCallback(parseInt(setting[0].toString()));
+    //         break;
+    //     }
+    //   }
+    // }
+
     //sp.settings();
-    sp.pg.updateBlockWall();
+    //sp.pg.updateBlockWall();
   };
 
   return (
@@ -85,19 +112,19 @@ const Settings = (sp: SettingsProps) => {
         <form onSubmit={handleSubmit}>
           <table>
             <tbody>
-              {Object.entries(settings).map(([key, setting]) => (
-                <tr key={key}>
+              {Object.entries(localSettings).map((setting) => (
+                <tr key={setting[0]}>
                   <th>
-                    {key}
-                    {!setting[1] ? "*" : ""}
+                    {setting[1].settingName}
+                    {!setting[1].valid ? "*" : ""}
                   </th>
                   <th>
                     <input
                       className="playground-input-dialogue"
                       type="text"
                       //style={(nvsetting[1]) ? "" : "color: 'red'"}
-                      value={setting[0].toString()}
-                      name={key}
+                      value={setting[1].settingValue.toString()}
+                      name={setting[1].settingName}
                       onChange={handleChange}
                     />
                   </th>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { gameStatusEnum } from "../model/modeltypes";
 import playGroundModel from "../model/playground";
+import { getSetting, setSetting } from "../utils/utils";
 
 //
 // Handle state and user hooks
@@ -35,7 +36,6 @@ function UseGameState(pg: playGroundModel): any {
 
   // Toggle game status Pause
   const togglePause = useCallback(() => {
-    console.log("toggle: " + pg.pause);
     if (gameRunStatus !== gameStatusEnum.GameOver) {
       if (gameRunStatus === gameStatusEnum.Pause) {
         pg.pause = false;
@@ -45,6 +45,7 @@ function UseGameState(pg: playGroundModel): any {
         setGameRunStatus(gameStatusEnum.Pause);
       }
     }
+    console.log("pause: " + pg.pause);
   }, [pg, gameRunStatus]);
 
   // Start new game from scratch
@@ -105,16 +106,24 @@ function UseGameState(pg: playGroundModel): any {
           console.log("Time interval: " + timeInterval);
           break;
         case "3":
-          pg.gameSettings.brickSize++;
+          let brickSize = getSetting(pg, "brickSize");
+          brickSize++;
+          setSetting(pg, "brickSize", brickSize);
           break;
         case "4":
-          pg.gameSettings.brickSize--;
+          brickSize = getSetting(pg, "brickSize");
+          brickSize--;
+          setSetting(pg, "brickSize", brickSize);
           break;
         case "5":
-          pg.gameSettings.brickSpace++;
+          let brickSpace = getSetting(pg, "brickSpace");
+          brickSpace++;
+          setSetting(pg, "brickSpace", brickSpace);
           break;
         case "6":
-          pg.gameSettings.brickSpace--;
+          brickSpace = getSetting(pg, "brickSpace");
+          brickSpace--;
+          setSetting(pg, "brickSpace", brickSpace);
           break;
         case "7":
           pg.addRow();
@@ -130,14 +139,6 @@ function UseGameState(pg: playGroundModel): any {
           break;
         case "Escape":
           togglePause();
-          break;
-        case "+":
-          pg.gameSettings.brickSize++;
-          pg.gameSettings.brickSpace++;
-          break;
-        case "-":
-          pg.gameSettings.brickSize--;
-          pg.gameSettings.brickSpace--;
           break;
         default:
       }
