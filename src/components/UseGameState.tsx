@@ -39,7 +39,7 @@ function UseGameState(pg: playGroundModel): any {
 
   // Toggle game status Pause
   const togglePause = useCallback(() => {
-    console.log("toggle: " + pg.pause);
+    console.log("toggle: " + pg.pause + "  gameStatus: " + gameStatus);
     if (gameStatus !== gameStatusEnum.GameOver) {
       setLastGameStatus(gameStatus);
       if (gameStatus === gameStatusEnum.Pause) {
@@ -54,6 +54,7 @@ function UseGameState(pg: playGroundModel): any {
 
   // Start new game from scratch
   const startNewGame = () => {
+    console.log("startNewGame gameStatus: " + gameStatus);
     pg.reset();
     pg.gameover = false;
     pg.pause = false;
@@ -62,23 +63,13 @@ function UseGameState(pg: playGroundModel): any {
     setLevel(1);
   };
 
-  const showSettings = () => {
-    setLastGameStatus(gameStatus);
-    setGameStatus(gameStatusEnum.Settings);
-  };
-
-  const setGameSettingsCallback = (myGameSettings: gameSettingsType) => {
-    setGameSettings(myGameSettings);
-    setGameStatus(lastGameStatus);
-  };
-
   const handleKeys = useCallback(
     (event) => {
+      console.log("event.key: " + event.key);
       switch (event.key) {
         case "ArrowLeft":
         case "a":
           if (!pg.gameover) {
-            // console.log("moveLeft");
             pg.activeBlock.moveLeft();
             if (pg.checkBlockPosition()) {
               pg.activeBlock.moveRight();
@@ -88,7 +79,6 @@ function UseGameState(pg: playGroundModel): any {
         case "ArrowRight":
         case "d":
           if (!pg.gameover) {
-            // console.log("moveRight");
             pg.activeBlock.moveRight();
             if (pg.checkBlockPosition()) {
               pg.activeBlock.moveLeft();
@@ -159,6 +149,23 @@ function UseGameState(pg: playGroundModel): any {
     [pg, togglePause, updatePlayground, timeInterval]
   );
 
+  const showSettings = useCallback(() => {
+    console.log("showSettings gameStatus: " + gameStatus);
+    document.removeEventListener("keydown", handleKeys);
+    setLastGameStatus(gameStatus);
+    setGameStatus(gameStatusEnum.Settings);
+  }, [gameStatus, handleKeys]);
+
+  const setGameSettingsCallback = useCallback(
+    (myGameSettings: gameSettingsType) => {
+      console.log("setGameSettingsCallback gameStatus: " + gameStatus);
+      document.removeEventListener("keydown", handleKeys);
+      setGameSettings(myGameSettings);
+      setGameStatus(lastGameStatus);
+    },
+    [gameStatus, lastGameStatus, handleKeys]
+  );
+
   // Main game engine
   useEffect(() => {
     function calcInterval(): number {
@@ -199,13 +206,15 @@ function UseGameState(pg: playGroundModel): any {
           );
         }
         console.log("gameIntervalId: " + gameIntervalId);
+      } else if (gameStatus === gameStatusEnum.Settings) {
+        document.removeEventListener("keydown", handleKeys);
       }
     }, timeInterval);
 
     return () => {
-      console.log("clearInterval");
-      clearInterval(gameIntervalId);
+      console.log("clearInterval removeEventListener");
       document.removeEventListener("keydown", handleKeys);
+      clearInterval(gameIntervalId);
     };
   }, [
     pg,
