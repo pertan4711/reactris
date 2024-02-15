@@ -1,73 +1,72 @@
 import { useState } from "react";
 import { SettingsProps } from "../../model/types";
-import { gameSettingsType } from "../../model/modeltypes";
 
 const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
-  let configSettings = {
-    initWallHeight: [gameSettings.initWallHeight, true, false],
-    numColumns: [gameSettings.numColumns, true, false],
-    numRows: [gameSettings.numRows, true, false],
-    brickSize: [gameSettings.brickSize, true, false],
-    brickSpace: [gameSettings.brickSpace, true, false],
-    levelUpgradeDiv: [gameSettings.levelUpgradeDiv, true, false],
+  type localSettingType = {
+    name: string;
+    value: number;
+    valid: Boolean;
+    changed: Boolean;
   };
 
-  const [localSettings, setLocalSettings] = useState(configSettings);
+  let transformSettings: localSettingType[] = [];
+
+  // Transform to local setting object to detect change and validate
+  for (const [key, value] of Object.entries(gameSettings)) {
+    let localSetting: localSettingType = {
+      name: key.toString(),
+      value: value,
+      valid: true,
+      changed: false,
+    };
+    transformSettings.push(localSetting);
+  }
+
+  const [localSettings, setLocalSettings] = useState(transformSettings);
 
   const handleChange = (event: any) => {
-    switch (event.target.name) {
-      case "numColumns":
-        configSettings.numColumns[0] = event.target.value;
-        configSettings.numColumns[1] = event.target.value > 5 ? true : false; // valid
-        configSettings.numColumns[2] = true; // changed
-        break;
-      case "numRows":
-        configSettings.numRows[0] = event.target.value;
-        configSettings.numRows[1] = event.target.value > 5 ? true : false;
-        configSettings.numRows[2] = true;
-        break;
-      case "brickSize":
-        configSettings.brickSize[0] = event.target.value;
-        configSettings.brickSize[1] = event.target.value > 5 ? true : false;
-        configSettings.brickSize[2] = true;
-        break;
-      case "brickSpace":
-        configSettings.brickSpace[0] = event.target.value;
-        configSettings.brickSpace[1] = event.target.value > 5 ? true : false;
-        configSettings.brickSpace[2] = true;
-        break;
-      case "initWallHeight":
-        configSettings.initWallHeight[0] = event.target.value;
-        configSettings.initWallHeight[1] =
-          event.target.value >= 0 ? true : false;
-        configSettings.initWallHeight[2] = true;
-        break;
-      case "levelUpgradeDiv":
-        configSettings.levelUpgradeDiv[0] = event.target.value;
-        configSettings.levelUpgradeDiv[1] =
-          event.target.value >= 1 ? true : false;
-        configSettings.levelUpgradeDiv[2] = true;
-        break;
-      default:
-        break;
-    }
+    console.log("handleChange: " + event.target.name);
 
-    setLocalSettings({
-      ...configSettings,
-    });
+    let setSetting = localSettings.find(
+      (setting) => setting.name === event.target.name
+    );
+
+    if (setSetting != null) {
+      setSetting.value = parseInt(event.target.value);
+      setSetting.changed = true;
+
+      switch (event.target.name) {
+        case "numColumns":
+        case "numRows":
+        case "brickSize":
+        case "brickSpace":
+          setSetting.valid = event.target.value > 5 ? true : false;
+          break;
+
+        case "initWallHeight":
+          setSetting.valid = event.target.value >= 0 ? true : false;
+          break;
+
+        case "levelUpgradeDiv":
+          setSetting.valid = event.target.value >= 1 ? true : false;
+          break;
+
+        default:
+          break;
+      }
+
+      console.log({ ...localSettings });
+      setLocalSettings([...localSettings]);
+    }
   };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
-    let updateSettings: gameSettingsType = {
-      initWallHeight: parseInt(localSettings.initWallHeight[0].toString()),
-      numColumns: parseInt(localSettings.numColumns[0].toString()),
-      numRows: parseInt(localSettings.numRows[0].toString()),
-      brickSize: parseInt(localSettings.brickSize[0].toString()),
-      brickSpace: parseInt(localSettings.brickSpace[0].toString()),
-      levelUpgradeDiv: gameSettings.levelUpgradeDiv,
-    };
+    let updateSettings = localSettings.reduce(
+      (acc, cur) => ({ ...acc, [cur.name]: cur.value }),
+      {}
+    );
 
     setGameSettingsCallback(updateSettings);
   };
@@ -84,19 +83,19 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
         <form onSubmit={handleSubmit}>
           <table>
             <tbody>
-              {Object.entries(localSettings).map(([key, setting]) => (
-                <tr key={key}>
+              {localSettings.map((setting) => (
+                <tr key={setting.name}>
                   <th>
-                    {key}
-                    {!setting[1] ? "*" : ""}
+                    {setting.name}
+                    {!setting.valid ? "*" : ""}
                   </th>
                   <th>
                     <input
                       className="playground-input-dialogue"
                       type="text"
                       //style={(nvsetting[1]) ? "" : "color: 'red'"}
-                      value={setting[0].toString()}
-                      name={key}
+                      value={setting.value.toString()}
+                      name={setting.name}
                       onChange={handleChange}
                     />
                   </th>
