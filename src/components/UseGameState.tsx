@@ -56,8 +56,6 @@ function UseGameState(pg: playGroundModel): any {
   const startNewGame = () => {
     console.log("startNewGame gameStatus: " + gameStatus);
     pg.reset();
-    pg.gameover = false;
-    pg.pause = false;
     setLastGameStatus(gameStatus);
     setGameStatus(gameStatusEnum.Ongoing);
     setLevel(1);
@@ -160,10 +158,13 @@ function UseGameState(pg: playGroundModel): any {
     (myGameSettings: gameSettingsType) => {
       console.log("setGameSettingsCallback gameStatus: " + gameStatus);
       document.removeEventListener("keydown", handleKeys);
-      setGameSettings(myGameSettings);
       setGameStatus(lastGameStatus);
+      setGameSettings(myGameSettings);
+      pg.numColumns = myGameSettings.numColumns;
+      pg.numRows = myGameSettings.numRows;
+      pg.gameSettings = myGameSettings;
     },
-    [gameStatus, lastGameStatus, handleKeys]
+    [gameStatus, lastGameStatus, handleKeys, pg]
   );
 
   // Main game engine

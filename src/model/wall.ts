@@ -77,12 +77,11 @@ export default class wall {
     }
   }
 
-  setColumn(col: number) {
-    this.numColumns = col;
+  buildWall() {
     let tempWall: number[][] = [];
     for (let y = 0; y < this.numRows; y++) {
       let row = [];
-      for (let x = 0; x < col; x++) {
+      for (let x = 0; x < this.numColumns; x++) {
         if (
           this.wall.length >= y &&
           this.wall[y].length >= x &&
@@ -98,13 +97,14 @@ export default class wall {
     this.wall = tempWall;
   }
 
+  setColumn(col: number) {
+    this.numColumns = col;
+    this.buildWall();
+  }
+
   setRows(rows: number) {
-    let tempWall: number[][] = [];
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < this.numColumns; x++) {
-        tempWall[y][x] = this.wall[y][x] > 0 ? this.wall[y][x] : emptyWallBrick;
-      }
-    }
+    this.numRows = rows;
+    this.buildWall();
   }
 
   addRow() {

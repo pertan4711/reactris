@@ -92,11 +92,14 @@ export default class playGroundModel {
   /// Reset and start game
   reset = () => {
     this.gameover = false;
+    this.pause = false;
     this.score = 0;
     this.level = 1;
-    this.activeBlock = this.generateNextBlock();
+    this.numColumns = this.gameSettings.numColumns;
+    this.numRows = this.gameSettings.numRows;
     this.wall.reset(this.gameSettings.initWallHeight);
     this.activeBlock.pY = 0;
+    this.activeBlock = this.generateNextBlock();
   };
 
   getWall = (): number[][] => {
