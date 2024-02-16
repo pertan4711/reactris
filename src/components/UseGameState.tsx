@@ -206,7 +206,7 @@ function UseGameState(pg: playGroundModel): any {
               pg.score
           );
         }
-        console.log("gameIntervalId: " + gameIntervalId);
+        //console.log("gameIntervalId: " + gameIntervalId);
       } else if (gameStatus === gameStatusEnum.Settings) {
         document.removeEventListener("keydown", handleKeys);
       }

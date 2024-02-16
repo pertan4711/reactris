@@ -24,7 +24,14 @@ export type gameSettingsType = {
   levelUpgradeDiv: number;
   brickSize: number;
   brickSpace: number;
+  gameType: gameTypeEnum;
 };
+
+export enum gameTypeEnum {
+  Classic,
+  Advanced,
+  Custom,
+}
 
 export enum gameStatusEnum {
   GameOver,
