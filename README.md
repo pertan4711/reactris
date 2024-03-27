@@ -50,6 +50,7 @@ This is the backlog of the bugs and missing features of the app.
 - configuration - Choose easy / standard / hard
 - custom block design page - editor to create your own block
 - check react versions
+- start random wall should not generate filled row
 
 ## Available Scripts
 

@@ -14,7 +14,7 @@ const TetrisApp = () => {
     levelUpgradeDiv: 2,
     brickSize: 70,
     brickSpace: 72,
-    gameType: gameTypeEnum.Advanced,
+    gameType: gameTypeEnum.Classic,
   };
 
   return (

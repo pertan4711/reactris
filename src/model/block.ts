@@ -2,7 +2,7 @@ import { blockModelType, brickModelType } from "./modeltypes";
 import { Blocks } from "./constants";
 
 // All blocks inherit from this one containing functionality to spin or move
-export default abstract class block {
+export default abstract class Block {
   blockIndex: number;
   pX: number;
   pY: number;

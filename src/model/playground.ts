@@ -1,7 +1,7 @@
 import wall from "./wall";
 import { blockModelType, gameSettingsType, gameStatusEnum } from "./modeltypes";
 import Block from "./block";
-import { Blocks, emptyWallBrick } from "./constants";
+import { Blocks, emptyWallBrick, playMode } from "./constants";
 import calculateBrickSize from "../utils/utils";
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,6 @@ export default class playGroundModel {
     });
     this.score = 0;
     this.level = 1;
-    this.activeBlock = this.generateNextBlock();
     this.gameSettings = gameSettings;
 
     this.gameSettings.brickSize = calculateBrickSize(
@@ -50,6 +49,7 @@ export default class playGroundModel {
       calculateBrickSize(winX, winY, this.numColumns, this.numRows) + 2;
     this.windowSizeX = winX;
     this.windowSizeY = winY;
+    this.activeBlock = this.generateNextBlock();
   }
 
   // Singleton playground
@@ -67,9 +67,12 @@ export default class playGroundModel {
 
   /// Randomize next block and put it in the middle
   generateNextBlock(): Block {
-    let differentBlocksCount = Blocks.length;
+    let differentBlocksCount =
+      playMode[this.gameSettings.gameType].blocks.length;
     let blockIndex = Math.floor(Math.random() * differentBlocksCount);
-    let mybl: any = Blocks[blockIndex].block;
+    let realBlockIndex =
+      playMode[this.gameSettings.gameType].blocks[blockIndex];
+    let mybl: any = Blocks[realBlockIndex].block;
     let xpos: number = Math.floor(this.numColumns / 2);
     let blockProps: blockModelType = {
       blockIndex,

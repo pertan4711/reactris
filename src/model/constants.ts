@@ -8,7 +8,7 @@ import rightblock from "./blocks/rightblock";
 import rightflashblock from "./blocks/rightflashblock";
 import squareblock from "./blocks/squareblock";
 import hillblock from "./blocks/hillblock";
-// import { gameSettingsType } from "./modeltypes";
+import { gameTypeEnum } from "./modeltypes";
 import bigleftblock from "./blocks/bigleftblock";
 import bigrightblock from "./blocks/bigrightblock";
 
@@ -27,14 +27,24 @@ export const Blocks: { block: any; color: string }[] = [
   { block: bigrightblock, color: "pink" },
 ];
 
-// export const initGameSettings: gameSettingsType = {
-//   numColumns: 10,
-//   numRows: 14,
-//   initWallHeight: 4,
-//   levelUpgradeDiv: 10,
-//   brickSize: 70,
-//   brickSpace: 72
-// };
+export const playMode: any[] = [
+  {
+    mode: gameTypeEnum.Classic,
+    blocks: [0, 1, 2, 3, 5, 6, 7],
+  },
+  {
+    mode: gameTypeEnum.Advanced,
+    blocks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+  },
+  {
+    mode: gameTypeEnum.Custom,
+    blocks: [0, 1, 2, 3],
+  },
+  {
+    mode: gameTypeEnum.Custom,
+    blocks: [0],
+  },
+];
 
 export const emptyWallBrick: number = -1;
 export const initWallPropability: number = 0.2;
