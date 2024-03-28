@@ -51,6 +51,8 @@ This is the backlog of the bugs and missing features of the app.
 - custom block design page - editor to create your own block
 - check react versions
 - start random wall should not generate filled row
+- show next block
+- better looking block with shadow
 
 ## Available Scripts
 

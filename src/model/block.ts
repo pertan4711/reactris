@@ -1,8 +1,8 @@
 import { blockModelType, brickModelType } from "./modeltypes";
-import { Blocks } from "./constants";
+import { blocks } from "./constants";
 
 // All blocks inherit from this one containing functionality to spin or move
-export default abstract class Block {
+export default abstract class block {
   blockIndex: number;
   pX: number;
   pY: number;
@@ -43,6 +43,6 @@ export default abstract class Block {
   }
 
   getBlockColor = () => {
-    return Blocks[this.blockIndex].color;
+    return blocks[this.blockIndex].color;
   };
 }

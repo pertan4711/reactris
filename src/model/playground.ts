@@ -1,7 +1,7 @@
 import wall from "./wall";
 import { blockModelType, gameSettingsType, gameStatusEnum } from "./modeltypes";
-import Block from "./block";
-import { Blocks, emptyWallBrick, playMode } from "./constants";
+import block from "./block";
+import { blocks, emptyWallBrick, playMode } from "./constants";
 import calculateBrickSize from "../utils/utils";
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -16,7 +16,7 @@ export default class playGroundModel {
   wall: wall;
   score: number;
   level: number;
-  activeBlock: Block;
+  activeBlock: block;
 
   gameSettings: gameSettingsType;
 
@@ -66,13 +66,13 @@ export default class playGroundModel {
   }
 
   /// Randomize next block and put it in the middle
-  generateNextBlock(): Block {
+  generateNextBlock(): block {
     let differentBlocksCount =
       playMode[this.gameSettings.gameType].blocks.length;
     let blockIndex = Math.floor(Math.random() * differentBlocksCount);
     let realBlockIndex =
       playMode[this.gameSettings.gameType].blocks[blockIndex];
-    let mybl: any = Blocks[realBlockIndex].block;
+    let mybl: any = blocks[realBlockIndex].block;
     let xpos: number = Math.floor(this.numColumns / 2);
     let blockProps: blockModelType = {
       blockIndex,

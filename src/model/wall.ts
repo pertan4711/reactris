@@ -1,7 +1,7 @@
 import { wallModelType } from "./modeltypes";
 import block from "./block";
 import {
-  Blocks,
+  blocks,
   emptyWallBrick,
   initWallColor,
   initWallPropability,
@@ -46,7 +46,7 @@ export default class wall {
         Math.random() > initWallPropability
           ? row.push(
               initWallRandomColor
-                ? Math.floor(Math.random() * Blocks.length)
+                ? Math.floor(Math.random() * blocks.length)
                 : initWallColor
             )
           : row.push(emptyWallBrick);

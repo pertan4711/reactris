@@ -1,7 +1,7 @@
 import React from "react";
 import Brick from "./Brick";
 import { WallProps } from "../../model/types";
-import { Blocks, emptyWallBrick } from "../../model/constants";
+import { blocks, emptyWallBrick } from "../../model/constants";
 
 const Wall = ({ wall, numCol, brickSize, brickSpace }: WallProps) => {
   return (
@@ -12,7 +12,7 @@ const Wall = ({ wall, numCol, brickSize, brickSpace }: WallProps) => {
             <Brick
               key={iy * (numCol + 2) + ix + 1}
               brick={{ ...{ pX: ix, pY: iy } }}
-              color={Blocks[x].color}
+              color={blocks[x].color}
               brickSize={brickSize}
               brickSpace={brickSpace}
             />

@@ -12,7 +12,7 @@ import { gameTypeEnum } from "./modeltypes";
 import bigleftblock from "./blocks/bigleftblock";
 import bigrightblock from "./blocks/bigrightblock";
 
-export const Blocks: { block: any; color: string }[] = [
+export const blocks: { block: any; color: string }[] = [
   { block: leftblock, color: "red" },
   { block: rightblock, color: "orange" },
   { block: squareblock, color: "yellow" },
