@@ -15,6 +15,7 @@ const TetrisApp = () => {
     brickSize: 70,
     brickSpace: 72,
     gameType: gameTypeEnum.Classic,
+    initWallPropability: 0.5,
   };
 
   return (

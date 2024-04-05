@@ -30,11 +30,7 @@ export default class playGroundModel {
   ) {
     this.gameover = true;
     this.pause = false;
-    this.wall = new wall({
-      numColumns: gameSettings.numColumns,
-      numRows: gameSettings.numRows,
-      initWallHeight: gameSettings.initWallHeight,
-    });
+    this.wall = new wall({ gameSettings });
     this.score = 0;
     this.level = 1;
     this.gameSettings = gameSettings;

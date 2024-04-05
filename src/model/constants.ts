@@ -47,6 +47,5 @@ export const playMode: any[] = [
 ];
 
 export const emptyWallBrick: number = -1;
-export const initWallPropability: number = 0.2;
 export const initWallRandomColor: boolean = true;
 export const initWallColor: number = 4;

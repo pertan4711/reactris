@@ -1,10 +1,9 @@
-import { wallModelType } from "./modeltypes";
+import { gameSettingsType, wallModelType } from "./modeltypes";
 import block from "./block";
 import {
   blocks,
   emptyWallBrick,
   initWallColor,
-  initWallPropability,
   initWallRandomColor,
 } from "./constants";
 
@@ -12,14 +11,16 @@ export default class wall {
   numColumns: number;
   numRows: number;
   wall: number[][];
+  gameSettings: gameSettingsType;
 
   constructor(wall: wallModelType) {
-    this.numColumns = wall.numColumns;
-    this.numRows = wall.numRows;
+    this.gameSettings = wall.gameSettings;
+    this.numColumns = wall.gameSettings.numColumns;
+    this.numRows = wall.gameSettings.numRows;
     this.wall = this.initWall(
-      wall.numColumns,
-      wall.numRows,
-      wall.initWallHeight
+      wall.gameSettings.numColumns,
+      wall.gameSettings.numRows,
+      wall.gameSettings.initWallHeight
     );
   }
 
@@ -43,7 +44,7 @@ export default class wall {
     for (let y = rows - height + 1; y <= rows; y++) {
       let row = [];
       for (let x = 0; x < columns; x++) {
-        Math.random() > initWallPropability
+        Math.random() > this.gameSettings.initWallPropability
           ? row.push(
               initWallRandomColor
                 ? Math.floor(Math.random() * blocks.length)
