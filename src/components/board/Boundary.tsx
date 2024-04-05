@@ -1,5 +1,5 @@
 // Draws the shadow from a panel with offset
-import { BoundaryProps } from "../../model/types";
+import { BoundaryProps } from "../../model/componentProps";
 
 const Boundary = ({ xoffset, height }: BoundaryProps) => {
   const xpos: string = xoffset.toString() + "px";

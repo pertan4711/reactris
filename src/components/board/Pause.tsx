@@ -1,4 +1,4 @@
-import { PauseProps } from "../../model/types";
+import { PauseProps } from "../../model/componentProps";
 
 const Pause = ({ pgLeft, pgTop, startGame }: PauseProps) => {
   return (

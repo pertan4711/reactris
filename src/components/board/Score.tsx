@@ -1,4 +1,4 @@
-import { ScoreProps } from "../../model/types";
+import { ScoreProps } from "../../model/componentProps";
 
 const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
   return (

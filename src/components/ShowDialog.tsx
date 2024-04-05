@@ -1,7 +1,7 @@
 import GameOver from "./board/GameOver";
 import Pause from "./board/Pause";
 import Settings from "./board/Settings";
-import { ShowDialogProps } from "../model/types";
+import { ShowDialogProps } from "../model/componentProps";
 import { gameStatusEnum } from "../model/modeltypes";
 
 const ShowDialog = (props: ShowDialogProps) => {

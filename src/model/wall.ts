@@ -4,7 +4,6 @@ import {
   blocks,
   emptyWallBrick,
   initWallColor,
-  initWallPropability,
   initWallRandomColor,
 } from "./constants";
 
@@ -12,10 +11,15 @@ export default class wall {
   numColumns: number;
   numRows: number;
   wall: number[][];
+  initWallHeight: number;
+  initWallPropability: number;
 
   constructor(wall: wallModelType) {
     this.numColumns = wall.numColumns;
     this.numRows = wall.numRows;
+    this.initWallHeight = wall.initWallHeight;
+    this.initWallPropability = wall.initWallPropability;
+
     this.wall = this.initWall(
       wall.numColumns,
       wall.numRows,
@@ -43,7 +47,7 @@ export default class wall {
     for (let y = rows - height + 1; y <= rows; y++) {
       let row = [];
       for (let x = 0; x < columns; x++) {
-        Math.random() > initWallPropability
+        Math.random() > this.initWallPropability
           ? row.push(
               initWallRandomColor
                 ? Math.floor(Math.random() * blocks.length)

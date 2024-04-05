@@ -15,6 +15,7 @@ export type wallModelType = {
   numColumns: number;
   numRows: number;
   initWallHeight: number;
+  initWallPropability: number;
 };
 
 export type gameSettingsType = {
@@ -25,6 +26,7 @@ export type gameSettingsType = {
   brickSize: number;
   brickSpace: number;
   gameType: gameTypeEnum;
+  initWallPropability: number;
 };
 
 export enum gameTypeEnum {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SettingsProps } from "../../model/types";
+import { SettingsProps } from "../../model/componentProps";
 
 const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
   type localSettingType = {

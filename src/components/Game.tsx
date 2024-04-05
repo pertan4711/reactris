@@ -8,9 +8,12 @@ import ShowDialog from "./ShowDialog";
 
 const Game = (props: any) => {
   const pg = playGroundModel.getInstance(
-    window.innerWidth,
-    window.innerHeight,
-    props.gameSettings
+    props.gameSettings.numColumns,
+    props.gameSettings.numRows,
+    props.gameSettings.gameType,
+    props.gameSettings.initWallHeight,
+    props.gameSettings.initWallPropability,
+    props.gameSettings.levelUpgradeDiv
   );
 
   const {
@@ -21,9 +24,7 @@ const Game = (props: any) => {
     togglePause,
     showSettings,
     setGameSettingsCallback,
-  } = UseGameState(pg);
-
-  pg.gameSettings = gameSettings;
+  } = UseGameState(pg, props.gameSettings);
 
   //console.log("gameStatus: " + gameStatus);
 
@@ -33,6 +34,7 @@ const Game = (props: any) => {
         <Playground
           blockBricks={activeBlockBricks}
           gameStatus={gameStatus}
+          gameSettings={gameSettings}
           actionCallbacks={{ startNewGame, togglePause, showSettings }}
           pg={pg}
         />

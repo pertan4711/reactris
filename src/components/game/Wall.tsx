@@ -1,6 +1,6 @@
 import React from "react";
 import Brick from "./Brick";
-import { WallProps } from "../../model/types";
+import { WallProps } from "../../model/componentProps";
 import { blocks, emptyWallBrick } from "../../model/constants";
 
 const Wall = ({ wall, numCol, brickSize, brickSpace }: WallProps) => {

@@ -1,4 +1,4 @@
-import { GameOverProps } from "../../model/types";
+import { GameOverProps } from "../../model/componentProps";
 
 const GameOver = ({ score, pgLeft, pgTop, startNewGame }: GameOverProps) => {
   return (

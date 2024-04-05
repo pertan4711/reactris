@@ -1,8 +1,7 @@
 import wall from "./wall";
-import { blockModelType, gameSettingsType, gameStatusEnum } from "./modeltypes";
+import { blockModelType, gameStatusEnum } from "./modeltypes";
 import block from "./block";
 import { blocks, emptyWallBrick, playMode } from "./constants";
-import calculateBrickSize from "../utils/utils";
 
 /////////////////////////////////////////////////////////////////////////////////////
 /// Playground is the model in the MVP design pattern and will keep track of the built
@@ -17,49 +16,55 @@ export default class playGroundModel {
   score: number;
   level: number;
   activeBlock: block;
-
-  gameSettings: gameSettingsType;
-
-  windowSizeX: number;
-  windowSizeY: number;
+  gameType: number;
+  initWallHeight: number;
+  initWallPropability: number;
+  levelUpgradeDiv: number;
 
   private constructor(
-    winX: number,
-    winY: number,
-    gameSettings: gameSettingsType
+    numColumns: number,
+    numRows: number,
+    gameType: number,
+    initWallHeight: number,
+    initWallPropability: number,
+    levelUpgradeDiv: number
   ) {
     this.gameover = true;
     this.pause = false;
+    this.gameType = gameType;
+    this.initWallHeight = initWallHeight;
+    this.initWallPropability = initWallPropability;
+    this.levelUpgradeDiv = levelUpgradeDiv;
+
     this.wall = new wall({
-      numColumns: gameSettings.numColumns,
-      numRows: gameSettings.numRows,
-      initWallHeight: gameSettings.initWallHeight,
+      numColumns: numColumns,
+      numRows: numRows,
+      initWallHeight: initWallHeight,
+      initWallPropability: initWallPropability,
     });
     this.score = 0;
     this.level = 1;
-    this.gameSettings = gameSettings;
-
-    this.gameSettings.brickSize = calculateBrickSize(
-      winX,
-      winY,
-      this.numColumns,
-      this.numRows
-    );
-    this.gameSettings.brickSpace =
-      calculateBrickSize(winX, winY, this.numColumns, this.numRows) + 2;
-    this.windowSizeX = winX;
-    this.windowSizeY = winY;
     this.activeBlock = this.generateNextBlock();
   }
 
   // Singleton playground
   public static getInstance(
-    winX: number,
-    winY: number,
-    gameSettings: gameSettingsType
+    numColumns: number,
+    numRows: number,
+    gameType: number,
+    initWallHeight: number,
+    initWallPropability: number,
+    levelUpgradeDiv: number
   ): playGroundModel {
     if (!playGroundModel.instance) {
-      playGroundModel.instance = new playGroundModel(winX, winY, gameSettings);
+      playGroundModel.instance = new playGroundModel(
+        numColumns,
+        numRows,
+        gameType,
+        initWallHeight,
+        initWallPropability,
+        levelUpgradeDiv
+      );
     }
 
     return playGroundModel.instance;
@@ -67,11 +72,9 @@ export default class playGroundModel {
 
   /// Randomize next block and put it in the middle
   generateNextBlock(): block {
-    let differentBlocksCount =
-      playMode[this.gameSettings.gameType].blocks.length;
+    let differentBlocksCount = playMode[this.gameType].blocks.length;
     let blockIndex = Math.floor(Math.random() * differentBlocksCount);
-    let realBlockIndex =
-      playMode[this.gameSettings.gameType].blocks[blockIndex];
+    let realBlockIndex = playMode[this.gameType].blocks[blockIndex];
     let mybl: any = blocks[realBlockIndex].block;
     let xpos: number = Math.floor(this.numColumns / 2);
     let blockProps: blockModelType = {
@@ -98,9 +101,7 @@ export default class playGroundModel {
     this.pause = false;
     this.score = 0;
     this.level = 1;
-    this.numColumns = this.gameSettings.numColumns;
-    this.numRows = this.gameSettings.numRows;
-    this.wall.reset(this.gameSettings.initWallHeight);
+    this.wall.reset(this.initWallHeight);
     this.activeBlock.pY = 0;
     this.activeBlock = this.generateNextBlock();
   };
@@ -154,7 +155,7 @@ export default class playGroundModel {
   };
 
   calcLevel = () => {
-    return Math.floor(this.score / this.gameSettings.levelUpgradeDiv) + 1;
+    return Math.floor(this.score / this.levelUpgradeDiv) + 1;
   };
 
   // Check playground edges
@@ -183,12 +184,10 @@ export default class playGroundModel {
   }
 
   addColumn = () => {
-    //this.numColumns++;
     this.wall.addColumn();
   };
 
   deleteColumn = () => {
-    //this.numColumns--;
     this.wall.deleteColumn();
   };
 
@@ -200,12 +199,10 @@ export default class playGroundModel {
   }
 
   addRow = () => {
-    //this.numRows++;
     this.wall.addRow();
   };
 
   deleteRow = () => {
-    //7this.numRows--;
     this.wall.deleteRow();
   };
 
@@ -243,7 +240,7 @@ export default class playGroundModel {
         "  score: " +
         this.score
     );
-    console.log("initWallHeight: " + this.gameSettings.initWallHeight);
+    console.log("initWallHeight: " + this.initWallHeight);
     let wall = this.getWall();
     console.log("wall: ");
     wall.forEach((row) => {

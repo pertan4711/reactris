@@ -1,4 +1,4 @@
-import { BrickProps } from "../../model/types";
+import { BrickProps } from "../../model/componentProps";
 
 const Brick = ({ brick, color, brickSize, brickSpace }: BrickProps) => {
   let myColor = color;

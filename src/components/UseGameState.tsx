@@ -6,7 +6,10 @@ import { gameSettingsType } from "../model/modeltypes";
 //
 // Handle state and user hooks
 //
-function UseGameState(pg: playGroundModel): any {
+function UseGameState(
+  pg: playGroundModel,
+  myGameSettings: gameSettingsType
+): any {
   // State variables
   const [activeBlockBricks, setActiveBlockBricks] = useState(
     pg.activeBlock.getBrickPosition()
@@ -15,7 +18,7 @@ function UseGameState(pg: playGroundModel): any {
   const [level, setLevel] = useState(pg.level);
   const [gameStatus, setGameStatus] = useState(gameStatusEnum.GameOver);
   const [lastGameStatus, setLastGameStatus] = useState(gameStatus);
-  const [gameSettings, setGameSettings] = useState(pg.gameSettings);
+  const [gameSettings, setGameSettings] = useState(myGameSettings);
 
   // Set interval first to 1 sec
   const gameTick = useCallback(() => {
@@ -105,16 +108,16 @@ function UseGameState(pg: playGroundModel): any {
           console.log("Time interval: " + timeInterval);
           break;
         case "3":
-          pg.gameSettings.brickSize++;
+          gameSettings.brickSize++;
           break;
         case "4":
-          pg.gameSettings.brickSize--;
+          gameSettings.brickSize--;
           break;
         case "5":
-          pg.gameSettings.brickSpace++;
+          gameSettings.brickSpace++;
           break;
         case "6":
-          pg.gameSettings.brickSpace--;
+          gameSettings.brickSpace--;
           break;
         case "7":
           pg.addRow();
@@ -132,19 +135,26 @@ function UseGameState(pg: playGroundModel): any {
           togglePause();
           break;
         case "+":
-          pg.gameSettings.brickSize++;
-          pg.gameSettings.brickSpace++;
+          gameSettings.brickSize++;
+          gameSettings.brickSpace++;
           break;
         case "-":
-          pg.gameSettings.brickSize--;
-          pg.gameSettings.brickSpace--;
+          gameSettings.brickSize--;
+          gameSettings.brickSpace--;
           break;
         default:
       }
       // when pressing a key - update
       updatePlayground();
     },
-    [pg, togglePause, updatePlayground, timeInterval]
+    [
+      pg,
+      togglePause,
+      updatePlayground,
+      timeInterval,
+      gameSettings.brickSize,
+      gameSettings.brickSpace,
+    ]
   );
 
   const showSettings = useCallback(() => {
@@ -162,7 +172,7 @@ function UseGameState(pg: playGroundModel): any {
       setGameSettings(myGameSettings);
       pg.numColumns = myGameSettings.numColumns;
       pg.numRows = myGameSettings.numRows;
-      pg.gameSettings = myGameSettings;
+      setGameSettings(myGameSettings);
     },
     [gameStatus, lastGameStatus, handleKeys, pg]
   );

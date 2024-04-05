@@ -4,6 +4,7 @@ import { gameSettingsType, gameStatusEnum } from "./modeltypes";
 export type PlaygroundProps = {
   blockBricks: { pX: number; pY: number }[];
   gameStatus: gameStatusEnum;
+  gameSettings: gameSettingsType;
   actionCallbacks: any;
   pg: playgroundModel;
 };

@@ -1,18 +1,19 @@
 // The main panels in the game: ScoreBoard, Block (active block) and the wall
 import Block from "./game/Block";
 import Wall from "./game/Wall";
-import { PlaygroundProps } from "../model/types";
+import { PlaygroundProps } from "../model/componentProps";
 import Boundary from "./board/Boundary";
 import ScoreBoard from "./board/Score";
 
 function Playground({
   blockBricks,
   gameStatus,
+  gameSettings,
   actionCallbacks,
   pg,
 }: PlaygroundProps) {
-  const pwidth: number = pg.numColumns * pg.gameSettings.brickSpace;
-  const pheight: number = pg.numRows * pg.gameSettings.brickSpace;
+  const pwidth: number = pg.numColumns * gameSettings.brickSpace;
+  const pheight: number = pg.numRows * gameSettings.brickSpace;
 
   return (
     <div>
@@ -29,17 +30,17 @@ function Playground({
         <Block
           bricks={blockBricks}
           color={pg.activeBlock.getBlockColor()}
-          numCol={pg.gameSettings.numColumns}
-          brickSize={pg.gameSettings.brickSize}
-          brickSpace={pg.gameSettings.brickSpace}
+          numCol={pg.numColumns}
+          brickSize={gameSettings.brickSize}
+          brickSpace={gameSettings.brickSpace}
         />
         {/* Colored wall */}
         <Wall
           wall={pg.getWall()}
-          numCol={pg.gameSettings.numColumns}
-          numRow={pg.gameSettings.numRows}
-          brickSize={pg.gameSettings.brickSize}
-          brickSpace={pg.gameSettings.brickSpace}
+          numCol={pg.numColumns}
+          numRow={pg.numRows}
+          brickSize={gameSettings.brickSize}
+          brickSpace={gameSettings.brickSpace}
         />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import Brick from "./Brick";
-import { BlockProps } from "../../model/types";
+import { BlockProps } from "../../model/componentProps";
 
 const Block = ({
   bricks,
