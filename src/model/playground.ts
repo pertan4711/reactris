@@ -16,6 +16,7 @@ export default class playGroundModel {
   score: number;
   level: number;
   activeBlock: block;
+  nextActive: block;
   gameType: number;
   initWallHeight: number;
   initWallPropability: number;
@@ -44,7 +45,8 @@ export default class playGroundModel {
     });
     this.score = 0;
     this.level = 1;
-    this.activeBlock = this.generateNextBlock();
+    this.activeBlock = this.generateBlock();
+    this.nextActive = this.generateBlock();
   }
 
   // Singleton playground
@@ -71,7 +73,7 @@ export default class playGroundModel {
   }
 
   /// Randomize next block and put it in the middle
-  generateNextBlock(): block {
+  generateBlock(): block {
     let differentBlocksCount = playMode[this.gameType].blocks.length;
     let blockIndex = Math.floor(Math.random() * differentBlocksCount);
     let realBlockIndex = playMode[this.gameType].blocks[blockIndex];
@@ -90,9 +92,12 @@ export default class playGroundModel {
 
   /// Move the active block down
   incTime = () => {
-    this.activeBlock !== null
-      ? this.activeBlock.pY++
-      : (this.activeBlock = this.generateNextBlock());
+    if (this.activeBlock !== null) {
+      this.activeBlock.pY++;
+    } else {
+      this.activeBlock = this.nextActive;
+      this.nextActive = this.generateBlock();
+    }
   };
 
   /// Reset and start game
@@ -103,7 +108,8 @@ export default class playGroundModel {
     this.level = 1;
     this.wall.reset(this.initWallHeight);
     this.activeBlock.pY = 0;
-    this.activeBlock = this.generateNextBlock();
+    this.activeBlock = this.generateBlock();
+    this.nextActive = this.generateBlock();
   };
 
   getWall = (): number[][] => {
@@ -127,7 +133,8 @@ export default class playGroundModel {
       // If bricks have the same postition - move block up and put in the wall
       this.activeBlock.pY--;
       this.wall.addBlock(this.activeBlock);
-      this.activeBlock = this.generateNextBlock();
+      this.activeBlock = this.nextActive;
+      this.nextActive = this.generateBlock();
       //console.log("block landed on wall");
 
       // If next randomized block collides it is game over
