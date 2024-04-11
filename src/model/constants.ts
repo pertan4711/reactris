@@ -12,8 +12,41 @@ import { gameTypeEnum } from "./modeltypes";
 import bigleftblock from "./blocks/bigleftblock";
 import bigrightblock from "./blocks/bigrightblock";
 
-export const blocks: { block: any; color: string }[] = [
-  { block: leftblock, color: "red" },
+export const blocks: {
+  block: any;
+  color: string;
+  spinpos: { pX: number; pY: number }[][];
+}[] = [
+  {
+    block: leftblock,
+    color: "red",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 0, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 1, pY: 1 },
+        { pX: 1, pY: 2 },
+      ],
+      [
+        { pX: 2, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 0, pY: 2 },
+        { pX: 1, pY: 2 },
+      ],
+    ],
+  },
   { block: rightblock, color: "orange" },
   { block: squareblock, color: "yellow" },
   { block: lineblock, color: "green" },
