@@ -3,6 +3,7 @@ export type blockModelType = {
   pX: number;
   pY: number;
   spinPosition: number;
+  mySpinPosition: { pX: number; pY: number }[][];
 };
 
 export type brickModelType = {

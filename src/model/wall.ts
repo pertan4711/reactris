@@ -127,7 +127,7 @@ export default class wall {
   addBlock(block: block) {
     if (block !== null) {
       var bricks = block.getBrickPosition();
-      bricks.forEach((brick) => {
+      bricks.forEach((brick: { pY: number; pX: number; }) => {
         this.wall[brick.pY][brick.pX] = block.blockIndex;
         // console.log(
         //   "wall[" + brick.pY + "][" + brick.pX + "]: " + block.blockIndex

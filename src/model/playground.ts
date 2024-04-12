@@ -84,8 +84,9 @@ export default class playGroundModel {
       pX: xpos,
       pY: 0,
       spinPosition: 1,
+      mySpinPosition: mybl.mySpinpos,
     };
-    let ab = new mybl(blockProps);
+    let ab = new block(blockProps);
 
     return ab;
   }

@@ -1,26 +1,27 @@
-import bigblock from "./blocks/bigblock";
-import jaggedblock from "./blocks/jaggedblock";
-import leftblock from "./blocks/leftblock";
-import leftflashblock from "./blocks/leftflashblock";
-import lineblock from "./blocks/lineblock";
-import minorlineblock from "./blocks/minorlineblock";
-import rightblock from "./blocks/rightblock";
-import rightflashblock from "./blocks/rightflashblock";
-import squareblock from "./blocks/squareblock";
-import hillblock from "./blocks/hillblock";
-import { gameTypeEnum } from "./modeltypes";
-import bigleftblock from "./blocks/bigleftblock";
-import bigrightblock from "./blocks/bigrightblock";
+// import bigblock from "./blocks/bigblock";
+// import jaggedblock from "./blocks/jaggedblock";
+// import leftblock from "./blocks/leftblock";
+// import leftflashblock from "./blocks/leftflashblock";
+// import lineblock from "./blocks/lineblock";
+// import minorlineblock from "./blocks/minorlineblock";
+// import rightblock from "./blocks/rightblock";
+// import rightflashblock from "./blocks/rightflashblock";
+// import squareblock from "./blocks/squareblock";
+// import hillblock from "./blocks/hillblock";
+// import { gameTypeEnum } from "./modeltypes";
+// import bigleftblock from "./blocks/bigleftblock";
+// import bigrightblock from "./blocks/bigrightblock";
+import { gameTypeEnum } from "../model/modeltypes";
 
 export const blocks: {
   block: any;
   color: string;
-  spinpos: { pX: number; pY: number }[][];
+  mySpinpos: { pX: number; pY: number }[][];
 }[] = [
   {
-    block: leftblock,
+    block: "leftblock",
     color: "red",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -48,9 +49,9 @@ export const blocks: {
     ],
   },
   {
-    block: rightblock,
+    block: "rightblock",
     color: "orange",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -78,9 +79,9 @@ export const blocks: {
     ],
   },
   {
-    block: squareblock,
+    block: "squareblock",
     color: "yellow",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -90,9 +91,9 @@ export const blocks: {
     ],
   },
   {
-    block: lineblock,
+    block: "lineblock",
     color: "green",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -108,9 +109,9 @@ export const blocks: {
     ],
   },
   {
-    block: minorlineblock,
+    block: "minorlineblock",
     color: "lightyellow",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -124,9 +125,9 @@ export const blocks: {
     ],
   },
   {
-    block: leftflashblock,
+    block: "leftflashblock",
     color: "blue",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -142,9 +143,9 @@ export const blocks: {
     ],
   },
   {
-    block: rightflashblock,
+    block: "rightflashblock",
     color: "brown",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 1, pY: 0 },
         { pX: 2, pY: 0 },
@@ -160,9 +161,9 @@ export const blocks: {
     ],
   },
   {
-    block: hillblock,
+    block: "hillblock",
     color: "cyan",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -190,9 +191,9 @@ export const blocks: {
     ],
   },
   {
-    block: bigblock,
+    block: "bigblock",
     color: "purple",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -212,9 +213,9 @@ export const blocks: {
     ],
   },
   {
-    block: jaggedblock,
+    block: "jaggedblock",
     color: "grey",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 1 },
@@ -228,9 +229,9 @@ export const blocks: {
     ],
   },
   {
-    block: bigleftblock,
+    block: "bigleftblock",
     color: "lightgreen",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
@@ -262,9 +263,9 @@ export const blocks: {
     ],
   },
   {
-    block: bigrightblock,
+    block: "bigrightblock",
     color: "pink",
-    spinpos: [
+    mySpinpos: [
       [
         { pX: 0, pY: 0 },
         { pX: 1, pY: 0 },
