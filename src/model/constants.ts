@@ -47,17 +47,254 @@ export const blocks: {
       ],
     ],
   },
-  { block: rightblock, color: "orange" },
-  { block: squareblock, color: "yellow" },
-  { block: lineblock, color: "green" },
-  { block: minorlineblock, color: "lightyellow" },
-  { block: leftflashblock, color: "blue" },
-  { block: rightflashblock, color: "brown" },
-  { block: hillblock, color: "cyan" },
-  { block: bigblock, color: "purple" },
-  { block: jaggedblock, color: "grey" },
-  { block: bigleftblock, color: "lightgreen" },
-  { block: bigrightblock, color: "pink" },
+  {
+    block: rightblock,
+    color: "orange",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 1, pY: 0 },
+        { pX: 1, pY: 1 },
+        { pX: 0, pY: 2 },
+        { pX: 1, pY: 2 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 0, pY: 2 },
+      ],
+    ],
+  },
+  {
+    block: squareblock,
+    color: "yellow",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+      ],
+    ],
+  },
+  {
+    block: lineblock,
+    color: "green",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 3, pY: 0 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 0, pY: 2 },
+        { pX: 0, pY: 3 },
+      ],
+    ],
+  },
+  {
+    block: minorlineblock,
+    color: "lightyellow",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 0, pY: 2 },
+      ],
+    ],
+  },
+  {
+    block: leftflashblock,
+    color: "blue",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 0, pY: 2 },
+      ],
+    ],
+  },
+  {
+    block: rightflashblock,
+    color: "brown",
+    spinpos: [
+      [
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 1, pY: 2 },
+      ],
+    ],
+  },
+  {
+    block: hillblock,
+    color: "cyan",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 1, pY: 1 },
+      ],
+      [
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 1, pY: 2 },
+      ],
+      [
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 0, pY: 2 },
+      ],
+    ],
+  },
+  {
+    block: bigblock,
+    color: "purple",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 0, pY: 2 },
+        { pX: 1, pY: 2 },
+      ],
+    ],
+  },
+  {
+    block: jaggedblock,
+    color: "grey",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 2 },
+      ],
+      [
+        { pX: 2, pY: 0 },
+        { pX: 1, pY: 1 },
+        { pX: 0, pY: 2 },
+      ],
+    ],
+  },
+  {
+    block: bigleftblock,
+    color: "lightgreen",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 1, pY: 2 },
+      ],
+      [
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 0, pY: 2 },
+        { pX: 1, pY: 2 },
+      ],
+    ],
+  },
+  {
+    block: bigrightblock,
+    color: "pink",
+    spinpos: [
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 2, pY: 0 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 0, pY: 2 },
+        { pX: 1, pY: 2 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 2, pY: 1 },
+      ],
+      [
+        { pX: 0, pY: 0 },
+        { pX: 1, pY: 0 },
+        { pX: 0, pY: 1 },
+        { pX: 1, pY: 1 },
+        { pX: 0, pY: 2 },
+      ],
+    ],
+  },
 ];
 
 export const playMode: any[] = [
