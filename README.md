@@ -29,30 +29,33 @@ Built partial with MVP pattern design where the model is written in typescript a
 
 ## TODO:
 
-This is the backlog of the bugs and missing features of the app.
+This is a list of the bugs and missing features of the app.
 
-- u should not get any points before start
-- level up does not work
-- simplify config process including/excluding which blocks to use in game
-- random rate should be individual to block
-- develop config page with size of block, playground, color and so on..
-- highscore page
-- alternate highscore and game page
-- score text should have more space (html border)
-- color should be configurable of block and brick
-- styling of text: include shadow - better looking
-- abstraction of block and bricks are a little bit looney
-- more unit tests
-- cypress ui tests
-- game restart is not possible
-- ESC should restart
-- startup page
-- configuration - Choose easy / standard / hard
-- custom block design page - editor to create your own block
-- check react versions
+### Backlog
+- print next active on console to the right
+- changing settings does not effect 'New Game'
 - start random wall should not generate filled row
+- u should not get any points before start
 - show next block
+- random rate should be individual and configurable to block
 - better looking block with shadow
+- styling of text: include shadow - better looking
+- score text should have more space (html border)
+- ESC should restart
+- **Pages**
+  - startup page
+  - highscore page
+  - alternate highscore and game page
+- **Test**
+  - more unit tests (jest)
+  - does jest function with typescript?
+  - cypress ui tests
+- **Configuration**
+  - Color - Should be configurable of block and brick
+  - Gamemode - Choose easy / standard / hard
+  - Custom block design page - editor to create your own block
+  - Simplify config process including/excluding which blocks to use in game
+- check react versions
 
 ## Available Scripts
 

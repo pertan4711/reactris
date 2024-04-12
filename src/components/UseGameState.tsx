@@ -24,6 +24,7 @@ function UseGameState(
   const gameTick = useCallback(() => {
     if (gameStatus === gameStatusEnum.Ongoing) {
       pg.incTime();
+      console.log("nextActive: " + pg.nextActive.constructor.name);
     }
   }, [pg, gameStatus]);
 
