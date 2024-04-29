@@ -56,6 +56,7 @@ This is a list of the bugs and missing features of the app.
   - Custom block design page - editor to create your own block
   - Simplify config process including/excluding which blocks to use in game
 - check react versions
+- will try to move these issues to Github project space
 
 ## Available Scripts
 
