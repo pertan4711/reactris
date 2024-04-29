@@ -30,7 +30,7 @@ Built partial with MVP pattern design where the model is written in typescript a
 ## Backlog:
 
 This is a list of the bugs and missing features of the app.
-[https://github.com/users/pertan4711/projects/3/views/1](View backlog)
+[View backlog](https://github.com/users/pertan4711/projects/3/views/1)
 
 ## Available Scripts
 
