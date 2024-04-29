@@ -78,3 +78,10 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 - There is a sandboxed clone of this code in [CodeSandbox](https://codesandbox.io/s/reactris-ng769y?file=/src/index.tsx)
 - You can build docker image
+
+```mermaid
+flowchart TD;
+    A[Start] --> B[Process 1];
+    B --> C[Process 2];
+    C --> D[End];
+```
