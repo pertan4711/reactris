@@ -27,35 +27,10 @@ Run the webserver and start the game with `yarn start` or `npm start`.
 The game will be a SPA on port 3000 (localhost:3000) and will be injected in the index.html file.
 Built partial with MVP pattern design where the model is written in typescript and the view part in React-Typescript.
 
-## TODO:
+## Backlog:
 
 This is a list of the bugs and missing features of the app.
-
-### Backlog
-- print next active on console to the right
-- changing settings does not effect 'New Game'
-- start random wall should not generate filled row
-- u should not get any points before start
-- show next block
-- random rate should be individual and configurable to block
-- better looking block with shadow
-- styling of text: include shadow - better looking
-- score text should have more space (html border)
-- ESC should restart
-- **Pages**
-  - startup page
-  - highscore page
-  - alternate highscore and game page
-- **Test**
-  - more unit tests (jest)
-  - does jest function with typescript?
-  - cypress ui tests
-- **Configuration**
-  - Color - Should be configurable of block and brick
-  - Gamemode - Choose easy / standard / hard
-  - Custom block design page - editor to create your own block
-  - Simplify config process including/excluding which blocks to use in game
-- check react versions
+[View backlog](https://github.com/users/pertan4711/projects/3/views/1)
 
 ## Available Scripts
 
@@ -103,3 +78,10 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 - There is a sandboxed clone of this code in [CodeSandbox](https://codesandbox.io/s/reactris-ng769y?file=/src/index.tsx)
 - You can build docker image
+
+```mermaid
+flowchart TD;
+    A[Start] --> B[Process 1];
+    B --> C[Process 2];
+    C --> D[End];
+```
