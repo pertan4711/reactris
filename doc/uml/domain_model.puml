@@ -1,5 +1,7 @@
+' This is a UML overview of reactris app and how it is constructed
 @startuml Domain Model
 skinparam BackgroundColor #EEEBDC
+note "Reactris class diagram of model" as diagramtext
 
 abstract class "Block" as Block {
   blockIndex: number
@@ -14,6 +16,8 @@ abstract class "Block" as Block {
   moveDown()
   getBlockColor()
 }
+
+note left of Block : Object containing {x,y} and\nspin position and brick structure
 
 class leftblock extends Block {
   getBrickPosition(): number[][]
@@ -67,6 +71,8 @@ class "Wall" as Wall {
   addBlock()
   check4CompletedRows(): number
 }
+
+note left of Wall : Current structure of brick wall
 
 Playground "1" *-- "1" Block : activeBlock
 Playground "1" -- "1" Wall : contains wall

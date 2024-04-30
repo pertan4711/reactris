@@ -8,6 +8,12 @@ Use the PlantUML extension in VSCode or Notepad++. You have to ensure you have g
 
 ```
 sudo apt update
+sudo apt install openjdk
+```
+I some cases you have to install graphviz as well.
+
+```
+sudo apt update
 sudo apt install default-jre
 sudo apt install graphviz
 ```
