@@ -81,7 +81,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ```mermaid
 flowchart TD;
-    A[Start] --> B[Process 1];
-    B --> C[Process 2];
-    C --> D[End];
+    A[Start] --> B[Player];
+    B --> C[Playground];
+    C --> D[Wall];
 ```
