@@ -25,3 +25,22 @@ https://plantuml.com/
 https://crashedmind.github.io/PlantUMLHitchhikersGuide/
 
 ```
+
+# Mermaid diagrams
+
+Another popular tool that is gaining popularity is Mermaid. It has a similar code as Plant-UML but could be 
+used in plain markdown files such as this file.
+
+A real good thing about this is that it could be used at Github out of the box but to use it in vscode you 
+have to install the "Markdown Preview Mermaid" extension.
+
+```mermaid
+sequenceDiagram
+    participant Player
+    participant Playground
+    participant ActiveBlock
+    participant Wall
+    Player->>Playground: start_game
+    Playground->>Wall: initWallHeight
+    Playground->>ActiveBlock: generateNextBlock
+```
