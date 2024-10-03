@@ -58,17 +58,46 @@ body {
 }
 
 .score-text {
-  font-size: 60px;
-  margin: 5px;
+  font-size: 50px;
+  margin: 15px 15px;
+}
+
+.score-panel {
+  background-color: yellow;
+  /* 
+  background: rgb(187, 107, 187);
+  padding: 10;
+  margin: 10;
+  border-radius: 25;
+  margin-bottom: 10; */
 }
 
 .button-text {
   font-family: "Joti One", cursive;
-  font-size: 40px;
+  font-size: 32px;
   color: darkgreen;
   background-color: rgb(245, 245, 245);
-  margin: 5px;
+  margin: 15px;
+
+  transition: all 500ms;
+  padding: 0.25em 1em;
 }
+
+.button-text.tilt-left {
+  rotate: -15deg;
+}
+
+.button-text.tilt-right {
+  rotate: 15deg;
+}
+
+.button-text:hover {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+  rotate: 0deg;
+  scale: 1.4;
+}
+
 
 .dialog-text {
   font-size: 40px;

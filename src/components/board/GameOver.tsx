@@ -1,4 +1,5 @@
 import { GameOverProps } from "../../model/componentProps";
+//import css from "./GameOver.module.css";
 
 const GameOver = ({ score, pgLeft, pgTop, startNewGame }: GameOverProps) => {
   return (
@@ -7,6 +8,8 @@ const GameOver = ({ score, pgLeft, pgTop, startNewGame }: GameOverProps) => {
       style={{
         left: pgLeft,
         top: pgTop,
+        width: 200,
+        height: 150,
       }}
     >
       <div>Game Over</div>
