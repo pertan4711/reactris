@@ -1,87 +1,68 @@
 # Game Reactris
 
-This is a clone of the tetris game done in React and Typescript. It is a simple project to learn especially react but also other
-languages and deploy techniques. Of course it is a full blown tetris with some interesting blocks that is self invented. It is easy
-to extend with your own block structures.
-It is an ongoing process there multiple techniques including testing with jest and deploying and hosting with docker
-will be used. I have also tried to make it available in both windows and linux environments.
+This is a clone of the tetris game done in React and Typescript. It is a simple project to learn especially react but also other languages and deploy techniques. Of course it is a full blown tetris with some interesting blocks that is self invented. It is easy to extend with your own block structures. It is an ongoing process there multiple techniques including testing with jest and deploying and hosting with docker will be used. 
 
-The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and uses some parameters for
-typescript (see below).
+The game engine is done in purly Typescript and could be tested separatly. The game GUI is done in react and main loop is refactored into the state component 'UseGameState.tsx'.
+
+The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and uses some parameters for typescript (see below).
 
 Configure and setup:
-
-### `yarn`
-
-Use yarn or npm to setup and configure the project. Be sure to install nodejs (npm). There could be some issues with the npm version.
-
-### `yarn install`
-
-Install all dependencies to run the game.
-
-### `yarn start`
-
-To develop and to start the game (web server)
+- `yarn install`
+- `yarn start`
+- `yarn test`
+- `yarn test --watch`
+- `yarn build`
 
 Run the webserver and start the game with `yarn start` or `npm start`.
-The game will be a SPA on port 3000 (localhost:3000) and will be injected in the index.html file.
-Built partial with MVP pattern design where the model is written in typescript and the view part in React-Typescript.
+The game will be a SPA on port 3000 (localhost:3000) and will be injected in the index.html file. Built partial with MVP pattern design where the model is written in typescript and the view part in React-Typescript.
 
 ## Backlog:
-
 This is a list of the bugs and missing features of the app.
 [View backlog](https://github.com/users/pertan4711/projects/3/views/1)
 
-## Available Scripts
 
-In the project directory, you can run:
+## Game Architecture
+The game follows the MVP (Model-View-Presenter) pattern. Here is a brief overview of the main components:
 
-### `yarn start`
+- **Model**: The game logic and state management are handled by the model classes. The main model class is [`playGroundModel`](src/model/playground.ts), which manages the game state, active block, and wall. Other model classes include various block types such as [`leftblock`](src/model/blocks/leftblock.ts), [`rightblock`](src/model/blocks/rightblock.ts), and [`lineblock`](src/model/blocks/lineblock.ts).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **View**: The view components are responsible for rendering the game UI. The main view component is [`Playground`](src/components/Playground.tsx), which renders the active block, wall, and score. Other view components include [`Block`](src/components/game/Block.tsx), [`Wall`](src/components/game/Wall.tsx), and [`ScoreBoard`](src/components/board/Score.tsx).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Presenter**: The presenter component [`UseGameState`](src/components/UseGameState.tsx) handles the game state and user interactions. It uses React hooks to manage the game state and update the view components.
 
-### `yarn test`
+## Key Files and Directories
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-It is possible to start a debug session with tests by typing "JavaScript Debug Terminal" and when write
+- `src/components`: Contains the React components for the game UI.
+- `src/model`: Contains the TypeScript classes for the game logic and state management.
+- `src/utils`: Contains utility functions such as [`calculateBrickSize`](src/utils/utils.ts).
+- `src/test`: Contains the Jest test files for the game.
 
-### `yarn test --watch`
+## UML Diagrams
+The project includes UML diagrams to illustrate the structure of the application. These diagrams are located in the `doc/uml` directory. You have to install PUML to read those.
 
-Sätt brytpunkter som vanligt i testfilen (Tetris.test.js)
+### Domain Model
+![Domain Model](doc/uml/domain_model.puml)
 
-### `yarn build`
+### Sequence Diagram
+![Start Game Sequence](doc/uml/start_game.puml)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Enhancement and future
+I will propably do a rework with Next and Tailwind just to mirror the current project I am working on.
 
 ## Additional
-
 - There is a sandboxed clone of this code in [CodeSandbox](https://codesandbox.io/s/reactris-ng769y?file=/src/index.tsx)
 - You can build docker image
 
 ```mermaid
 flowchart TD;
-    A[Start] --> B[Player];
-    B --> C[Playground];
+    A[Tetris] --> C[Playground];
+    C --> G[Game Engine];
     C --> D[Wall];
+    D --> E[Block];
+    E --> F[Brick];
 ```
+
+## Reference
+Pluralsight courses:
+- "React 17: Getting started" (retired) with Samer Buna
+- "React 18 Fundamentals" by Roland Guijt
