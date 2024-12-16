@@ -9,6 +9,7 @@
 
   /* 
   top: 50;
+  border: 0;
   border-bottom: -150;
   left: 40%;
   bottom: -60; 
@@ -17,7 +18,6 @@
 
   overflow: hidden;
   margin: 0;
-  /* border: 0; */
   cursor: pointer;
   text-transform: uppercase;
   transition: all 300ms;
@@ -25,10 +25,13 @@
   rotate: 45deg;
   padding: 0;
   outline: none;
-  /* composes: submit; */
-  /* height: auto;
+  
+  /* 
+  composes: submit;
+  height: auto;
   width: auto;
-  font-size: 1em; */
+  font-size: 1em; 
+  */
   translate: -50% 50%;
   rotate: -5deg;
   padding: 0.25em 1em;

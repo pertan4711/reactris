@@ -4,7 +4,7 @@ import { GameOverProps } from "../../model/componentProps";
 const GameOver = ({ score, pgLeft, pgTop, startNewGame }: GameOverProps) => {
   return (
     <div
-      className="playground-dialogue playground-text"
+      className="playground-dialogue playground-text sunken-panel"
       style={{
         left: pgLeft,
         top: pgTop,
@@ -12,8 +12,8 @@ const GameOver = ({ score, pgLeft, pgTop, startNewGame }: GameOverProps) => {
         height: 150,
       }}
     >
-      <div>Game Over</div>
-      <div>Your score: {score}</div>
+      <div className="dialog-text">Game Over</div>
+      <div className="dialog-text">Your score: {score}</div>
       <button
         className="button-text"
         id="resetButton"

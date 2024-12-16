@@ -14,6 +14,7 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
           top: 5,
         }}
       ></div>
+      
       {/* Board displaying score */}
       <div
         className="playground-panel"
@@ -26,51 +27,42 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
         }}
       >
         <div className="score-heading">Reactris</div>
-        <div 
-          // className="score-panel"
+        <div className=" sunken-panel"
           style={{
-            backgroundColor: "rgb(187, 107,187)",
+            backgroundColor: "rgb(255, 165, 255)",
             margin: "10px",
             padding: "5px 10px 5px 10px",
             borderRadius: "10px",
             }}>
-        {/* </div>
-        <div 
-          style={{
-            backgroundColor: "rgb(236, 154, 236, 0.7)",
-            margin: "10px",
-            paddingLeft: "15px",
-            borderRadius: "10px",
-            }}> */}
           <div className="score-text">Score:{pg.score}</div>
           <div className="score-text">Level:{pg.level}</div>
         </div>
         <p />
         <div 
           style={{
-            backgroundColor: "rgb(187, 107,187)",
+            backgroundColor: "rgb(255, 165, 255)",
             margin: "10px",
             borderRadius: "10px",
             marginLeft: "10px",
             padding: "40px"
             }}
-          className="score-panel">
+          className="score-panel sunken-panel">
           <button
-            className="button-text tilt-left"
+            className="button-text tilt-left-light shadow-button"
             onClick={() => actionCallbacks.showSettings()}
           >
             Settings
           </button>
           <br />
           <button
-            className="button-text tilt-right"
+            className="button-text tilt-right shadow-button"
             onClick={() => actionCallbacks.togglePause()}
           >
             Pause
           </button>
           <br />
           <button
-            className="button-text tilt-right"
+            className="button-text tilt-left-light shadow-button"
             onClick={() => actionCallbacks.startNewGame()}
           >
             New Game

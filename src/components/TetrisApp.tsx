@@ -25,7 +25,7 @@ const TetrisApp = () => {
     levelUpgradeDiv: 2,
     brickSize: brickSize,
     brickSpace: brickSize + 2,
-    gameType: gameTypeEnum.Classic,
+    gameType: gameTypeEnum.Advanced,
     initWallPropability: 0.5,
   };
 

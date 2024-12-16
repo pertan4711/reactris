@@ -13,13 +13,7 @@ body {
 }
 
 .Tetris-header {
-  /*background-color: lightgrey; /* #282c34; */
-  /* min-height: 100vh;
-  display: flex;
-  flex-direction: column; */
   align-items: center;
-  /* justify-content: center;
-  font-size: calc(10px + 2vmin); */
   color: white;
 }
 
@@ -35,7 +29,7 @@ body {
 }
 
 .playground-dialogue {
-  background: rgb(236, 154, 236, 0.7);
+  background: rgb(236, 154, 236);
   color: green;
   font-family: "Joti One", cursive;
   font-size: 30px;
@@ -55,21 +49,17 @@ body {
 
 .score-heading {
   font-size: 80px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .score-text {
   font-size: 50px;
   margin: 15px 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .score-panel {
   background-color: yellow;
-  /* 
-  background: rgb(187, 107, 187);
-  padding: 10;
-  margin: 10;
-  border-radius: 25;
-  margin-bottom: 10; */
 }
 
 .button-text {
@@ -91,6 +81,14 @@ body {
   rotate: 15deg;
 }
 
+.button-text.tilt-left-light {
+  rotate: -8deg;
+}
+
+.button-text.tilt-right-light {
+  rotate: 7deg;
+}
+
 .button-text:hover {
   outline: 2px solid #fff;
   outline-offset: 4px;
@@ -98,9 +96,20 @@ body {
   scale: 1.4;
 }
 
+.shadow-button {
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sunken-panel {
+  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 -4px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 10px;
+}
+
 
 .dialog-text {
-  font-size: 40px;
+  font-size: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .ScoreStyleShadow {
