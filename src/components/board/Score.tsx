@@ -25,13 +25,46 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
           top: 0,
         }}
       >
-        <div className="score-heading">Reactris</div>
-        <div className="score-text">Score:{pg.score}</div>
-        <div className="score-text">Level:{pg.level}</div>
+        <div
+          className="score-heading"
+          style={{
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          Reactris
+        </div>
+        <div
+          className="score-text"
+          style={{
+            textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          Score: {pg.score}
+        </div>
+        <div
+          className="score-text"
+          style={{
+            textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          Level: {pg.level}
+        </div>
         <p />
-        <div style={{ color: "white", margin: "5px" }}>
+        <div
+          style={{
+            color: "white",
+            margin: "5px",
+          }}
+        >
           <button
             className="button-text"
+            style={{
+              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+              boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
+              backgroundColor: "lightyellow",
+              border: "none",
+              cursor: "pointer",
+            }}
             onClick={() => actionCallbacks.showSettings()}
           >
             Settings
@@ -39,6 +72,13 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
           <br />
           <button
             className="button-text"
+            style={{
+              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+              boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
+              backgroundColor: "lightyellow",
+              border: "none",
+              cursor: "pointer",
+            }}
             onClick={() => actionCallbacks.togglePause()}
           >
             Pause
@@ -46,6 +86,13 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
           <br />
           <button
             className="button-text"
+            style={{
+              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+              boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
+              backgroundColor: "lightyellow",
+              border: "none",
+              cursor: "pointer",
+            }}
             onClick={() => actionCallbacks.startNewGame()}
           >
             New Game

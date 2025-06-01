@@ -9,20 +9,25 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     changed: Boolean;
   };
 
-  let transformSettings: localSettingType[] = [];
+  const labelMap = {
+    numColumns: "Columns",
+    numRows: "Rows",
+    gameType: "Game Type",
+    initWallHeight: "Initial Wall Height",
+    initWallPropability: "Wall Probability",
+    levelUpgradeDiv: "Level Upgrade Divider",
+  };
 
-  // Transform to local setting object to detect change and validate
-  for (const [key, value] of Object.entries(gameSettings)) {
-    let localSetting: localSettingType = {
+  const transformSettings = () => {
+    return Object.entries(gameSettings).map(([key, value]) => ({
       name: key.toString(),
       value: value,
       valid: true,
       changed: false,
-    };
-    transformSettings.push(localSetting);
-  }
+    }));
+  };
 
-  const [localSettings, setLocalSettings] = useState(transformSettings);
+  const [localSettings, setLocalSettings] = useState(transformSettings());
 
   const handleChange = (event: any) => {
     console.log("handleChange: " + event.target.name);
@@ -86,7 +91,7 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
               {localSettings.map((setting) => (
                 <tr key={setting.name}>
                   <th>
-                    {setting.name}
+                    {labelMap[setting.name as keyof typeof labelMap] || setting.name}
                     {!setting.valid ? "*" : ""}
                   </th>
                   <th>
