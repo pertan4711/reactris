@@ -6,17 +6,6 @@ const Boundary = ({ xoffset, height }: BoundaryProps) => {
   const bheight: string = height.toString() + "px";
   return (
     <>
-      {/* Shadow */}
-      <div
-        style={{
-          width: xpos,
-          height: bheight,
-          background: "grey",
-          position: "absolute",
-          left: 5,
-          top: 5,
-        }}
-      ></div>
       {/* Panel */}
       <div
         className="playground-background"

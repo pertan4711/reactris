@@ -5,7 +5,9 @@ header {
 }
 
 body {
-  background-color: lightblue;
+  background: linear-gradient(180deg, #7cc1fd 0%, #e3f0ff 100%);
+  min-height: 100vh;
+  margin: 0;
 }
 
 .Tetris {

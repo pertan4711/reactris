@@ -3,18 +3,6 @@ import { ScoreProps } from "../../model/componentProps";
 const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
   return (
     <>
-      {/* Shadow of board */}
-      <div
-        style={{
-          position: "absolute",
-          background: "grey",
-          left: width + 10,
-          width: 350,
-          height: height,
-          top: 5,
-        }}
-      ></div>
-      
       {/* Board displaying score */}
       <div
         className="playground-panel"
@@ -24,6 +12,9 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
           width: 350,
           height: height,
           top: 0,
+          backgroundColor: "#FFF8DC", // matches Settings panel background
+          boxShadow: "2px 2px 5px rgba(0,0,0,0.5)", // Match inner panel shadow for consistency
+          borderRadius: "10px",
         }}
       >
         <div
@@ -34,46 +25,49 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
         >
           Reactris
         </div>
-        <div className=" sunken-panel"
+        <div className="sunken-panel"
           style={{
-            backgroundColor: "rgb(255, 165, 255)",
+            backgroundColor: "#FFF9E3", // matches Settings inner panel
             margin: "10px",
             padding: "5px 10px 5px 10px",
             borderRadius: "10px",
-            }}>
+            boxShadow: "2px 2px 5px rgba(0,0,0,0.5)", // consistent shadow
+          }}>
           <div
-          className="score-text"
-          style={{
-            textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
-          }}
-        >
-          Score: {pg.score}
-        </div>
+            className="score-text"
+            style={{
+              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            Score: {pg.score}
+          </div>
           <div
-          className="score-text"
-          style={{
-            textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
-          }}
-        >
-          Level: {pg.level}
-        </div>
+            className="score-text"
+            style={{
+              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            Level: {pg.level}
+          </div>
         </div>
         <p />
         <div 
           style={{
-            backgroundColor: "rgb(255, 165, 255)",
+            backgroundColor: "#FFF9E3", // matches Settings inner panel
             margin: "10px",
             borderRadius: "10px",
             marginLeft: "10px",
-            padding: "40px"
-            }}
-          className="score-panel sunken-panel">
+            padding: "40px",
+            boxShadow: "2px 2px 5px rgba(0,0,0,0.5)", // consistent shadow
+          }}
+          className="score-panel sunken-panel"
+        >
           <button
             className="button-text"
             style={{
               textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
               boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
-              backgroundColor: "lightyellow",
+              backgroundColor: "#EEEEE0", // Slightly grayer than lightyellow
               border: "none",
               cursor: "pointer",
             }}
@@ -87,7 +81,7 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
             style={{
               textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
               boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
-              backgroundColor: "lightyellow",
+              backgroundColor: "#EEEEE0", // Slightly grayer than lightyellow
               border: "none",
               cursor: "pointer",
             }}
@@ -101,7 +95,7 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
             style={{
               textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
               boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
-              backgroundColor: "lightyellow",
+              backgroundColor: "#EEEEE0", // Slightly grayer than lightyellow
               border: "none",
               cursor: "pointer",
             }}
