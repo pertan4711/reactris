@@ -8,6 +8,9 @@ const Block = ({
   brickSpace,
   numCol,
 }: BlockProps) => {
+  // Create a radial gradient using the block color
+  const gradient = `radial-gradient(circle at 50% 50%, ${color} 60%, #222 100%)`;
+
   return (
     <div>
       {bricks.map((brick: { pX: number; pY: number }) => (
@@ -17,6 +20,9 @@ const Block = ({
           color={color}
           brickSize={brickSize}
           brickSpace={brickSpace}
+          style={{
+            background: gradient,
+          }}
         />
       ))}
     </div>
