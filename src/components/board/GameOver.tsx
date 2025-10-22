@@ -1,7 +1,9 @@
+import React, { useState } from "react";
 import { GameOverProps } from "../../model/componentProps";
 //import css from "./GameOver.module.css";
 
 const GameOver = ({ score, pgLeft, pgTop, startNewGame }: GameOverProps) => {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <div
       className="playground-dialogue playground-text sunken-panel"
@@ -18,6 +20,8 @@ const GameOver = ({ score, pgLeft, pgTop, startNewGame }: GameOverProps) => {
         justifyContent: "center",
         backgroundColor: "#FFF9E3", // Match Score.tsx and Settings inner panel
         boxShadow: "2px 2px 5px rgba(0,0,0,0.5)", // Match panel shadow
+        borderRight: "2px solid #d1cfc7", // subtle right border
+  borderBottom: "3px solid #6c6b68", // much darker bottom border
       }}
     >
       <div
@@ -42,15 +46,15 @@ const GameOver = ({ score, pgLeft, pgTop, startNewGame }: GameOverProps) => {
         style={{
           textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
           boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
-          backgroundColor: "#EEEEE0", // Slightly grayer than lightyellow
+          backgroundColor: "#EEEEE0",
           border: "none",
           cursor: "pointer",
           marginTop: "16px",
-          transform: "rotate(-5deg)",
-          transition: "transform 0.15s",
+          transform: isHovered ? "rotate(0deg)" : "rotate(-5deg)",
+          transition: "transform 0.7s",
         }}
-        onMouseEnter={e => (e.currentTarget.style.transform = "rotate(0deg)")}
-        onMouseLeave={e => (e.currentTarget.style.transform = "rotate(-5deg)")}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         onClick={() => startNewGame()}
       >
         Play

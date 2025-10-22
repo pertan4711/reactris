@@ -20,9 +20,6 @@ const Block = ({
           color={color}
           brickSize={brickSize}
           brickSpace={brickSpace}
-          style={{
-            background: gradient,
-          }}
         />
       ))}
     </div>
