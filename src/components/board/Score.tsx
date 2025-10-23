@@ -97,6 +97,22 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
           >
             New Game
           </button>
+          <br />
+          {actionCallbacks.onBackToMenu && (
+            <button
+              className="button-text"
+              style={{
+                textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
+                boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
+                backgroundColor: "lightcoral",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onClick={() => actionCallbacks.onBackToMenu()}
+            >
+              Main Menu
+            </button>
+          )}
         </div>
       </div>
     </>

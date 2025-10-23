@@ -6,7 +6,13 @@ import Playground from "./Playground";
 import UseGameState from "./UseGameState";
 import ShowDialog from "./ShowDialog";
 
-const Game = (props: any) => {
+interface GameProps {
+  gameSettings: any;
+  startNewGame: () => void;
+  onBackToMenu?: () => void;
+}
+
+const Game = (props: GameProps) => {
   const pg = playGroundModel.getInstance(
     props.gameSettings.numColumns,
     props.gameSettings.numRows,
@@ -35,7 +41,7 @@ const Game = (props: any) => {
           blockBricks={activeBlockBricks}
           gameStatus={gameStatus}
           gameSettings={gameSettings}
-          actionCallbacks={{ startNewGame, togglePause, showSettings }}
+          actionCallbacks={{ startNewGame, togglePause, showSettings, onBackToMenu: props.onBackToMenu }}
           pg={pg}
         />
       </div>
@@ -49,6 +55,7 @@ const Game = (props: any) => {
             togglePause,
             showSettings,
             setGameSettingsCallback,
+            onBackToMenu: props.onBackToMenu,
           }}
         />
       </div>

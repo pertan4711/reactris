@@ -28,6 +28,7 @@ const ShowDialog = (props: ShowDialogProps) => {
           pgLeft={gameOverTextLeft}
           pgTop={gameOverTextTop}
           startNewGame={props.actionCallbacks.startNewGame}
+          onBackToMenu={props.actionCallbacks.onBackToMenu}
         />
       )}
       {props.gameStatus === gameStatusEnum.Pause && (

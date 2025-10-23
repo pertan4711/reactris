@@ -18,7 +18,7 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     levelUpgradeDiv: "Level Upgrade Divider",
   };
 
-  const transformSettings = () => {
+  const transformSettings = (): localSettingType[] => {
     return Object.entries(gameSettings).map(([key, value]) => ({
       name: key.toString(),
       value: value,

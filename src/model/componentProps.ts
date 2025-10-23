@@ -57,6 +57,7 @@ export type GameOverProps = {
   pgLeft: number;
   pgTop: number;
   startNewGame: any;
+  onBackToMenu?: () => void;
 };
 
 export type PauseProps = {

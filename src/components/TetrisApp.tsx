@@ -3,10 +3,15 @@
 import { useState } from "react";
 import { gameSettingsType, gameTypeEnum } from "../model/modeltypes";
 import Game from "./Game";
+import MainMenu from "./MainMenu";
+import HighScores from "./HighScores";
 import calculateBrickSize from "../utils/utils";
+
+type AppScreen = 'menu' | 'game' | 'highscores';
 
 // Init settings for startup
 const TetrisApp = () => {
+  const [currentScreen, setCurrentScreen] = useState<AppScreen>('menu');
   const [gameId, setGameId] = useState(1); // Should be used to reset game
 
   let numCol = 10;
@@ -29,13 +34,54 @@ const TetrisApp = () => {
     initWallPropability: 0.5,
   };
 
-  return (
-    <Game
-      key={gameId}
-      startNewGame={() => setGameId(gameId + 1)}
-      gameSettings={initGameSettings}
-    />
-  );
+  const handleStartGame = () => {
+    setCurrentScreen('game');
+    setGameId(gameId + 1); // Reset game when starting new
+  };
+
+  const handleShowHighScores = () => {
+    setCurrentScreen('highscores');
+  };
+
+  const handleBackToMenu = () => {
+    setCurrentScreen('menu');
+  };
+
+  const renderCurrentScreen = () => {
+    switch (currentScreen) {
+      case 'menu':
+        return (
+          <MainMenu 
+            onStartGame={handleStartGame}
+            onShowHighScores={handleShowHighScores}
+          />
+        );
+      case 'game':
+        return (
+          <Game
+            key={gameId}
+            startNewGame={handleStartGame}
+            gameSettings={initGameSettings}
+            onBackToMenu={handleBackToMenu}
+          />
+        );
+      case 'highscores':
+        return (
+          <HighScores 
+            onBack={handleBackToMenu}
+          />
+        );
+      default:
+        return (
+          <MainMenu 
+            onStartGame={handleStartGame}
+            onShowHighScores={handleShowHighScores}
+          />
+        );
+    }
+  };
+
+  return renderCurrentScreen();
 };
 
 export default TetrisApp;
