@@ -66,7 +66,7 @@ function UseGameState(
   };
 
   const handleKeys = useCallback(
-    (event) => {
+    (event: KeyboardEvent) => {
       console.log("event.key: " + event.key);
       switch (event.key) {
         case "ArrowLeft":
