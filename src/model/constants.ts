@@ -13,18 +13,18 @@ import bigleftblock from "./blocks/bigleftblock";
 import bigrightblock from "./blocks/bigrightblock";
 
 export const blocks: { block: any; color: string }[] = [
-  { block: leftblock, color: "red" },
-  { block: rightblock, color: "orange" },
-  { block: squareblock, color: "yellow" },
-  { block: lineblock, color: "green" },
-  { block: minorlineblock, color: "lightyellow" },
-  { block: leftflashblock, color: "blue" },
-  { block: rightflashblock, color: "brown" },
-  { block: hillblock, color: "cyan" },
-  { block: bigblock, color: "purple" },
-  { block: jaggedblock, color: "grey" },
-  { block: bigleftblock, color: "lightgreen" },
-  { block: bigrightblock, color: "pink" },
+  { block: leftblock, color: "#3498DB" },
+  { block: rightblock, color: "#E67E22" },
+  { block: squareblock, color: "#F1C40F" },
+  { block: lineblock, color: "#00CEC9" },
+  { block: minorlineblock, color: "#FDCB6E" },
+  { block: leftflashblock, color: "#E74C3C" },
+  { block: rightflashblock, color: "#2ECC71" },
+  { block: hillblock, color: "#9B59B6" },
+  { block: bigblock, color: "#8E44AD" },
+  { block: jaggedblock, color: "#74B9FF" },
+  { block: bigleftblock, color: "#55EFC4" },
+  { block: bigrightblock, color: "#FD79A8" },
 ];
 
 export const playMode: any[] = [

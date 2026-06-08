@@ -10,6 +10,7 @@ interface GameProps {
   gameSettings: any;
   startNewGame: () => void;
   onBackToMenu?: () => void;
+  onViewHighScores?: () => void;
 }
 
 const Game = (props: GameProps) => {
@@ -34,9 +35,21 @@ const Game = (props: GameProps) => {
 
   //console.log("gameStatus: " + gameStatus);
 
+  const pwidth = gameSettings.numColumns * gameSettings.brickSpace;
+  const pheight = gameSettings.numRows * gameSettings.brickSpace;
+
   return (
-    <div>
-      <div>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{ position: "relative", width: pwidth + 360, height: pheight, flexShrink: 0 }}>
         <Playground
           blockBricks={activeBlockBricks}
           gameStatus={gameStatus}
@@ -44,18 +57,18 @@ const Game = (props: GameProps) => {
           actionCallbacks={{ startNewGame, togglePause, showSettings, onBackToMenu: props.onBackToMenu }}
           pg={pg}
         />
-      </div>
-      <div>
         <ShowDialog
           gameStatus={gameStatus}
           gameSettings={gameSettings}
           score={pg.score}
+          level={pg.level}
           actionCallbacks={{
             startNewGame,
             togglePause,
             showSettings,
             setGameSettingsCallback,
             onBackToMenu: props.onBackToMenu,
+            onViewHighScores: props.onViewHighScores,
           }}
         />
       </div>

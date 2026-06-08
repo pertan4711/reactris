@@ -11,6 +11,7 @@ export type PlaygroundProps = {
 
 export type ShowDialogProps = {
   score: number;
+  level: number;
   gameStatus: gameStatusEnum;
   gameSettings: gameSettingsType;
   actionCallbacks: any;
@@ -54,10 +55,12 @@ export type ScoreProps = {
 
 export type GameOverProps = {
   score: number;
+  level: number;
   pgLeft: number;
   pgTop: number;
   startNewGame: any;
   onBackToMenu?: () => void;
+  onViewHighScores?: () => void;
 };
 
 export type PauseProps = {

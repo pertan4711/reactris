@@ -25,10 +25,12 @@ const ShowDialog = (props: ShowDialogProps) => {
       {gameStatus === gameStatusEnum.GameOver && (
         <GameOver
           score={props.score}
+          level={props.level}
           pgLeft={gameOverTextLeft}
           pgTop={gameOverTextTop}
           startNewGame={props.actionCallbacks.startNewGame}
           onBackToMenu={props.actionCallbacks.onBackToMenu}
+          onViewHighScores={props.actionCallbacks.onViewHighScores}
         />
       )}
       {props.gameStatus === gameStatusEnum.Pause && (

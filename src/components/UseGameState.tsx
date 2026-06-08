@@ -41,6 +41,15 @@ function UseGameState(
     }
   }, [pg, gameStatus]);
 
+  // Sync brick size when window resizes
+  useEffect(() => {
+    setGameSettings(prev => ({
+      ...prev,
+      brickSize: myGameSettings.brickSize,
+      brickSpace: myGameSettings.brickSpace,
+    }));
+  }, [myGameSettings.brickSize, myGameSettings.brickSpace]);
+
   // Toggle game status Pause
   const togglePause = useCallback(() => {
     console.log("toggle: " + pg.pause + "  gameStatus: " + gameStatus);

@@ -7,11 +7,12 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
       <div
         style={{
           position: "absolute",
-          background: "grey",
+          background: "rgba(0,0,0,0.4)",
           left: width + 10,
           width: 350,
           height: height,
           top: 5,
+          borderRadius: 8,
         }}
       ></div>
       {/* Board displaying score */}
@@ -60,10 +61,6 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
             className="button-text"
             style={{
               textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
-              boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
-              backgroundColor: "lightyellow",
-              border: "none",
-              cursor: "pointer",
             }}
             onClick={() => actionCallbacks.showSettings()}
           >
@@ -74,10 +71,6 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
             className="button-text"
             style={{
               textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
-              boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
-              backgroundColor: "lightyellow",
-              border: "none",
-              cursor: "pointer",
             }}
             onClick={() => actionCallbacks.togglePause()}
           >
@@ -88,10 +81,6 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
             className="button-text"
             style={{
               textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
-              boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
-              backgroundColor: "lightyellow",
-              border: "none",
-              cursor: "pointer",
             }}
             onClick={() => actionCallbacks.startNewGame()}
           >
@@ -103,10 +92,7 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
               className="button-text"
               style={{
                 textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)",
-                boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)",
-                backgroundColor: "lightcoral",
-                border: "none",
-                cursor: "pointer",
+                background: "linear-gradient(135deg, #e74c3c, #c0392b)",
               }}
               onClick={() => actionCallbacks.onBackToMenu()}
             >

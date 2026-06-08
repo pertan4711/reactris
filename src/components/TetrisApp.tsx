@@ -1,6 +1,6 @@
 // Main entry for game app
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { gameSettingsType, gameTypeEnum } from "../model/modeltypes";
 import Game from "./Game";
 import MainMenu from "./MainMenu";
@@ -13,17 +13,31 @@ type AppScreen = 'menu' | 'game' | 'highscores';
 const TetrisApp = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('menu');
   const [gameId, setGameId] = useState(1); // Should be used to reset game
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
-  let numCol = 10;
-  let numRow = 14;
-  let brickSize = calculateBrickSize(
-    window.innerWidth,
-    window.innerHeight,
-    numCol,
-    numRow
-  );
+  useEffect(() => {
+    let timeoutId: number;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(() => {
+        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      }, 100);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
-  let initGameSettings: gameSettingsType = {
+  const numCol = 10;
+  const numRow = 14;
+  const brickSize = calculateBrickSize(windowSize.width, windowSize.height, numCol, numRow);
+
+  const initGameSettings: gameSettingsType = {
     numColumns: numCol,
     numRows: numRow,
     initWallHeight: 4,
@@ -63,6 +77,7 @@ const TetrisApp = () => {
             startNewGame={handleStartGame}
             gameSettings={initGameSettings}
             onBackToMenu={handleBackToMenu}
+            onViewHighScores={handleShowHighScores}
           />
         );
       case 'highscores':
