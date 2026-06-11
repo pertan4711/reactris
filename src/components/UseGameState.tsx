@@ -16,7 +16,7 @@ function UseGameState(
   );
   const [timeInterval, setTimeInterval] = useState(1000);
   const [level, setLevel] = useState(pg.level);
-  const [gameStatus, setGameStatus] = useState(gameStatusEnum.GameOver);
+  const [gameStatus, setGameStatus] = useState(gameStatusEnum.Ongoing);
   const [lastGameStatus, setLastGameStatus] = useState(gameStatus);
   const [gameSettings, setGameSettings] = useState(myGameSettings);
 
@@ -76,6 +76,11 @@ function UseGameState(
 
   const handleKeys = useCallback(
     (event: KeyboardEvent) => {
+      // Don't hijack keys while the user is typing in an input
+      const target = event.target as HTMLElement | null;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
+        return;
+      }
       console.log("event.key: " + event.key);
       switch (event.key) {
         case "ArrowLeft":

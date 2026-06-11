@@ -1,6 +1,7 @@
 // Main entry for game app
 // Implement view part in MVP - Model exist in singelton object 'pg'
 
+import { useRef } from "react";
 import playGroundModel from "../model/playground";
 import Playground from "./Playground";
 import UseGameState from "./UseGameState";
@@ -22,6 +23,15 @@ const Game = (props: GameProps) => {
     props.gameSettings.initWallPropability,
     props.gameSettings.levelUpgradeDiv
   );
+
+  // Fresh game on every mount: the playground is a singleton, so re-entering
+  // from the menu would otherwise inherit the previous game's "game over" state
+  // and stale active block.
+  const resetOnce = useRef(false);
+  if (!resetOnce.current) {
+    pg.reset();
+    resetOnce.current = true;
+  }
 
   const {
     activeBlockBricks,
@@ -49,7 +59,7 @@ const Game = (props: GameProps) => {
         overflow: "hidden",
       }}
     >
-      <div style={{ position: "relative", width: pwidth + 360, height: pheight, flexShrink: 0 }}>
+      <div style={{ position: "relative", width: pwidth + 360, height: pheight, flexShrink: 0, padding: "5px 0 5px 5px", boxSizing: "content-box" }}>
         <Playground
           blockBricks={activeBlockBricks}
           gameStatus={gameStatus}

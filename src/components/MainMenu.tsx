@@ -1,5 +1,5 @@
 // Main Menu Component for Tetris Game
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./MainMenu.css";
 
 interface MainMenuProps {
@@ -35,32 +35,31 @@ const COLORS = [
   '#98D8C8', // Mint
 ];
 
+const CELL_SIZE = 104;
+
 interface FallingBlockProps {
   shape: number[][];
   color: string;
   startX: number;
-  delay: number;
+  startY: number;
+  speed: number;
+  spinDelay: number;
 }
 
-const FallingBlock: React.FC<FallingBlockProps> = ({ shape, color, startX, delay }) => {
-  const [position, setPosition] = useState({ x: startX, y: -100 });
+const FallingBlock: React.FC<FallingBlockProps> = ({ shape, color, startX, startY, speed, spinDelay }) => {
+  const [position, setPosition] = useState({ x: startX, y: startY });
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const fallInterval = setInterval(() => {
-        setPosition(prev => {
-          if (prev.y > window.innerHeight + 100) {
-            return { x: startX, y: -100 };
-          }
-          return { x: prev.x, y: prev.y + 2 };
-        });
-      }, 50);
-
-      return () => clearInterval(fallInterval);
-    }, delay);
-
-    return () => clearTimeout(timer);
-  }, [startX, delay]);
+    const fallInterval = setInterval(() => {
+      setPosition(prev => {
+        if (prev.y > window.innerHeight + 100) {
+          return { x: prev.x, y: -shape.length * CELL_SIZE - 20 };
+        }
+        return { x: prev.x, y: prev.y + speed };
+      });
+    }, 50);
+    return () => clearInterval(fallInterval);
+  }, [speed, shape.length]);
 
   return (
     <div
@@ -69,6 +68,7 @@ const FallingBlock: React.FC<FallingBlockProps> = ({ shape, color, startX, delay
         left: position.x,
         top: position.y,
         color: color,
+        animationDelay: `0s, ${spinDelay}s`,
       }}
     >
       {shape.map((row, rowIndex) =>
@@ -79,8 +79,10 @@ const FallingBlock: React.FC<FallingBlockProps> = ({ shape, color, startX, delay
               className="block-cell"
               style={{
                 backgroundColor: color,
-                left: colIndex * 25,
-                top: rowIndex * 25,
+                left: colIndex * CELL_SIZE,
+                top: rowIndex * CELL_SIZE,
+                width: CELL_SIZE,
+                height: CELL_SIZE,
               }}
             />
           ) : null
@@ -96,20 +98,45 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores }) =>
     shape: number[][];
     color: string;
     startX: number;
-    delay: number;
+    startY: number;
+    speed: number;
+    spinDelay: number;
   }>>([]);
+  const startRef = useRef<HTMLButtonElement>(null);
+  const highScoreRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    // Create falling blocks
-    const blocks = Array.from({ length: 12 }, (_, i) => ({
+    const COUNT = 14;
+    const margin = 4 * CELL_SIZE;
+    const blocks = Array.from({ length: COUNT }, (_, i) => ({
       id: i,
       shape: TETRIS_SHAPES[Math.floor(Math.random() * TETRIS_SHAPES.length)],
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      startX: Math.random() * (window.innerWidth - 100),
-      delay: Math.random() * 5000,
+      startX: Math.random() * Math.max(0, window.innerWidth - margin),
+      // Distribute initial vertical positions across (and above) the viewport
+      // so blocks are already scattered when the menu first appears.
+      startY: -100 + Math.random() * (window.innerHeight + 200),
+      // Each block falls at its own pace so they don't sync up after recycling.
+      speed: 1.5 + Math.random() * 1.5,
+      // Negative delay starts each block mid-rotation, so spins stay out of phase.
+      spinDelay: -Math.random() * 22,
     }));
 
     setAnimatedBlocks(blocks);
+    startRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const active = document.activeElement;
+        if (active === startRef.current) highScoreRef.current?.focus();
+        else startRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
   }, []);
 
   return (
@@ -122,7 +149,9 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores }) =>
             shape={block.shape}
             color={block.color}
             startX={block.startX}
-            delay={block.delay}
+            startY={block.startY}
+            speed={block.speed}
+            spinDelay={block.spinDelay}
           />
         ))}
       </div>
@@ -135,15 +164,17 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores }) =>
         </div>
 
         <div className="menu-buttons">
-          <button 
+          <button
+            ref={startRef}
             className="menu-button start-button"
             onClick={onStartGame}
           >
             <span className="button-icon">▶</span>
             START GAME
           </button>
-          
-          <button 
+
+          <button
+            ref={highScoreRef}
             className="menu-button highscore-button"
             onClick={onShowHighScores}
           >
@@ -155,18 +186,11 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores }) =>
         <div className="game-info">
           <div className="info-item">
             <span className="info-label">Controls:</span>
-            <span className="info-text">Arrow Keys to Move • Space to Rotate</span>
+            <span className="info-text">↑/↓ to select • Enter to confirm • Arrows/WASD to move • Q/E to rotate • Esc to pause</span>
           </div>
         </div>
       </div>
 
-      {/* Decorative tetris blocks */}
-      <div className="decorative-blocks">
-        <div className="deco-block deco-block-1" style={{backgroundColor: '#FF6B6B'}}></div>
-        <div className="deco-block deco-block-2" style={{backgroundColor: '#4ECDC4'}}></div>
-        <div className="deco-block deco-block-3" style={{backgroundColor: '#45B7D1'}}></div>
-        <div className="deco-block deco-block-4" style={{backgroundColor: '#96CEB4'}}></div>
-      </div>
     </div>
   );
 };

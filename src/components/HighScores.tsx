@@ -1,5 +1,5 @@
 // High Scores Component
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useRef } from "react";
 import "./HighScores.css";
 import { getHighScores, HighScoreEntry } from "../utils/highScores";
 
@@ -9,6 +9,19 @@ interface HighScoresProps {
 
 const HighScores: React.FC<HighScoresProps> = ({ onBack }) => {
   const scores: HighScoreEntry[] = getHighScores();
+  const backRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    backRef.current?.focus();
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Backspace') {
+        e.preventDefault();
+        onBack();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onBack]);
 
   const formatScore = (score: number): string => {
     return score.toLocaleString();
@@ -80,7 +93,8 @@ const HighScores: React.FC<HighScoresProps> = ({ onBack }) => {
         </div>
 
         <div className="highscores-actions">
-          <button 
+          <button
+            ref={backRef}
             className="back-button"
             onClick={onBack}
           >

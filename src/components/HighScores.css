@@ -3,7 +3,10 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 209, 102, 0.12), transparent 65%),
+    radial-gradient(ellipse at 20% 90%, rgba(0, 212, 255, 0.15), transparent 60%),
+    linear-gradient(135deg, #14143a 0%, #2a1f55 50%, #1a1640 100%);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -142,8 +145,7 @@
 
 .score-date {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-  font-family: 'Arial', sans-serif;
+  font-size: 1rem;
 }
 
 .highscores-actions {
@@ -189,6 +191,11 @@
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(108, 92, 231, 0.6);
   background: linear-gradient(135deg, #7c6ce8, #b2a9fe);
+}
+
+.back-button:focus-visible {
+  outline: 3px solid #ffd166;
+  outline-offset: 4px;
 }
 
 .back-button:active {

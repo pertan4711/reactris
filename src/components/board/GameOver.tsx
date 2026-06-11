@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { GameOverProps } from "../../model/componentProps";
 import { qualifiesForHighScore, saveHighScore } from "../../utils/highScores";
 
@@ -6,8 +6,11 @@ const GameOver = ({ score, level, pgLeft, pgTop, startNewGame, onBackToMenu, onV
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const qualifies = qualifiesForHighScore(score);
+  const playAgainRef = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = () => {
+    if (submitted) return;
     saveHighScore(name, score, level);
     setSubmitted(true);
   };
@@ -16,15 +19,44 @@ const GameOver = ({ score, level, pgLeft, pgTop, startNewGame, onBackToMenu, onV
     if (e.key === 'Enter') handleSubmit();
   };
 
+  const showInput = qualifies && !submitted;
+  useEffect(() => {
+    if (!showInput) {
+      playAgainRef.current?.focus();
+    }
+  }, [showInput]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      const target = e.target as HTMLElement | null;
+      if (target && target.tagName === 'INPUT') return;
+      // Cycle through ALL visible buttons on screen (side panel + dialog)
+      const buttons = Array.from(
+        document.querySelectorAll<HTMLButtonElement>('button')
+      ).filter(b => b.offsetParent !== null);
+      if (buttons.length === 0) return;
+      e.preventDefault();
+      const idx = buttons.indexOf(document.activeElement as HTMLButtonElement);
+      const next = e.key === 'ArrowDown'
+        ? (idx + 1) % buttons.length
+        : (idx <= 0 ? buttons.length - 1 : idx - 1);
+      buttons[next].focus();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       className="playground-dialogue playground-text"
       style={{ left: pgLeft, top: pgTop }}
     >
       <div>Game Over</div>
       <div>Your score: {score}</div>
 
-      {qualifies && !submitted && (
+      {showInput && (
         <div style={{ margin: '10px 0' }}>
           <div style={{ fontSize: '22px', marginBottom: '8px' }}>🏆 New High Score!</div>
           <input
@@ -62,7 +94,7 @@ const GameOver = ({ score, level, pgLeft, pgTop, startNewGame, onBackToMenu, onV
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '8px' }}>
-        <button className="button-text" id="resetButton" onClick={() => startNewGame()}>
+        <button ref={playAgainRef} className="button-text" id="resetButton" onClick={() => startNewGame()}>
           Play Again
         </button>
         {submitted && onViewHighScores && (

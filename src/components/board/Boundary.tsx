@@ -2,27 +2,26 @@
 import { BoundaryProps } from "../../model/componentProps";
 
 const Boundary = ({ xoffset, height }: BoundaryProps) => {
-  const xpos: string = xoffset.toString() + "px";
-  const bheight: string = height.toString() + "px";
   return (
     <>
-      {/* Shadow */}
+      {/* Grey frame around the playground */}
       <div
         style={{
-          width: xpos,
-          height: bheight,
+          width: xoffset + 10,
+          height: height + 10,
           background: "grey",
           position: "absolute",
-          left: 5,
-          top: 5,
+          left: -5,
+          top: -5,
+          borderRadius: 16,
         }}
       ></div>
       {/* Panel */}
       <div
         className="playground-background"
         style={{
-          width: xpos,
-          height: bheight,
+          width: xoffset,
+          height: height,
           position: "absolute",
           left: 0,
           top: 0,
