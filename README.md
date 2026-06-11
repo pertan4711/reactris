@@ -1,4 +1,4 @@
-# Reactris - A React Tetris experience
+# Reactris - A React Tetris Experience
 
 This is a clone of the tetris game done in React and Typescript. It is a simple project to learn especially react but also other
 languages and deploy techniques. Of course it is a full blown tetris with some interesting blocks that is self invented. It is easy
