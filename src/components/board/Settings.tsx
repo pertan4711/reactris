@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SettingsProps } from "../../model/componentProps";
+import { playMode } from "../../model/constants";
+import { gameTypeEnum } from "../../model/modeltypes";
 
 const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
   type localSettingType = {
@@ -20,6 +22,38 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
   };
 
   const FLOAT_FIELDS = new Set(["initWallPropability"]);
+
+  const validateValue = (name: string, value: number): boolean => {
+    if (isNaN(value)) return false;
+    switch (name) {
+      case "numColumns":
+      case "numRows":
+      case "brickSize":
+      case "brickSpace":
+        return value > 5;
+      case "initWallHeight":
+        return value >= 0;
+      case "levelUpgradeDiv":
+        return value >= 1;
+      case "initWallPropability":
+        return value >= 0 && value <= 1;
+      case "gameType":
+        return Number.isInteger(value) && value >= 0 && value < playMode.length;
+      default:
+        return true;
+    }
+  };
+
+  const gameTypeLabel = (idx: number): string | null => {
+    const mode = playMode[idx];
+    if (!mode) return null;
+    const name = gameTypeEnum[mode.mode] ?? "Custom";
+    if (name === "Custom") {
+      const n = mode.blocks.length;
+      return `Custom (${n} ${n === 1 ? "block" : "blocks"})`;
+    }
+    return name;
+  };
 
   const transformSettings = (): localSettingType[] => {
     return Object.entries(gameSettings).map(([key, value]) => ({
@@ -48,21 +82,53 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     focusables()[0]?.focus();
 
     const handler = (e: KeyboardEvent) => {
-      if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-      const list = focusables();
-      if (list.length === 0) return;
-      e.preventDefault();
-      const idx = list.indexOf(document.activeElement as HTMLElement);
-      const next =
-        e.key === "ArrowDown"
-          ? (idx + 1) % list.length
-          : idx <= 0
-          ? list.length - 1
-          : idx - 1;
-      const target = list[next];
-      target.focus();
-      if (target.tagName === "INPUT") {
-        (target as HTMLInputElement).select();
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        const list = focusables();
+        if (list.length === 0) return;
+        e.preventDefault();
+        const idx = list.indexOf(document.activeElement as HTMLElement);
+        const next =
+          e.key === "ArrowDown"
+            ? (idx + 1) % list.length
+            : idx <= 0
+            ? list.length - 1
+            : idx - 1;
+        const target = list[next];
+        target.focus();
+        if (target.tagName === "INPUT") {
+          (target as HTMLInputElement).select();
+        }
+        return;
+      }
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        const active = document.activeElement as HTMLElement | null;
+        if (!active || active.tagName !== "INPUT") return;
+        const name = (active as HTMLInputElement).name;
+        const isFloat = FLOAT_FIELDS.has(name);
+        const step = isFloat ? 0.1 : 1;
+        const delta = e.key === "ArrowRight" ? step : -step;
+        e.preventDefault();
+        setLocalSettings((prev) =>
+          prev.map((s) => {
+            if (s.name !== name) return s;
+            let newVal: number;
+            if (name === "gameType") {
+              newVal = (s.value + delta + playMode.length) % playMode.length;
+            } else if (isFloat) {
+              newVal = Math.round((s.value + delta) * 10) / 10;
+            } else {
+              newVal = s.value + delta;
+            }
+            return {
+              ...s,
+              value: newVal,
+              rawValue: String(newVal),
+              changed: true,
+              valid: validateValue(name, newVal),
+            };
+          })
+        );
       }
     };
     window.addEventListener("keydown", handler);
@@ -113,26 +179,7 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     setSetting.rawValue = raw;
     setSetting.changed = true;
     if (hasNumber) setSetting.value = parsed;
-
-    switch (name) {
-      case "numColumns":
-      case "numRows":
-      case "brickSize":
-      case "brickSpace":
-        setSetting.valid = hasNumber && parsed > 5;
-        break;
-      case "initWallHeight":
-        setSetting.valid = hasNumber && parsed >= 0;
-        break;
-      case "levelUpgradeDiv":
-        setSetting.valid = hasNumber && parsed >= 1;
-        break;
-      case "initWallPropability":
-        setSetting.valid = hasNumber && parsed >= 0 && parsed <= 1;
-        break;
-      default:
-        break;
-    }
+    setSetting.valid = validateValue(name, parsed);
 
     setLocalSettings([...localSettings]);
   };
@@ -168,14 +215,26 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
                     {!setting.valid ? "*" : ""}
                   </th>
                   <th>
-                    <input
-                      className="playground-input-dialogue"
-                      type="text"
-                      style={setting.valid ? undefined : { color: '#ff6b6b', borderColor: '#ff6b6b' }}
-                      value={setting.rawValue}
-                      name={setting.name}
-                      onChange={handleChange}
-                    />
+                    {setting.name === "gameType" ? (
+                      <input
+                        className="playground-input-dialogue"
+                        type="text"
+                        style={setting.valid ? undefined : { color: '#ff6b6b', borderColor: '#ff6b6b' }}
+                        value={gameTypeLabel(setting.value) ?? setting.rawValue}
+                        name={setting.name}
+                        readOnly
+                        title="Use ← / → to change"
+                      />
+                    ) : (
+                      <input
+                        className="playground-input-dialogue"
+                        type="text"
+                        style={setting.valid ? undefined : { color: '#ff6b6b', borderColor: '#ff6b6b' }}
+                        value={setting.rawValue}
+                        name={setting.name}
+                        onChange={handleChange}
+                      />
+                    )}
                   </th>
                 </tr>
               ))}

@@ -187,6 +187,12 @@ function UseGameState(
       setGameSettings(myGameSettings);
       pg.numColumns = myGameSettings.numColumns;
       pg.numRows = myGameSettings.numRows;
+      if (pg.gameType !== myGameSettings.gameType) {
+        pg.gameType = myGameSettings.gameType;
+        // Refresh the upcoming block so the new mode applies to the next-block preview
+        // immediately; the already-spawned activeBlock plays out as-is.
+        pg.nextActive = pg.generateBlock();
+      }
       setGameSettings(myGameSettings);
     },
     [gameStatus, lastGameStatus, handleKeys, pg]
