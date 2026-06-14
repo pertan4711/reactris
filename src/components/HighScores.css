@@ -70,13 +70,56 @@
   font-weight: 300;
 }
 
+.gametype-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.gametype-tab {
+  font-family: 'Joti One', cursive;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.05em;
+}
+
+.gametype-tab:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.gametype-tab.empty {
+  opacity: 0.55;
+}
+
+.gametype-tab.active {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 215, 0, 0.1));
+  border-color: #FFD700;
+  color: #FFD700;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+  opacity: 1;
+}
+
+.gametype-tab:focus-visible {
+  outline: 2px solid #ffd166;
+  outline-offset: 2px;
+}
+
 .scores-list {
   margin-bottom: 2rem;
 }
 
 .scores-header {
   display: grid;
-  grid-template-columns: 1fr 2fr 1.5fr 1fr 1.2fr;
+  grid-template-columns: 1fr 2fr 1.5fr 0.8fr 1fr 1.2fr;
   gap: 1rem;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.1);
@@ -90,7 +133,7 @@
 
 .score-row {
   display: grid;
-  grid-template-columns: 1fr 2fr 1.5fr 1fr 1.2fr;
+  grid-template-columns: 1fr 2fr 1.5fr 0.8fr 1fr 1.2fr;
   gap: 1rem;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.05);
@@ -141,6 +184,12 @@
 .score-level {
   color: #FF9800;
   font-weight: bold;
+}
+
+.score-board {
+  color: #A29BFE;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
 }
 
 .score-date {
@@ -232,12 +281,14 @@
 
 .particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 14px;
+  height: 14px;
   background: #FFD700;
   border-radius: 50%;
   opacity: 0.6;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.8);
   animation: particle-float linear infinite;
+  animation-fill-mode: backwards;
 }
 
 @keyframes particle-float {
@@ -271,8 +322,10 @@
   
   .header-level,
   .header-date,
+  .header-board,
   .score-level,
-  .score-date {
+  .score-date,
+  .score-board {
     display: none;
   }
   

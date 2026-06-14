@@ -2,16 +2,16 @@ import { useState, useEffect, useRef } from "react";
 import { GameOverProps } from "../../model/componentProps";
 import { qualifiesForHighScore, saveHighScore } from "../../utils/highScores";
 
-const GameOver = ({ score, level, pgLeft, pgTop, startNewGame, onBackToMenu, onViewHighScores }: GameOverProps) => {
+const GameOver = ({ score, level, gameType, numColumns, numRows, pgLeft, pgTop, startNewGame, onBackToMenu, onViewHighScores }: GameOverProps) => {
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const qualifies = qualifiesForHighScore(score);
+  const qualifies = qualifiesForHighScore(score, gameType);
   const playAgainRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = () => {
     if (submitted) return;
-    saveHighScore(name, score, level);
+    saveHighScore(name, score, level, gameType, numColumns, numRows);
     setSubmitted(true);
   };
 
@@ -98,7 +98,7 @@ const GameOver = ({ score, level, pgLeft, pgTop, startNewGame, onBackToMenu, onV
           Play Again
         </button>
         {submitted && onViewHighScores && (
-          <button className="button-text" onClick={onViewHighScores}>
+          <button className="button-text" onClick={() => onViewHighScores(gameType)}>
             View High Scores
           </button>
         )}

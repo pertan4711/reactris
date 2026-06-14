@@ -56,11 +56,14 @@ export type ScoreProps = {
 export type GameOverProps = {
   score: number;
   level: number;
+  gameType: number;
+  numColumns: number;
+  numRows: number;
   pgLeft: number;
   pgTop: number;
   startNewGame: any;
   onBackToMenu?: () => void;
-  onViewHighScores?: () => void;
+  onViewHighScores?: (gameType?: number) => void;
 };
 
 export type PauseProps = {

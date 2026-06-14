@@ -11,7 +11,7 @@ interface GameProps {
   gameSettings: any;
   startNewGame: () => void;
   onBackToMenu?: () => void;
-  onViewHighScores?: () => void;
+  onViewHighScores?: (gameType?: number) => void;
 }
 
 const Game = (props: GameProps) => {

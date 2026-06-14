@@ -26,6 +26,9 @@ const ShowDialog = (props: ShowDialogProps) => {
         <GameOver
           score={props.score}
           level={props.level}
+          gameType={props.gameSettings.gameType}
+          numColumns={props.gameSettings.numColumns}
+          numRows={props.gameSettings.numRows}
           pgLeft={gameOverTextLeft}
           pgTop={gameOverTextTop}
           startNewGame={props.actionCallbacks.startNewGame}

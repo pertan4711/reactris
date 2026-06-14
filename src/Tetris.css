@@ -29,6 +29,7 @@ body {
   font-family: "Joti One", cursive;
   color: white;
   position: absolute;
+  padding-top: 24px;
   border: 2px solid #00d4ff;
   border-radius: 12px;
   box-shadow:
@@ -37,6 +38,25 @@ body {
     0 0 25px rgba(0, 212, 255, 0.45),
     0 0 50px rgba(0, 212, 255, 0.18);
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.75);
+}
+
+.settings-fullscreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 2rem;
+  box-sizing: border-box;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(118, 75, 162, 0.35), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(0, 212, 255, 0.18), transparent 60%),
+    linear-gradient(135deg, #1a1640 0%, #2d1f4a 50%, #14143a 100%);
+}
+
+.settings-fullscreen .playground-dialogue {
+  position: relative;
 }
 
 .playground-dialogue {
@@ -91,6 +111,7 @@ body {
 .score-heading {
   font-size: 70px;
   color: #ffd166;
+  text-align: center;
   text-shadow:
     0 0 10px rgba(255, 209, 102, 0.85),
     0 0 22px rgba(255, 209, 102, 0.5),
@@ -118,7 +139,7 @@ body {
 
 .score-text {
   font-size: 48px;
-  margin: 5px;
+  margin: 5px 5px 5px 28px;
   color: #00f0ff;
   text-shadow:
     0 0 8px rgba(0, 240, 255, 0.85),

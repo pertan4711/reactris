@@ -29,8 +29,7 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
         <div className="score-heading">Reactris</div>
         <div className="score-text">Score: {pg.score}</div>
         <div className="score-text">Level: {pg.level}</div>
-        <p />
-        <div style={{ color: "white", margin: "5px" }}>
+        <div style={{ color: "white", margin: "40px 5px 5px 28px" }}>
           <button
             className="button-text"
             onClick={() => actionCallbacks.showSettings()}

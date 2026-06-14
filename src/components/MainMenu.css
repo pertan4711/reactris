@@ -165,6 +165,22 @@
   transform: translateY(-1px);
 }
 
+.settings-button {
+  background: linear-gradient(135deg, #6c5ce7, #5a4ed1);
+  color: white;
+  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+}
+
+.settings-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(108, 92, 231, 0.6);
+  background: linear-gradient(135deg, #7c6ce8, #6c5ce7);
+}
+
+.settings-button:active {
+  transform: translateY(-1px);
+}
+
 .highscore-button {
   background: linear-gradient(135deg, #FF9800, #f57c00);
   color: white;

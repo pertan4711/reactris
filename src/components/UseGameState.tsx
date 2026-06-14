@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { gameStatusEnum } from "../model/modeltypes";
 import playGroundModel from "../model/playground";
 import { gameSettingsType } from "../model/modeltypes";
+import { saveSettings } from "../utils/settings";
 
 //
 // Handle state and user hooks
@@ -194,6 +195,7 @@ function UseGameState(
         pg.nextActive = pg.generateBlock();
       }
       setGameSettings(myGameSettings);
+      saveSettings(myGameSettings);
     },
     [gameStatus, lastGameStatus, handleKeys, pg]
   );

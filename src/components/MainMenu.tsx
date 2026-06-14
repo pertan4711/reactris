@@ -5,6 +5,7 @@ import "./MainMenu.css";
 interface MainMenuProps {
   onStartGame: () => void;
   onShowHighScores: () => void;
+  onShowSettings: () => void;
 }
 
 // Tetris block shapes for animation
@@ -92,7 +93,7 @@ const FallingBlock: React.FC<FallingBlockProps> = ({ shape, color, startX, start
   );
 };
 
-const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores }) => {
+const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores, onShowSettings }) => {
   const [animatedBlocks, setAnimatedBlocks] = useState<Array<{
     id: number;
     shape: number[][];
@@ -103,6 +104,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores }) =>
     spinDelay: number;
   }>>([]);
   const startRef = useRef<HTMLButtonElement>(null);
+  const settingsRef = useRef<HTMLButtonElement>(null);
   const highScoreRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -130,9 +132,11 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores }) =>
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
-        const active = document.activeElement;
-        if (active === startRef.current) highScoreRef.current?.focus();
-        else startRef.current?.focus();
+        const order = [startRef.current, settingsRef.current, highScoreRef.current];
+        const idx = order.indexOf(document.activeElement as HTMLButtonElement);
+        const dir = e.key === 'ArrowDown' ? 1 : -1;
+        const next = order[(idx + dir + order.length) % order.length];
+        next?.focus();
       }
     };
     window.addEventListener('keydown', handler);
@@ -171,6 +175,15 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores }) =>
           >
             <span className="button-icon">▶</span>
             START GAME
+          </button>
+
+          <button
+            ref={settingsRef}
+            className="menu-button settings-button"
+            onClick={onShowSettings}
+          >
+            <span className="button-icon">⚙</span>
+            SETTINGS
           </button>
 
           <button

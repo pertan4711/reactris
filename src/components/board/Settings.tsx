@@ -82,6 +82,11 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     focusables()[0]?.focus();
 
     const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setGameSettingsCallback(gameSettings);
+        return;
+      }
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         const list = focusables();
         if (list.length === 0) return;
@@ -133,7 +138,7 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [showKeys]);
+  }, [showKeys, gameSettings, setGameSettingsCallback]);
 
   // Esc closes the Key bindings sub-dialog
   useEffect(() => {
