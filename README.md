@@ -1,87 +1,167 @@
 # Reactris - A React Tetris Experience
 
-This is a clone of the tetris game done in React and Typescript. It is a simple project to learn especially react but also other
-languages and deploy techniques. Of course it is a full blown tetris with some interesting blocks that is self invented. It is easy
-to extend with your own block structures.
-It is an ongoing process there multiple techniques including testing with jest and deploying and hosting with docker
-will be used. I have also tried to make it available in both windows and linux environments.
+A Tetris clone built around a shared TypeScript game engine, with two front-ends in this repo:
 
-The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and uses some parameters for
-typescript (see below).
+- **Web** — React + TypeScript SPA (the original Reactris).
+- **CLI** — a terminal/console version that drives the same engine and renders with ANSI color.
 
-Configure and setup:
+A future **WPF** front-end is planned as a third sibling, written in C# against the same engine API as a reference port.
 
-### `yarn`
+The model is a full Tetris with several self-invented block shapes, and is easy to extend with your own pieces.
 
-Use yarn or npm to setup and configure the project. Be sure to install nodejs (npm). There could be some issues with the npm version.
+## Repository layout
 
-### `yarn install`
+```
+reactris/
+├── engine/    # @reactris/engine — pure TypeScript game model (no DOM, no React)
+├── web/       # @reactris/web    — React app (CRA), imports the engine
+├── cli/       # @reactris/cli    — Node TUI, imports the engine
+├── package.json          # npm workspaces root
+└── tsconfig.base.json    # shared compiler options
+```
 
-Install all dependencies to run the game.
+The engine is the single source of truth for game rules. Both front-ends consume it via the workspace package `@reactris/engine`.
 
-### `yarn start`
+## Setup
 
-To develop and to start the game (web server)
+Install Node.js (18 or newer) and clone the repo. Then from the project root:
 
-Run the webserver and start the game with `yarn start` or `npm start`.
-The game will be a SPA on port 3000 (localhost:3000) and will be injected in the index.html file.
-Built partial with MVP pattern design where the model is written in typescript and the view part in React-Typescript.
+```bash
+npm install                          # installs deps for all workspaces
+npm -w @reactris/engine run build    # compile the engine to engine/dist
+```
 
-## Backlog:
+Building the engine once is required before running either front-end the first time (the React app and the CLI both resolve `@reactris/engine` to `engine/dist`). After that, `npm -w @reactris/engine run watch` will keep it rebuilding while you edit engine code.
 
-This is a list of the bugs and missing features of the app.
-[View backlog](https://github.com/users/pertan4711/projects/3/views/1)
+## Running the web app
 
-## Available Scripts
+```bash
+npm -w @reactris/web start
+```
 
-In the project directory, you can run:
+Opens a dev server on http://localhost:3000. The page reloads on edits and lint errors appear in the console. Built with CRA; for production:
 
-### `yarn start`
+```bash
+npm -w @reactris/web run build       # outputs web/build/
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Tests:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+npm -w @reactris/web test -- --watchAll=false
+```
 
-### `yarn test`
+The web app uses an MVP pattern: the model is the engine package, the View is the React components, and `web/src/components/UseGameState.tsx` is the Presenter that owns the game loop and keyboard.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-It is possible to start a debug session with tests by typing "JavaScript Debug Terminal" and when write
+## Running the CLI
 
-### `yarn test --watch`
+```bash
+npm -w @reactris/cli start           # ts-node, no build step needed
+```
 
-Sätt brytpunkter som vanligt i testfilen (Tetris.test.js)
+or build and run the compiled output:
 
-### `yarn build`
+```bash
+npm -w @reactris/cli run build
+node cli/dist/index.js
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Use a real terminal (Windows Terminal, iTerm, etc.) — the renderer assumes ANSI 24-bit color and a window of roughly ≥30 rows × ≥50 columns.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Controls
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Key             | Action                |
+|-----------------|-----------------------|
+| ← / A           | Move left             |
+| → / D           | Move right            |
+| ↓ / S           | Soft drop             |
+| ↑ / Q           | Rotate counter-clockwise |
+| E               | Rotate clockwise      |
+| Esc             | Pause / unpause       |
+| R               | Restart after game over |
+| Ctrl+C          | Quit                  |
 
-### `yarn eject`
+### State and high scores
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The CLI persists settings and per-game-type high scores to:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+~/.reactris-console/state.json
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+(`C:\Users\<you>\.reactris-console\state.json` on Windows.) There is no in-CLI settings screen yet — to change rows/columns/game type, edit that JSON file. The web app uses `localStorage` and does not share its store with the CLI.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph engine ["@reactris/engine — pure TypeScript"]
+        direction TB
+        PG[playGroundModel<br/><i>singleton, game state</i>]
+        WALL[wall<br/><i>grid + line clears</i>]
+        BLOCK[block<br/><i>abstract</i>]
+        BLOCKS[blocks/*<br/><i>line, square, jagged,<br/>hill, flash, big…</i>]
+        CONST[constants<br/><i>colors, modes</i>]
+        PG --> WALL
+        PG --> BLOCK
+        BLOCK --> BLOCKS
+        BLOCKS -.uses.-> CONST
+    end
+
+    subgraph web ["@reactris/web — React + CRA"]
+        direction TB
+        TA[TetrisApp<br/><i>screens, settings</i>]
+        MM[MainMenu]
+        HS[HighScores]
+        GAME[Game]
+        UGS[UseGameState<br/><i>presenter:<br/>loop + keyboard</i>]
+        VIEW[Playground / Block /<br/>Wall / Brick / dialogs]
+        TA --> MM
+        TA --> HS
+        TA --> GAME
+        GAME --> UGS
+        GAME --> VIEW
+    end
+
+    subgraph cli ["@reactris/cli — Node TUI"]
+        direction TB
+        IDX[index.ts<br/><i>bootstrap</i>]
+        LOOP[loop<br/><i>setInterval tick</i>]
+        INPUT[input<br/><i>raw stdin keys</i>]
+        REND[renderer<br/><i>ANSI + chalk</i>]
+        STORE[store<br/><i>~/.reactris-console/<br/>state.json</i>]
+        IDX --> LOOP
+        IDX --> INPUT
+        IDX --> REND
+        IDX --> STORE
+    end
+
+    UGS ==reads + mutates==> PG
+    VIEW ==reads==> PG
+    LOOP ==reads + mutates==> PG
+    INPUT ==reads + mutates==> PG
+    REND ==reads==> PG
+
+    classDef pkg fill:#1f2937,stroke:#60a5fa,stroke-width:2px,color:#fff
+    classDef hub fill:#312e81,stroke:#a78bfa,stroke-width:2px,color:#fff
+    class PG hub
+```
+
+Engine API the front-ends rely on:
+
+- `playGroundModel.getInstance(cols, rows, gameType, wallHeight, wallProb, levelDiv)` — singleton game state.
+- `pg.reset()`, `pg.incTime()`, `pg.updateGame()`, `pg.checkBlockPosition()`.
+- `pg.activeBlock.{moveLeft, moveRight, turnLeft, turnRight, getBrickPosition, blockIndex}`.
+- Reads of `pg.{wall, getWall(), numRows, numColumns, score, level, gameover, pause, nextActive}`.
+
+This contract is what a future WPF (or any other) front-end would re-implement.
+
+## Backlog
+
+A list of bugs and missing features:
+[View backlog](https://github.com/users/pertan4711/projects/3/views/1).
 
 ## Additional
 
-- There is a sandboxed clone of this code in [CodeSandbox](https://codesandbox.io/s/reactris-ng769y?file=/src/index.tsx)
-- You can build docker image
-
-```mermaid
-flowchart TD;
-    A[Start] --> B[Player];
-    B --> C[Playground];
-    C --> D[Wall];
-```
+- A sandboxed clone of the (pre-monorepo) code lives in [CodeSandbox](https://codesandbox.io/s/reactris-ng769y?file=/src/index.tsx).
+- A `Dockerfile` is present at the repo root from the single-package days; it expects to build and run inside `web/` after the restructure and needs an update before it works again.
