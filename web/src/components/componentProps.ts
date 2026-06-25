@@ -50,6 +50,7 @@ export type ScoreProps = {
   gameStatus: gameStatusEnum;
   actionCallbacks: any;
   pg: playgroundModel;
+  showNextPiece: number;
 };
 
 export type GameOverProps = {

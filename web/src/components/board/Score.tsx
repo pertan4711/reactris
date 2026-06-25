@@ -1,6 +1,60 @@
 import { ScoreProps } from "../componentProps";
+import { emptyWallBrick } from "@reactris/engine";
 
-const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
+const PREVIEW_BRICK = 20;
+const PREVIEW_GAP = 2;
+
+function NextPreview({ pg }: { pg: ScoreProps["pg"] }) {
+  const nextBricks = pg.nextActive.getBrickPosition();
+  const color = pg.nextActive.getBlockColor();
+  const minX = Math.min(...nextBricks.map((b) => b.pX));
+  const minY = Math.min(...nextBricks.map((b) => b.pY));
+
+  const grid: number[][] = Array.from({ length: 4 }, () =>
+    Array(4).fill(emptyWallBrick)
+  );
+  for (const b of nextBricks) {
+    const x = b.pX - minX;
+    const y = b.pY - minY;
+    if (y >= 0 && y < 4 && x >= 0 && x < 4) grid[y][x] = 1;
+  }
+
+  const step = PREVIEW_BRICK + PREVIEW_GAP;
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: 4 * step - PREVIEW_GAP,
+        height: 4 * step - PREVIEW_GAP,
+        margin: "6px 0 0 28px",
+      }}
+    >
+      {grid.flatMap((row, y) =>
+        row.map((cell, x) => (
+          <div
+            key={y * 4 + x}
+            style={{
+              position: "absolute",
+              left: x * step,
+              top: y * step,
+              width: PREVIEW_BRICK,
+              height: PREVIEW_BRICK,
+              background:
+                cell === emptyWallBrick ? "rgba(255,255,255,0.06)" : color,
+              borderRadius: 3,
+              boxShadow:
+                cell !== emptyWallBrick
+                  ? `0 0 6px ${color}, 0 0 12px ${color}55`
+                  : undefined,
+            }}
+          />
+        ))
+      )}
+    </div>
+  );
+}
+
+const ScoreBoard = ({ width, height, actionCallbacks, pg, showNextPiece }: ScoreProps) => {
   return (
     <>
       {/* Shadow of board */}
@@ -29,7 +83,13 @@ const ScoreBoard = ({ width, height, actionCallbacks, pg }: ScoreProps) => {
         <div className="score-heading">Reactris</div>
         <div className="score-text">Score: {pg.score}</div>
         <div className="score-text">Level: {pg.level}</div>
-        <div style={{ color: "white", margin: "40px 5px 5px 28px" }}>
+        {showNextPiece !== 0 && (
+          <>
+            <div className="score-text" style={{ marginBottom: 0 }}>Next:</div>
+            <NextPreview pg={pg} />
+          </>
+        )}
+        <div style={{ color: "white", margin: "24px 5px 5px 28px" }}>
           <button
             className="button-text"
             onClick={() => actionCallbacks.showSettings()}

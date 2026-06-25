@@ -24,6 +24,7 @@ function Playground({
         gameStatus={gameStatus}
         actionCallbacks={actionCallbacks}
         pg={pg}
+        showNextPiece={gameSettings.showNextPiece}
       />
       <div>
         {/* Active block */}

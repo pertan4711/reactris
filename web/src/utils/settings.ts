@@ -4,7 +4,7 @@ const KEY = 'reactris_settings_v1';
 
 export type PersistedSettings = Pick<
   gameSettingsType,
-  'numColumns' | 'numRows' | 'gameType' | 'initWallHeight' | 'levelUpgradeDiv' | 'initWallPropability'
+  'numColumns' | 'numRows' | 'gameType' | 'initWallHeight' | 'levelUpgradeDiv' | 'initWallPropability' | 'showNextPiece'
 >;
 
 export function loadSettings(): Partial<PersistedSettings> {
@@ -26,6 +26,7 @@ export function saveSettings(s: gameSettingsType): void {
     initWallHeight: s.initWallHeight,
     levelUpgradeDiv: s.levelUpgradeDiv,
     initWallPropability: s.initWallPropability,
+    showNextPiece: s.showNextPiece,
   };
   try {
     localStorage.setItem(KEY, JSON.stringify(toSave));

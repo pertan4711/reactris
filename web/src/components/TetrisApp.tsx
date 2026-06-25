@@ -20,6 +20,7 @@ const readPersisted = () => {
     levelUpgradeDiv: s.levelUpgradeDiv ?? 2,
     gameType: s.gameType ?? gameTypeEnum.Classic,
     initWallPropability: s.initWallPropability ?? 0.5,
+    showNextPiece: s.showNextPiece ?? 1,
   };
 };
 
@@ -60,6 +61,7 @@ const TetrisApp = () => {
     brickSpace: brickSize + 2,
     gameType: persisted.gameType,
     initWallPropability: persisted.initWallPropability,
+    showNextPiece: persisted.showNextPiece,
   };
 
   const handleStartGame = () => {
@@ -84,6 +86,7 @@ const TetrisApp = () => {
       levelUpgradeDiv: newSettings.levelUpgradeDiv,
       gameType: newSettings.gameType,
       initWallPropability: newSettings.initWallPropability,
+      showNextPiece: newSettings.showNextPiece,
     });
   };
 

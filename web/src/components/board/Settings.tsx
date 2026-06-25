@@ -18,9 +18,11 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     initWallHeight: "Initial Wall Height",
     initWallPropability: "Wall Probability (0-1)",
     levelUpgradeDiv: "Level Upgrade Divider",
+    showNextPiece: "Show Next Piece",
   };
 
   const FLOAT_FIELDS = new Set(["initWallPropability"]);
+  const TOGGLE_FIELDS = new Set(["showNextPiece"]);
 
   const validateValue = (name: string, value: number): boolean => {
     if (isNaN(value)) return false;
@@ -38,6 +40,8 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
         return value >= 0 && value <= 1;
       case "gameType":
         return Number.isInteger(value) && value >= 0 && value < playMode.length;
+      case "showNextPiece":
+        return value === 0 || value === 1;
       default:
         return true;
     }
@@ -110,6 +114,7 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
         if (!active || active.tagName !== "INPUT") return;
         const name = (active as HTMLInputElement).name;
         const isFloat = FLOAT_FIELDS.has(name);
+        const isToggle = TOGGLE_FIELDS.has(name);
         const step = isFloat ? 0.1 : 1;
         const delta = e.key === "ArrowRight" ? step : -step;
         e.preventDefault();
@@ -117,7 +122,9 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
           prev.map((s) => {
             if (s.name !== name) return s;
             let newVal: number;
-            if (name === "gameType") {
+            if (isToggle) {
+              newVal = s.value === 0 ? 1 : 0;
+            } else if (name === "gameType") {
               newVal = (s.value + delta + playMode.length) % playMode.length;
             } else if (isFloat) {
               newVal = Math.round((s.value + delta) * 10) / 10;
@@ -220,6 +227,16 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
                         type="text"
                         style={setting.valid ? undefined : { color: '#ff6b6b', borderColor: '#ff6b6b' }}
                         value={gameTypeLabel(setting.value) ?? setting.rawValue}
+                        name={setting.name}
+                        readOnly
+                        title="Use ← / → to change"
+                      />
+                    ) : TOGGLE_FIELDS.has(setting.name) ? (
+                      <input
+                        className="playground-input-dialogue"
+                        type="text"
+                        style={setting.valid ? undefined : { color: '#ff6b6b', borderColor: '#ff6b6b' }}
+                        value={setting.value !== 0 ? "Yes" : "No"}
                         name={setting.name}
                         readOnly
                         title="Use ← / → to change"

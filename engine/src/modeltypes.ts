@@ -27,6 +27,7 @@ export type gameSettingsType = {
   brickSpace: number;
   gameType: gameTypeEnum;
   initWallPropability: number;
+  showNextPiece: number;
 };
 
 export enum gameTypeEnum {
