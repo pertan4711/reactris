@@ -1,3 +1,5 @@
+See also: [CI/CD with GitHub Actions](ci.md)
+
 # UML diagrams
 
 A popular UML diagram tool is PlantUML. I provided a simple domain model and sequence diagram to illustrate the structure of the application.
