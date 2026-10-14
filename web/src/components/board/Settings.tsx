@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { SettingsProps } from "../componentProps";
 
+const FLOAT_FIELDS = new Set(["initWallPropability"]);
+const TOGGLE_FIELDS = new Set(["showNextPiece"]);
+
 const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
   type localSettingType = {
     name: string;
@@ -18,9 +21,6 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     levelUpgradeDiv: "Level Upgrade Divider",
     showNextPiece: "Show Next Piece",
   };
-
-  const FLOAT_FIELDS = new Set(["initWallPropability"]);
-  const TOGGLE_FIELDS = new Set(["showNextPiece"]);
 
   const validateValue = (name: string, value: number): boolean => {
     if (isNaN(value)) return false;
