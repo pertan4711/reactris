@@ -13,8 +13,10 @@ export default class wall {
   wall: number[][];
   initWallHeight: number;
   initWallPropability: number;
+  random: () => number;
 
   constructor(wall: wallModelType) {
+    this.random = wall.random ?? Math.random;
     this.numColumns = wall.numColumns;
     this.numRows = wall.numRows;
     this.initWallHeight = wall.initWallHeight;
@@ -47,10 +49,10 @@ export default class wall {
     for (let y = rows - height + 1; y <= rows; y++) {
       let row = [];
       for (let x = 0; x < columns; x++) {
-        Math.random() > this.initWallPropability
+        this.random() > this.initWallPropability
           ? row.push(
               initWallRandomColor
-                ? Math.floor(Math.random() * blocks.length)
+                ? Math.floor(this.random() * blocks.length)
                 : initWallColor
             )
           : row.push(emptyWallBrick);
@@ -124,11 +126,13 @@ export default class wall {
       newrow.push(emptyWallBrick);
     }
     this.numRows++;
-    this.wall.push(newrow);
+    this.wall.unshift(newrow);
   }
 
   deleteRow() {
-    this.wall.pop();
+    if (this.numRows <= 1) return;
+    this.numRows--;
+    this.wall.shift();
   }
 
   addBlock(block: block) {
@@ -155,7 +159,6 @@ export default class wall {
             // Whole row - Remove and increment local counter
             this.deleteCompletedRow(row);
             completeRows++;
-            console.log("completed row(s): " + completeRows);
           }
         }
       }
@@ -170,6 +173,9 @@ export default class wall {
       for (let col = 0; col < this.numColumns; col++) {
         this.wall[row + 1][col] = this.wall[row][col];
       }
+    }
+    for (let col = 0; col < this.numColumns; col++) {
+      this.wall[0][col] = emptyWallBrick;
     }
   }
 }

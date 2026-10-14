@@ -74,6 +74,12 @@ const TetrisApp = () => {
     setCurrentScreen('highscores');
   };
 
+  const handleChangeGameType = (gameType: number) => {
+    const next = { ...initGameSettings, gameType };
+    updatePersistedFromSettings(next);
+    saveSettings(next);
+  };
+
   const handleShowSettings = () => {
     setCurrentScreen('settings');
   };
@@ -110,6 +116,8 @@ const TetrisApp = () => {
             onStartGame={handleStartGame}
             onShowHighScores={handleShowHighScores}
             onShowSettings={handleShowSettings}
+            gameType={persisted.gameType}
+            onChangeGameType={handleChangeGameType}
           />
         );
       case 'settings':
@@ -145,6 +153,8 @@ const TetrisApp = () => {
             onStartGame={handleStartGame}
             onShowHighScores={handleShowHighScores}
             onShowSettings={handleShowSettings}
+            gameType={persisted.gameType}
+            onChangeGameType={handleChangeGameType}
           />
         );
     }

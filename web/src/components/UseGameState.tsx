@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { gameStatusEnum, playGroundModel, gameSettingsType } from "@reactris/engine";
+import {
+  gameStatusEnum,
+  playGroundModel,
+  gameSettingsType,
+  intervalForLevel,
+} from "@reactris/engine";
 import { saveSettings } from "../utils/settings";
 
 //
@@ -23,8 +28,7 @@ function UseGameState(
   // Set interval first to 1 sec
   const gameTick = useCallback(() => {
     if (gameStatus === gameStatusEnum.Ongoing) {
-      pg.incTime();
-      console.log("nextActive: " + pg.nextActive.constructor.name);
+      pg.tick();
     }
   }, [pg, gameStatus]);
 
@@ -93,38 +97,22 @@ function UseGameState(
       switch (event.key) {
         case "ArrowLeft":
         case "a":
-          if (!pg.gameover) {
-            pg.activeBlock.moveLeft();
-            if (pg.checkBlockPosition()) {
-              pg.activeBlock.moveRight();
-            }
-          }
+          pg.tryMove(-1);
           break;
         case "ArrowRight":
         case "d":
-          if (!pg.gameover) {
-            pg.activeBlock.moveRight();
-            if (pg.checkBlockPosition()) {
-              pg.activeBlock.moveLeft();
-            }
-          }
+          pg.tryMove(1);
           break;
         case "ArrowUp":
         case "q":
-          if (!pg.gameover) {
-            pg.activeBlock.turnLeft();
-          }
+          pg.tryRotate("left");
           break;
         case "e":
-          if (!pg.gameover) {
-            pg.activeBlock.turnRight();
-          }
+          pg.tryRotate("right");
           break;
         case "ArrowDown":
         case "s":
-          if (!pg.gameover) {
-            pg.incTime();
-          }
+          pg.softDrop();
           break;
         case "p":
           pg.printConfig();
@@ -178,14 +166,9 @@ function UseGameState(
       document.removeEventListener("keydown", handleKeys);
       setGameStatus(lastGameStatus);
       setGameSettings(myGameSettings);
-      pg.numColumns = myGameSettings.numColumns;
-      pg.numRows = myGameSettings.numRows;
-      if (pg.gameType !== myGameSettings.gameType) {
-        pg.gameType = myGameSettings.gameType;
-        // Refresh the upcoming block so the new mode applies to the next-block preview
-        // immediately; the already-spawned activeBlock plays out as-is.
-        pg.nextActive = pg.generateBlock();
-      }
+      // The already-spawned activeBlock plays out as-is; wall height and
+      // probability apply on the next new game.
+      pg.configure(myGameSettings);
       setGameSettings(myGameSettings);
       saveSettings(myGameSettings);
       onSettingsApplied?.(myGameSettings);
@@ -195,28 +178,8 @@ function UseGameState(
 
   // Main game engine
   useEffect(() => {
-    function calcInterval(): number {
-      //console.log("level: " + level + "  pg.level: " + pg.level);
-      if (level < 2) {
-        return 1000;
-      }
-      if (level === 2) {
-        return 800;
-      } else if (level === 3) {
-        return 700;
-      } else if (level === 4) {
-        return 600;
-      } else if (level === 5) {
-        return 500;
-      } else if (level > 5) {
-        return 400;
-      }
-      return 400;
-    }
-
-    //pg.printConfig();
     document.addEventListener("keydown", handleKeys);
-    setTimeInterval(calcInterval());
+    setTimeInterval(intervalForLevel(level));
     const gameIntervalId = setInterval(() => {
       if (gameStatus === gameStatusEnum.Ongoing) {
         gameTick();

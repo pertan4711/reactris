@@ -16,6 +16,16 @@ export type wallModelType = {
   numRows: number;
   initWallHeight: number;
   initWallPropability: number;
+  random?: () => number;
+};
+
+export type playgroundSettingsType = {
+  numColumns: number;
+  numRows: number;
+  gameType: number;
+  initWallHeight: number;
+  initWallPropability: number;
+  levelUpgradeDiv: number;
 };
 
 export type gameSettingsType = {
