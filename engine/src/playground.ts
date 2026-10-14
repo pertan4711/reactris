@@ -1,5 +1,9 @@
 import wall from "./wall";
-import { blockModelType, gameStatusEnum } from "./modeltypes";
+import {
+  blockModelType,
+  gameStatusEnum,
+  playgroundSettingsType,
+} from "./modeltypes";
 import block from "./block";
 import { blocks, emptyWallBrick, playMode } from "./constants";
 
@@ -9,7 +13,6 @@ import { blocks, emptyWallBrick, playMode } from "./constants";
 /// increment time, initialize, randomize next block and check if the active block has landed.
 /////////////////////////////////////////////////////////////////////////////////////
 export default class playGroundModel {
-  private static instance: playGroundModel; // Singleton
   gameover: boolean;
   pause: boolean;
   wall: wall;
@@ -21,27 +24,27 @@ export default class playGroundModel {
   initWallHeight: number;
   initWallPropability: number;
   levelUpgradeDiv: number;
+  random: () => number;
 
-  private constructor(
-    numColumns: number,
-    numRows: number,
-    gameType: number,
-    initWallHeight: number,
-    initWallPropability: number,
-    levelUpgradeDiv: number
+  /// `random` can be replaced with a seeded generator to make games reproducible
+  constructor(
+    settings: playgroundSettingsType,
+    random: () => number = Math.random
   ) {
+    this.random = random;
     this.gameover = true;
     this.pause = false;
-    this.gameType = gameType;
-    this.initWallHeight = initWallHeight;
-    this.initWallPropability = initWallPropability;
-    this.levelUpgradeDiv = levelUpgradeDiv;
+    this.gameType = settings.gameType;
+    this.initWallHeight = settings.initWallHeight;
+    this.initWallPropability = settings.initWallPropability;
+    this.levelUpgradeDiv = settings.levelUpgradeDiv;
 
     this.wall = new wall({
-      numColumns: numColumns,
-      numRows: numRows,
-      initWallHeight: initWallHeight,
-      initWallPropability: initWallPropability,
+      numColumns: settings.numColumns,
+      numRows: settings.numRows,
+      initWallHeight: settings.initWallHeight,
+      initWallPropability: settings.initWallPropability,
+      random,
     });
     this.score = 0;
     this.level = 1;
@@ -49,38 +52,34 @@ export default class playGroundModel {
     this.nextActive = this.generateBlock();
   }
 
-  // Singleton playground
-  public static getInstance(
-    numColumns: number,
-    numRows: number,
-    gameType: number,
-    initWallHeight: number,
-    initWallPropability: number,
-    levelUpgradeDiv: number
-  ): playGroundModel {
-    if (!playGroundModel.instance) {
-      playGroundModel.instance = new playGroundModel(
-        numColumns,
-        numRows,
-        gameType,
-        initWallHeight,
-        initWallPropability,
-        levelUpgradeDiv
-      );
+  /// Apply new settings mid-game. Wall height and probability take effect on next reset().
+  configure = (settings: playgroundSettingsType) => {
+    if (this.numColumns !== settings.numColumns) {
+      this.numColumns = settings.numColumns;
     }
-
-    return playGroundModel.instance;
-  }
+    if (this.numRows !== settings.numRows) {
+      this.numRows = settings.numRows;
+    }
+    this.initWallHeight = settings.initWallHeight;
+    this.initWallPropability = settings.initWallPropability;
+    this.wall.initWallPropability = settings.initWallPropability;
+    this.levelUpgradeDiv = settings.levelUpgradeDiv;
+    if (this.gameType !== settings.gameType) {
+      this.gameType = settings.gameType;
+      // Refresh the upcoming block so the new mode applies to the preview
+      this.nextActive = this.generateBlock();
+    }
+  };
 
   /// Randomize next block and put it in the middle
   generateBlock(): block {
     let differentBlocksCount = playMode[this.gameType].blocks.length;
-    let blockIndex = Math.floor(Math.random() * differentBlocksCount);
-    let realBlockIndex = playMode[this.gameType].blocks[blockIndex];
+    let modeIndex = Math.floor(this.random() * differentBlocksCount);
+    let realBlockIndex = playMode[this.gameType].blocks[modeIndex];
     let mybl: any = blocks[realBlockIndex].block;
     let xpos: number = Math.floor(this.numColumns / 2);
     let blockProps: blockModelType = {
-      blockIndex,
+      blockIndex: realBlockIndex,
       pX: xpos,
       pY: 0,
       spinPosition: 1,
@@ -100,6 +99,28 @@ export default class playGroundModel {
     }
   };
 
+  /// One game step: move the active block down and land it if needed
+  tick = () => {
+    if (this.gameover || this.pause) return;
+    this.incTime();
+    this.updateGame();
+  };
+
+  softDrop = () => {
+    this.tick();
+  };
+
+  /// Move the active block sideways; undone if it would collide
+  tryMove = (dx: -1 | 1): boolean => {
+    if (this.gameover || this.pause) return false;
+    this.activeBlock.pX += dx;
+    if (this.checkBlockPosition()) {
+      this.activeBlock.pX -= dx;
+      return false;
+    }
+    return true;
+  };
+
   /// Reset and start game
   reset = () => {
     this.gameover = false;
@@ -117,6 +138,7 @@ export default class playGroundModel {
   };
 
   updateGame = () => {
+    if (this.gameover) return;
     this.updateBlockWall();
     /// If block has landed - update score and randomize next active block
     this.score = this.score + this.wall.check4CompletedRows();
@@ -145,7 +167,7 @@ export default class playGroundModel {
   };
 
   // Check wall and active block for overlaps
-  checkBlockPosition = () => {
+  checkBlockPosition = (): boolean => {
     let bricks: {
       pX: number;
       pY: number;
@@ -153,12 +175,33 @@ export default class playGroundModel {
     for (let i = 0; i < bricks.length; i++) {
       let brick = bricks[i];
       if (
+        brick.pX < 0 ||
+        brick.pX >= this.numColumns ||
         brick.pY >= this.numRows ||
-        this.wall.getWall()[brick.pY][brick.pX] !== emptyWallBrick
+        (brick.pY >= 0 &&
+          this.wall.getWall()[brick.pY][brick.pX] !== emptyWallBrick)
       ) {
         return true;
       }
     }
+    return false;
+  };
+
+  /// Rotate the active block, nudging it inside the side edges. If it still
+  /// collides with the wall or floor, the rotation is undone.
+  tryRotate = (direction: "left" | "right"): boolean => {
+    if (this.gameover || this.pause) return false;
+    const oldX = this.activeBlock.pX;
+    const oldSpin = this.activeBlock.spinPosition;
+    if (direction === "left") this.activeBlock.turnLeft();
+    else this.activeBlock.turnRight();
+    this.adjustBlockWallPosition();
+    if (this.checkBlockPosition()) {
+      this.activeBlock.pX = oldX;
+      this.activeBlock.spinPosition = oldSpin;
+      return false;
+    }
+    return true;
   };
 
   calcLevel = () => {
@@ -168,18 +211,12 @@ export default class playGroundModel {
   // Check playground edges
   adjustBlockWallPosition = () => {
     let bricks = this.activeBlock.getBrickPosition();
-    for (let i = 0; i < bricks.length; i++) {
-      let brick = bricks[i];
-      if (brick.pX < 0) {
-        this.activeBlock.pX++;
-        console.log("Brick to far left");
-        break;
-      }
-      if (brick.pX > this.numColumns - 1) {
-        this.activeBlock.pX--;
-        console.log("Brick to far right");
-        break;
-      }
+    const minX = Math.min(...bricks.map((b) => b.pX));
+    const maxX = Math.max(...bricks.map((b) => b.pX));
+    if (minX < 0) {
+      this.activeBlock.pX -= minX;
+    } else if (maxX > this.numColumns - 1) {
+      this.activeBlock.pX -= maxX - (this.numColumns - 1);
     }
   };
 

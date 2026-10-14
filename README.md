@@ -149,10 +149,10 @@ flowchart LR
 
 Engine API the front-ends rely on:
 
-- `playGroundModel.getInstance(cols, rows, gameType, wallHeight, wallProb, levelDiv)` — singleton game state.
-- `pg.reset()`, `pg.incTime()`, `pg.updateGame()`, `pg.checkBlockPosition()`.
-- `pg.activeBlock.{moveLeft, moveRight, turnLeft, turnRight, getBrickPosition, blockIndex}`.
-- Reads of `pg.{wall, getWall(), numRows, numColumns, score, level, gameover, pause, nextActive}`.
+- `new playGroundModel({ numColumns, numRows, gameType, initWallHeight, initWallPropability, levelUpgradeDiv }, random?)` — one game's state; `random` defaults to `Math.random`.
+- `pg.reset()`, `pg.tick()`, `pg.softDrop()`, `pg.tryMove(-1 | 1)`, `pg.tryRotate("left" | "right")`, `pg.configure(settings)`.
+- `intervalForLevel(level)` — tick interval in ms.
+- Reads of `pg.{wall, getWall(), numRows, numColumns, score, level, gameover, pause, activeBlock, nextActive}`.
 
 This contract is what a future WPF (or any other) front-end would re-implement.
 

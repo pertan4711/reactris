@@ -2,7 +2,12 @@ export { default as playGroundModel } from "./playground";
 export { default as wall } from "./wall";
 export { default as block } from "./block";
 export * from "./modeltypes";
-export { blocks, playMode, emptyWallBrick } from "./constants";
+export {
+  blocks,
+  playMode,
+  emptyWallBrick,
+  intervalForLevel,
+} from "./constants";
 
 export { default as bigblock } from "./blocks/bigblock";
 export { default as bigleftblock } from "./blocks/bigleftblock";

@@ -1,5 +1,5 @@
 // Main entry for game app
-// Implement view part in MVP - Model exist in singelton object 'pg'
+// Implement view part in MVP - Model is the playground object 'pg'
 
 import { useRef } from "react";
 import { gameSettingsType, playGroundModel } from "@reactris/engine";
@@ -16,23 +16,14 @@ interface GameProps {
 }
 
 const Game = (props: GameProps) => {
-  const pg = playGroundModel.getInstance(
-    props.gameSettings.numColumns,
-    props.gameSettings.numRows,
-    props.gameSettings.gameType,
-    props.gameSettings.initWallHeight,
-    props.gameSettings.initWallPropability,
-    props.gameSettings.levelUpgradeDiv
-  );
-
-  // Fresh game on every mount: the playground is a singleton, so re-entering
-  // from the menu would otherwise inherit the previous game's "game over" state
-  // and stale active block.
-  const resetOnce = useRef(false);
-  if (!resetOnce.current) {
-    pg.reset();
-    resetOnce.current = true;
+  // One playground per mount; TetrisApp re-mounts Game (key={gameId}) for
+  // every new game started from the menu.
+  const pgRef = useRef<playGroundModel | null>(null);
+  if (pgRef.current === null) {
+    pgRef.current = new playGroundModel(props.gameSettings);
+    pgRef.current.reset();
   }
+  const pg = pgRef.current;
 
   const {
     activeBlockBricks,

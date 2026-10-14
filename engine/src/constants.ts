@@ -27,24 +27,40 @@ export const blocks: { block: any; color: string }[] = [
   { block: bigrightblock, color: "#FD79A8" },
 ];
 
-export const playMode: any[] = [
+// Index in this list is the persisted gameType and the high-score bucket key,
+// so keep existing entries in place and append new modes at the end.
+export const playMode: { mode: gameTypeEnum; name: string; blocks: number[] }[] = [
   {
     mode: gameTypeEnum.Classic,
+    name: "Classic",
     blocks: [0, 1, 2, 3, 5, 6, 7],
   },
   {
     mode: gameTypeEnum.Advanced,
+    name: "Advanced",
     blocks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   },
   {
     mode: gameTypeEnum.Custom,
+    name: "Beginner",
     blocks: [0, 1, 2, 3],
   },
   {
     mode: gameTypeEnum.Custom,
+    name: "Line only",
     blocks: [0],
   },
 ];
+
+/// Milliseconds between game ticks for a given level
+export function intervalForLevel(level: number): number {
+  if (level < 2) return 1000;
+  if (level === 2) return 800;
+  if (level === 3) return 700;
+  if (level === 4) return 600;
+  if (level === 5) return 500;
+  return 400;
+}
 
 export const emptyWallBrick: number = -1;
 export const initWallPropability: number = 0.2;

@@ -14,14 +14,7 @@ import {
 function main(): void {
   const settings = loadSettings();
 
-  const pg = playGroundModel.getInstance(
-    settings.numColumns,
-    settings.numRows,
-    settings.gameType,
-    settings.initWallHeight,
-    settings.initWallPropability,
-    settings.levelUpgradeDiv
-  );
+  const pg = new playGroundModel(settings);
   pg.reset();
 
   let loop: LoopHandle;
@@ -124,24 +117,19 @@ function main(): void {
     }
     switch (action) {
       case "left":
-        pg.activeBlock.moveLeft();
-        if (pg.checkBlockPosition()) pg.activeBlock.moveRight();
+        pg.tryMove(-1);
         break;
       case "right":
-        pg.activeBlock.moveRight();
-        if (pg.checkBlockPosition()) pg.activeBlock.moveLeft();
+        pg.tryMove(1);
         break;
       case "rotateLeft":
-        pg.activeBlock.turnLeft();
-        if (pg.checkBlockPosition()) pg.activeBlock.turnRight();
+        pg.tryRotate("left");
         break;
       case "rotateRight":
-        pg.activeBlock.turnRight();
-        if (pg.checkBlockPosition()) pg.activeBlock.turnLeft();
+        pg.tryRotate("right");
         break;
       case "softDrop":
-        pg.incTime();
-        pg.updateGame();
+        pg.softDrop();
         break;
       case "pause":
         loop.setPaused(!loop.isPaused());

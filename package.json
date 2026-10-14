@@ -10,7 +10,7 @@
   "scripts": {
     "build:engine": "npm -w @reactris/engine run build",
     "web": "npm -w @reactris/web start",
-    "test": "npm -w @reactris/web test -- --watchAll=false",
+    "test": "npm -w @reactris/engine test && npm -w @reactris/web test -- --watchAll=false --passWithNoTests",
     "cli": "npm -w @reactris/cli start",
     "build": "npm -w @reactris/engine run build && npm -w @reactris/web run build"
   }

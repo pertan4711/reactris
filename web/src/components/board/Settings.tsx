@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { SettingsProps } from "../componentProps";
-import { playMode, gameTypeEnum } from "@reactris/engine";
 
 const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
   type localSettingType = {
@@ -14,7 +13,6 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
   const labelMap = {
     numColumns: "Columns",
     numRows: "Rows",
-    gameType: "Game Type",
     initWallHeight: "Initial Wall Height",
     initWallPropability: "Wall Probability (0-1)",
     levelUpgradeDiv: "Level Upgrade Divider",
@@ -38,8 +36,6 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
         return value >= 1;
       case "initWallPropability":
         return value >= 0 && value <= 1;
-      case "gameType":
-        return Number.isInteger(value) && value >= 0 && value < playMode.length;
       case "showNextPiece":
         return value === 0 || value === 1;
       default:
@@ -47,25 +43,17 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
     }
   };
 
-  const gameTypeLabel = (idx: number): string | null => {
-    const mode = playMode[idx];
-    if (!mode) return null;
-    const name = gameTypeEnum[mode.mode] ?? "Custom";
-    if (name === "Custom") {
-      const n = mode.blocks.length;
-      return `Custom (${n} ${n === 1 ? "block" : "blocks"})`;
-    }
-    return name;
-  };
-
+  // Game type is chosen on the main menu, not here
   const transformSettings = (): localSettingType[] => {
-    return Object.entries(gameSettings).map(([key, value]) => ({
-      name: key.toString(),
-      value: value as number,
-      rawValue: String(value),
-      valid: true,
-      changed: false,
-    }));
+    return Object.entries(gameSettings)
+      .filter(([key]) => key !== "gameType")
+      .map(([key, value]) => ({
+        name: key.toString(),
+        value: value as number,
+        rawValue: String(value),
+        valid: true,
+        changed: false,
+      }));
   };
 
   const [localSettings, setLocalSettings] = useState(transformSettings());
@@ -124,8 +112,6 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
             let newVal: number;
             if (isToggle) {
               newVal = s.value === 0 ? 1 : 0;
-            } else if (name === "gameType") {
-              newVal = (s.value + delta + playMode.length) % playMode.length;
             } else if (isFloat) {
               newVal = Math.round((s.value + delta) * 10) / 10;
             } else {
@@ -196,7 +182,7 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
 
     let updateSettings = localSettings.reduce(
       (acc, cur) => ({ ...acc, [cur.name]: cur.value }),
-      {}
+      { ...gameSettings }
     );
 
     setGameSettingsCallback(updateSettings);
@@ -221,17 +207,7 @@ const Settings = ({ gameSettings, setGameSettingsCallback }: SettingsProps) => {
                     {!setting.valid ? "*" : ""}
                   </th>
                   <th>
-                    {setting.name === "gameType" ? (
-                      <input
-                        className="playground-input-dialogue"
-                        type="text"
-                        style={setting.valid ? undefined : { color: '#ff6b6b', borderColor: '#ff6b6b' }}
-                        value={gameTypeLabel(setting.value) ?? setting.rawValue}
-                        name={setting.name}
-                        readOnly
-                        title="Use ← / → to change"
-                      />
-                    ) : TOGGLE_FIELDS.has(setting.name) ? (
+                    {TOGGLE_FIELDS.has(setting.name) ? (
                       <input
                         className="playground-input-dialogue"
                         type="text"

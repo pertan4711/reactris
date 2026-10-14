@@ -1,11 +1,14 @@
 // Main Menu Component for Tetris Game
 import React, { useState, useEffect, useRef } from "react";
 import "./MainMenu.css";
+import { playMode } from "@reactris/engine";
 
 interface MainMenuProps {
   onStartGame: () => void;
-  onShowHighScores: () => void;
+  onShowHighScores: (gameType?: number) => void;
   onShowSettings: () => void;
+  gameType: number;
+  onChangeGameType: (gameType: number) => void;
 }
 
 // Tetris block shapes for animation
@@ -93,7 +96,13 @@ const FallingBlock: React.FC<FallingBlockProps> = ({ shape, color, startX, start
   );
 };
 
-const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores, onShowSettings }) => {
+const MainMenu: React.FC<MainMenuProps> = ({
+  onStartGame,
+  onShowHighScores,
+  onShowSettings,
+  gameType,
+  onChangeGameType,
+}) => {
   const [animatedBlocks, setAnimatedBlocks] = useState<Array<{
     id: number;
     shape: number[][];
@@ -106,6 +115,10 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores, onSh
   const startRef = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
   const highScoreRef = useRef<HTMLButtonElement>(null);
+
+  const mode = playMode[gameType] ?? playMode[0];
+  const stepGameType = (dir: number) =>
+    onChangeGameType((gameType + dir + playMode.length) % playMode.length);
 
   useEffect(() => {
     const COUNT = 14;
@@ -137,11 +150,15 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores, onSh
         const dir = e.key === 'ArrowDown' ? 1 : -1;
         const next = order[(idx + dir + order.length) % order.length];
         next?.focus();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const dir = e.key === 'ArrowRight' ? 1 : -1;
+        onChangeGameType((gameType + dir + playMode.length) % playMode.length);
       }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, []);
+  }, [gameType, onChangeGameType]);
 
   return (
     <div className="main-menu">
@@ -167,6 +184,33 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores, onSh
           <p className="game-subtitle">A React Tetris Experience</p>
         </div>
 
+        <div className="mode-switch" role="group" aria-label="Game mode">
+          <button
+            type="button"
+            className="mode-arrow"
+            tabIndex={-1}
+            aria-label="Previous mode"
+            onClick={() => stepGameType(-1)}
+          >
+            ◀
+          </button>
+          <div className="mode-label" aria-live="polite">
+            <span className="mode-name">{mode.name}</span>
+            <span className="mode-detail">
+              {mode.blocks.length} {mode.blocks.length === 1 ? "piece" : "pieces"}
+            </span>
+          </div>
+          <button
+            type="button"
+            className="mode-arrow"
+            tabIndex={-1}
+            aria-label="Next mode"
+            onClick={() => stepGameType(1)}
+          >
+            ▶
+          </button>
+        </div>
+
         <div className="menu-buttons">
           <button
             ref={startRef}
@@ -189,7 +233,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores, onSh
           <button
             ref={highScoreRef}
             className="menu-button highscore-button"
-            onClick={onShowHighScores}
+            onClick={() => onShowHighScores(gameType)}
           >
             <span className="button-icon">🏆</span>
             HIGH SCORES
@@ -199,7 +243,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onShowHighScores, onSh
         <div className="game-info">
           <div className="info-item">
             <span className="info-label">Controls:</span>
-            <span className="info-text">↑/↓ to select • Enter to confirm • Arrows/WASD to move • Q/E to rotate • Esc to pause</span>
+            <span className="info-text">↑/↓ to select • ←/→ to change mode • Enter to confirm • Arrows/WASD to move • Q/E to rotate • Esc to pause</span>
           </div>
         </div>
       </div>

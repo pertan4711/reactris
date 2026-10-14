@@ -2,7 +2,7 @@
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import "./HighScores.css";
 import { getHighScores, HighScoreEntry } from "../utils/highScores";
-import { playMode, gameTypeEnum } from "@reactris/engine";
+import { playMode } from "@reactris/engine";
 
 interface HighScoresProps {
   onBack: () => void;
@@ -11,16 +11,8 @@ interface HighScoresProps {
 
 const PARTICLE_COLORS = ['#FFD700', '#00D4FF', '#FF6B6B', '#A29BFE', '#4CAF50', '#FF9800', '#E91E63'];
 
-const gameTypeLabel = (idx: number): string => {
-  const mode = playMode[idx];
-  if (!mode) return `Type ${idx}`;
-  const name = gameTypeEnum[mode.mode] ?? "Custom";
-  if (name === "Custom") {
-    const n = mode.blocks.length;
-    return `Custom (${n})`;
-  }
-  return name;
-};
+const gameTypeLabel = (idx: number): string =>
+  playMode[idx]?.name ?? `Type ${idx}`;
 
 const HighScores: React.FC<HighScoresProps> = ({ onBack, initialGameType }) => {
   const backRef = useRef<HTMLButtonElement>(null);
