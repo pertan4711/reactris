@@ -33,6 +33,38 @@ npm -w @reactris/engine run build    # compile the engine to engine/dist
 
 Building the engine once is required before running either front-end the first time (the React app and the CLI both resolve `@reactris/engine` to `engine/dist`). After that, `npm -w @reactris/engine run watch` will keep it rebuilding while you edit engine code.
 
+Root shortcuts:
+
+| Command                | Does                                      |
+|------------------------|-------------------------------------------|
+| `npm run build:engine` | Build the engine                          |
+| `npm run web`          | Start the web dev server                  |
+| `npm run cli`          | Start the terminal version                |
+| `npm test`             | Run all tests once                        |
+| `npm run build`        | Build engine + web (outputs `web/build/`) |
+
+## Tests
+
+The game rules are tested in the engine (Jest + ts-jest, `engine/test/`):
+
+```bash
+npm test                                 # all tests, once
+npm -w @reactris/engine test -- wall     # a single test file
+```
+
+## Game modes
+
+Chosen on the main menu (web) or via `gameType` in the CLI state file:
+
+| Mode      | Pieces                                     |
+|-----------|--------------------------------------------|
+| Classic   | The 7 standard Tetris pieces               |
+| Advanced  | Standard pieces plus the invented shapes   |
+| Beginner  | 4 simple pieces                            |
+| Line only | Just the line piece                        |
+
+New modes are added to `playMode` in `engine/src/constants.ts`. Append them at the end — the index is stored as `gameType` and used as the high-score key.
+
 ## Running the web app
 
 ```bash
@@ -45,11 +77,19 @@ Opens a dev server on http://localhost:3000. The page reloads on edits and lint 
 npm -w @reactris/web run build       # outputs web/build/
 ```
 
-Tests:
+### Web controls
 
-```bash
-npm -w @reactris/web test -- --watchAll=false
-```
+| Key           | Action                         |
+|---------------|--------------------------------|
+| ← / A         | Move left                      |
+| → / D         | Move right                     |
+| ↓ / S         | Soft drop                      |
+| ↑ / Q         | Rotate counter-clockwise       |
+| E             | Rotate clockwise               |
+| Esc           | Pause / unpause                |
+| + / −         | Bigger / smaller bricks        |
+
+On the main menu, ↑/↓ moves between items and ←/→ switches game mode. Settings and high scores are kept in the browser's `localStorage`.
 
 The web app uses an MVP pattern: the model is the engine package, the View is the React components, and `web/src/components/UseGameState.tsx` is the Presenter that owns the game loop and keyboard.
 
@@ -97,11 +137,11 @@ The CLI persists settings and per-game-type high scores to:
 flowchart LR
     subgraph engine ["@reactris/engine — pure TypeScript"]
         direction TB
-        PG[playGroundModel<br/><i>singleton, game state</i>]
+        PG[playGroundModel<br/><i>one game's state</i>]
         WALL[wall<br/><i>grid + line clears</i>]
         BLOCK[block<br/><i>abstract</i>]
         BLOCKS[blocks/*<br/><i>line, square, jagged,<br/>hill, flash, big…</i>]
-        CONST[constants<br/><i>colors, modes</i>]
+        CONST[constants<br/><i>colors, modes,<br/>tick speed</i>]
         PG --> WALL
         PG --> BLOCK
         BLOCK --> BLOCKS
@@ -153,8 +193,13 @@ Engine API the front-ends rely on:
 - `pg.reset()`, `pg.tick()`, `pg.softDrop()`, `pg.tryMove(-1 | 1)`, `pg.tryRotate("left" | "right")`, `pg.configure(settings)`.
 - `intervalForLevel(level)` — tick interval in ms.
 - Reads of `pg.{wall, getWall(), numRows, numColumns, score, level, gameover, pause, activeBlock, nextActive}`.
+- `playMode`, `blocks` (piece classes and colors) and the shared types from `modeltypes`.
 
 This contract is what a future WPF (or any other) front-end would re-implement.
+
+## CI/CD
+
+Every push runs the tests and builds; `master` and pull requests are deployed to Azure Static Web Apps. See [doc/ci.md](doc/ci.md).
 
 ## Backlog
 

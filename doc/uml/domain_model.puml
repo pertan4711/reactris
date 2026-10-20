@@ -1,81 +1,104 @@
-' This is a UML overview of reactris app and how it is constructed
+' This is a UML overview of the reactris game engine (engine/src) and how it is constructed
 @startuml Domain Model
 skinparam BackgroundColor #EEEBDC
-note "Reactris class diagram of model" as diagramtext
+note "Reactris class diagram of the engine model" as diagramtext
 
-abstract class "Block" as Block {
+abstract class "block" as Block {
   blockIndex: number
   pX: number
   pY: number
   spinPosition: number
   bricks: brickModelType[]
+  {abstract} getBrickPosition(): position[]
   turnLeft()
   turnRight()
   moveLeft()
   moveRight()
   moveDown()
-  getBlockColor()
+  getBlockColor(): string
 }
 
-note left of Block : Object containing {x,y} and\nspin position and brick structure
+note left of Block : Position {x,y}, spin position\nand brick structure.\nblockIndex points into the\nblocks list in constants
 
-class leftblock extends Block {
-  getBrickPosition(): number[][]
-}
+' Standard pieces
+class leftblock extends Block
+class rightblock extends Block
+class squareblock extends Block
+class lineblock extends Block
+class leftflashblock extends Block
+class rightflashblock extends Block
+class hillblock extends Block
 
-class rightblock extends Block {
-  getBrickPosition(): number[][]
-}
+' Invented pieces
+class minorlineblock extends Block
+class bigblock extends Block
+class jaggedblock extends Block
+class bigleftblock extends Block
+class bigrightblock extends Block
 
-class lineblock extends Block {
-  getBrickPosition(): number[][]
-}
-
-class "Playground" as Playground {
-  - {static} instance: playground
+class "playGroundModel" as Playground {
   gameover: boolean
   pause: boolean
-  level: number
-  wall: Wall
   score: number
-  activeBlock: Block
-  ' initWallHeight: number
-  ' brickSize: number
-  ' brickSpace: number
-  ' windowSizeX: number
-  ' windowSizeY: number
-  
-  'getInstance(winX: number, winY: number): playground
-  generateNextBlock(): Block
-  incTimer(): void
-  ' reset(): void
-  getWall(): Wall
-  ' getScore(): number
-  ' updateBlockWallStatus(): void
+  level: number
+  gameType: number
+  initWallHeight: number
+  initWallPropability: number
+  levelUpgradeDiv: number
+  wall: wall
+  activeBlock: block
+  nextActive: block
+  random: () => number
+  numColumns: number
+  numRows: number
+  --
+  constructor(settings: playgroundSettingsType, random?)
+  configure(settings): void
+  reset(): void
+  tick(): void
+  softDrop(): void
+  tryMove(dx: -1 | 1): boolean
+  tryRotate(direction: "left" | "right"): boolean
+  generateBlock(): block
+  getWall(): number[][]
+  getGameStatus(): gameStatusEnum
 }
 
-note top of Playground : Singleton class that contains \n the game logic related
+note top of Playground : One game's state and rules.\nCreated by each front-end (web, CLI);\nrandom can be seeded for tests
 
-class "Wall" as Wall {
+class "wall" as Wall {
   numColumns: number
   numRows: number
   wall: number[][]
+  initWallHeight: number
+  initWallPropability: number
+  --
+  reset(height): void
   initWall(columns, rows, height): void
   getWall(): number[][]
   addColumn()
   deleteColumn()
   setColumn(col)
-  setRows(rows:number)
+  setRows(rows)
   addRow()
   deleteRow()
-  addBlock()
+  addBlock(block)
   check4CompletedRows(): number
 }
 
-note left of Wall : Current structure of brick wall
+note left of Wall : Grid of brick colors,\n-1 (emptyWallBrick) = empty
 
-Playground "1" *-- "1" Block : activeBlock
-Playground "1" -- "1" Wall : contains wall
+class "constants" as Constants <<module>> {
+  blocks: {block, color}[]
+  playMode: {mode, name, blocks}[]
+  intervalForLevel(level): number
+}
 
+note right of Constants : playMode: Classic, Advanced,\nBeginner, Line only.\nIndex = persisted gameType
+
+Playground "1" *-- "2" Block : activeBlock,\nnextActive
+Playground "1" *-- "1" Wall : wall
+Playground ..> Constants : playMode, blocks
+Wall ..> Block : addBlock
 
 @enduml
