@@ -8,11 +8,17 @@ export type InputAction =
   | "softDrop"
   | "pause"
   | "quit"
-  | "restart";
+  | "restart"
+  | "toggleSize"
+  | "settings"
+  | "other";
 
 export type KeyEvent = { sequence?: string; name?: string; ctrl?: boolean };
 
-export function attachInput(handler: (action: InputAction) => void): () => void {
+/// The raw key name is passed along for screens with their own keys, like Settings
+export function attachInput(
+  handler: (action: InputAction, keyName?: string) => void
+): () => void {
   readline.emitKeypressEvents(process.stdin);
   if (process.stdin.isTTY) process.stdin.setRawMode(true);
   process.stdin.resume();
@@ -20,26 +26,7 @@ export function attachInput(handler: (action: InputAction) => void): () => void 
   const onKey = (_str: string, key: KeyEvent) => {
     if (!key) return;
     if (key.ctrl && key.name === "c") return handler("quit");
-    switch (key.name) {
-      case "left":
-      case "a":
-        return handler("left");
-      case "right":
-      case "d":
-        return handler("right");
-      case "up":
-      case "q":
-        return handler("rotateLeft");
-      case "e":
-        return handler("rotateRight");
-      case "down":
-      case "s":
-        return handler("softDrop");
-      case "escape":
-        return handler("pause");
-      case "r":
-        return handler("restart");
-    }
+    handler(toAction(key.name), key.name);
   };
 
   process.stdin.on("keypress", onKey);
@@ -49,4 +36,33 @@ export function attachInput(handler: (action: InputAction) => void): () => void 
     if (process.stdin.isTTY) process.stdin.setRawMode(false);
     process.stdin.pause();
   };
+}
+
+function toAction(name: string | undefined): InputAction {
+  switch (name) {
+    case "left":
+    case "a":
+      return "left";
+    case "right":
+    case "d":
+      return "right";
+    case "up":
+    case "q":
+      return "rotateLeft";
+    case "e":
+      return "rotateRight";
+    case "down":
+    case "s":
+      return "softDrop";
+    case "escape":
+      return "pause";
+    case "r":
+      return "restart";
+    case "z":
+      return "toggleSize";
+    case "o":
+      return "settings";
+    default:
+      return "other";
+  }
 }

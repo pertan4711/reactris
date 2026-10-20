@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { playGroundModel } from "@reactris/engine";
-import { render, hideCursor, showCursor } from "./renderer";
+import { render, hideCursor, showCursor, forceClear } from "./renderer";
+import { SettingsScreen } from "./settings";
 import { attachInput } from "./input";
 import { startLoop, LoopHandle } from "./loop";
 import {
@@ -9,19 +10,34 @@ import {
   qualifiesForHighScore,
   saveHighScore,
   getHighScores,
+  loadBoardSize,
+  saveBoardSize,
 } from "./store";
 
 function main(): void {
   const settings = loadSettings();
+  let size = loadBoardSize();
 
   const pg = new playGroundModel(settings);
   pg.reset();
 
   let loop: LoopHandle;
   let savedThisGame = false;
+  let enteringName = false;
+  let settingsScreen: SettingsScreen | null = null;
+  let pausedBeforeSettings = false;
+  let confirmingRestart = false;
+  let pausedBeforeRestart = false;
 
   const draw = () =>
-    render({ pg, paused: loop ? loop.isPaused() : false, gameOver: pg.gameover });
+    render({
+      pg,
+      size,
+      showNext: settings.showNextPiece !== 0,
+      paused: loop ? loop.isPaused() : false,
+      gameOver: pg.gameover,
+      confirmRestart: confirmingRestart,
+    });
 
   const printScoreboard = (): void => {
     const scores = getHighScores(settings.gameType);
@@ -40,6 +56,7 @@ function main(): void {
 
   const promptHighScoreName = (cb: (name: string) => void): void => {
     process.stdout.write("\n  New high score! Name: ");
+    enteringName = true;
     let buf = "";
     const onData = (data: Buffer) => {
       const s = data.toString("utf8");
@@ -48,6 +65,7 @@ function main(): void {
         if (code === 13 || code === 10) {
           process.stdin.off("data", onData);
           process.stdout.write("\n");
+          enteringName = false;
           cb(buf.trim());
           return;
         }
@@ -103,15 +121,83 @@ function main(): void {
   });
   draw();
 
-  const detach = attachInput((action) => {
+  const startNewGame = () => {
+    savedThisGame = false;
+    pg.reset();
+    loop.setPaused(false);
+  };
+
+  const openSettings = () => {
+    pausedBeforeSettings = loop.isPaused();
+    loop.setPaused(true);
+    settingsScreen = new SettingsScreen({ ...settings, boardSize: size });
+    settingsScreen.render();
+  };
+
+  const closeSettings = (apply: boolean) => {
+    const next = settingsScreen!.values;
+    settingsScreen = null;
+    forceClear();
+    let restart = false;
+    if (apply) {
+      const { boardSize, ...gameSettings } = next;
+      // These change the board or the pieces, so they need a fresh game
+      restart = (
+        ["gameType", "numColumns", "numRows", "initWallHeight", "initWallPropability"] as const
+      ).some((k) => gameSettings[k] !== settings[k]);
+      Object.assign(settings, gameSettings);
+      saveSettings(settings);
+      size = boardSize;
+      saveBoardSize(size);
+      pg.configure(settings);
+    }
+    if (restart) {
+      startNewGame();
+    } else {
+      loop.setPaused(pausedBeforeSettings);
+    }
+    draw();
+    if (pg.gameover) printScoreboard();
+  };
+
+  const detach = attachInput((action, keyName) => {
+    if (action === "quit") return shutdown(0);
+    // Keys typed into the high-score name must not also play the game
+    if (enteringName) return;
+    if (settingsScreen) {
+      const result = settingsScreen.handleKey(keyName);
+      if (result === "open") settingsScreen.render();
+      else closeSettings(result === "apply");
+      return;
+    }
+    // Y restarts; any other key goes back to the game as it was
+    if (confirmingRestart) {
+      confirmingRestart = false;
+      if (keyName === "y") startNewGame();
+      else loop.setPaused(pausedBeforeRestart);
+      draw();
+      return;
+    }
+    if (action === "settings") return openSettings();
+    // During a game R asks first, since it sits next to E (rotate right)
+    if (action === "restart" && !pg.gameover) {
+      pausedBeforeRestart = loop.isPaused();
+      loop.setPaused(true);
+      confirmingRestart = true;
+      draw();
+      return;
+    }
+    // Not after game over: Z would redraw over the scoreboard
+    if (action === "toggleSize" && !pg.gameover) {
+      size = size === "large" ? "normal" : "large";
+      saveBoardSize(size);
+      draw();
+      return;
+    }
     if (pg.gameover) {
       if (action === "restart") {
-        savedThisGame = false;
-        pg.reset();
-        loop.setPaused(false);
+        startNewGame();
         draw();
-      } else if (action === "quit") {
-        shutdown(0);
       }
       return;
     }
@@ -134,9 +220,6 @@ function main(): void {
       case "pause":
         loop.setPaused(!loop.isPaused());
         break;
-      case "quit":
-        shutdown(0);
-        return;
     }
     draw();
     handleGameOver();

@@ -14,6 +14,7 @@ export type PersistedSettings = Pick<
   | "initWallHeight"
   | "levelUpgradeDiv"
   | "initWallPropability"
+  | "showNextPiece"
 >;
 
 export type HighScoreEntry = {
@@ -25,8 +26,11 @@ export type HighScoreEntry = {
   date: string;
 };
 
+export type BoardSize = "normal" | "large";
+
 type State = {
   settings: PersistedSettings;
+  boardSize: BoardSize;
   highScores: Record<number, HighScoreEntry[]>;
 };
 
@@ -38,7 +42,9 @@ const DEFAULT_STATE: State = {
     initWallHeight: 0,
     levelUpgradeDiv: 2,
     initWallPropability: 0.5,
+    showNextPiece: 1,
   },
+  boardSize: "large",
   highScores: {},
 };
 
@@ -50,6 +56,7 @@ function readState(): State {
     const parsed = JSON.parse(raw);
     return {
       settings: { ...DEFAULT_STATE.settings, ...(parsed.settings ?? {}) },
+      boardSize: parsed.boardSize === "normal" ? "normal" : "large",
       highScores: parsed.highScores ?? {},
     };
   } catch {
@@ -73,6 +80,16 @@ export function loadSettings(): PersistedSettings {
 export function saveSettings(settings: PersistedSettings): void {
   const state = readState();
   state.settings = settings;
+  writeState(state);
+}
+
+export function loadBoardSize(): BoardSize {
+  return readState().boardSize;
+}
+
+export function saveBoardSize(size: BoardSize): void {
+  const state = readState();
+  state.boardSize = size;
   writeState(state);
 }
 
