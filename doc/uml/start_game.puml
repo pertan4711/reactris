@@ -3,31 +3,43 @@
 skinparam Style strictuml
 
 actor "Player" as Player #green
-participant "Playground" as Playground #blue
+participant "Front-end\n(UseGameState / CLI loop)" as Front #green
+participant "playGroundModel" as Playground #blue
 participant "Active block" as Block #orange
 participant "Wall" as Wall #red
-participant "ScorePanel" as Panel #green
 
-Player -[#blue]> Playground : start_game
-Playground -[#red]> Wall : initWallHeight
-Playground -[#orange]> Block : generateNextBlock
+Player -[#blue]> Front : start game
+Front -[#blue]> Playground : reset()
+Playground -[#red]> Wall : reset(initWallHeight)
+Playground -[#orange]> Block : generateBlock() (active + next)
 
-alt Check collision
-group game check loop
-    Playground -> Playground : moveBlock down
-else Block collision
-    Playground -[#red]> Wall : transform block to wall
-    alt Check full line
-    group check full line
-        Wall -[#red]> Wall : check full line
-    else No full line
-        Wall -[#red]> Wall : update wall
+loop every intervalForLevel(level) ms
+    Front -[#blue]> Playground : tick()
+    Playground -[#orange]> Block : move down
+    alt No collision
+        Playground -> Playground : keep falling
+    else Block collision
+        Playground -[#red]> Wall : addBlock(activeBlock)
+        Playground -[#orange]> Block : activeBlock = nextActive,\nnextActive = generateBlock()
+        opt New block collides
+            Playground -> Playground : gameover = true
+        end
+        Playground -[#red]> Wall : check4CompletedRows()
+        Wall -[#red]> Wall : delete full rows
+        Wall --> Playground : rows cleared
+        Playground -> Playground : update score and level
     end
-    end
-    Wall -[#red]> Wall : check full line
-    Playground -[#orange]> Block : generateNextBlock
+    Front -> Front : re-render from model
 end
 
-Player -[#blue]> Playground : moveLeft
-group 
+Player -[#blue]> Front : key press
+alt Left / right
+    Front -[#blue]> Playground : tryMove(-1 | 1)
+else Rotate
+    Front -[#blue]> Playground : tryRotate("left" | "right")
+else Down
+    Front -[#blue]> Playground : softDrop()
+end
+Playground --> Front : move undone if it collides
+
 @enduml
